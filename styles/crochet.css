@@ -1,0 +1,65 @@
+body {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
+}
+
+header, .pattern-select, .pattern-body {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+header {
+  background-color: wheat;
+  color: black;
+  font-size: large;
+}
+
+main {
+  margin-top: 20px;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.pattern-select {
+  background-color: wheat;
+}
+.pattern-select label {
+  margin-right: 10px;
+}
+
+.pattern-body {
+  background-color: antiquewhite;
+  flex-direction: column;
+  align-items: center;
+}
+
+.materials,
+.glossary,
+.notes,
+.steps {
+  background-color: wheat;
+  font-size: 20px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.hooks,
+.yarns {
+  font-size: 18px;
+}
+
+.yarn-amt,
+.row-number {
+  max-width: 40px;
+}
+
+.inner {
+  background-color: antiquewhite;
+  font-size: 15px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
