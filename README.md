@@ -67,3 +67,17 @@ Steps:
   R3: ch 2, turn, 1 dc in the first 3 st, 5dc bobble in the 4th st, 1 dc in the next 11 stitches, 5dc bobble in the next st, 1 dc in the last 4 st;
   ...
 ```
+
+## interface
+dropdown at top conceals rest of page: "What type of project?"
+
+select 'US Crochet' - page opens up below
+text fields for title/author/desc
+materials - dropdowns for hooks, field for yarn + amount
+glossary - enter keyword/shorthand on left, description on right
+notes - text field
+steps labeled by Row
+- each step requires an index (placeholder increments based on previous step), or range from `n-m`
+- text field to the right contains instructions, parsed for references to previous steps and stitch names (styled with `<span>`?)
+  - clicking on a reference brings you to the step w a temporary highlight, stitches can be moused over for tooltips pulled from glossary/general library
+  - ie: `ch 1, turn, sc in each st across;` - mousing over `ch` brings up an entry for `Chain`, same for `sc`
