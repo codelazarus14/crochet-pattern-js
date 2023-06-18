@@ -12,32 +12,40 @@
         <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
       </div>
       <div class="pattern-body js-pattern-body is-hidden">
-        <div class="materials">Materials
+        <div class="materials heading">Materials
           <p class="hooks">Hooks</p>
           <div class="inner">
-            <p>Hook 1</p>
-            <p>US L</p>
-            <button>+</button>
+            <div class="hook-input">
+              <label for="hook-types">Choose a hook size:</label>
+              <select class="js-hook-types" name="hook-types" id="hook-types">
+                <option value="text">Text</option>
+              </select>
+              <button class="js-hook-confirm">+</button>
+            </div>
+            <div class="js-hook-list"></div>
           </div>
           <p class="yarns">Yarns</p>
           <div class="inner">
-            <p>Yarn 1</p>
-            <input class="yarn-amt" type="number"><p>skeins</p>
-            <button>+</button>
+            <div class="yarn-input">
+              <input class="js-yarn-name" placeholder="Enter yarn name">
+              <input class="js-yarn-amt" type="number">
+              <button class="js-yarn-confirm">+</button>
+            </div>
+            <div class="js-yarn-list"></div>
           </div>
         </div>
-        <div class="glossary">Glossary
+        <div class="glossary heading">Glossary
           <div class="inner">
             <input placeholder="Enter term">
             <input placeholder="Enter description">
           </div>
         </div>
-        <div class="notes">Notes
+        <div class="notes heading">Notes
           <div class="inner">
             <input placeholder="Enter some notes">
           </div>
         </div>
-        <div class="steps">Steps
+        <div class="steps heading">Steps
           <div class="inner">
             <input class="row-number" type="number">
             <input placeholder="Instructions for the first row">
