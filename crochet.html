@@ -16,11 +16,7 @@
           <p class="hooks">Hooks</p>
           <div class="inner">
             <div class="hook-input">
-              <label for="hook-types">Choose a hook size:</label>
-              <select class="js-hook-types" name="hook-types" id="hook-types">
-                <option value="text">Text</option>
-              </select>
-              <button class="js-hook-confirm">+</button>
+              <div class="js-hook-types"></div>
             </div>
             <div class="js-hook-list"></div>
           </div>
@@ -28,7 +24,8 @@
           <div class="inner">
             <div class="yarn-input">
               <input class="js-yarn-name" placeholder="Enter yarn name">
-              <input class="js-yarn-amt" type="number">
+              <input class="js-yarn-amt" type="number" value="1" min="1">
+              <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
               <button class="js-yarn-confirm">+</button>
             </div>
             <div class="js-yarn-list"></div>
