@@ -8,6 +8,8 @@
     <header>Crochet Pattern Creator</header>
     <main>
       <div class="pattern-select">
+        <!-- TODO: replace <select> with custom dropdown in js
+          https://www.w3schools.com/Css/css_dropdowns.asp -->
         <label for="pattern-types">Choose a project type:</label>
         <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
       </div>
@@ -15,9 +17,7 @@
         <div class="materials heading">Materials
           <p class="hooks">Hooks</p>
           <div class="inner">
-            <div class="hook-input">
-              <div class="js-hook-types"></div>
-            </div>
+            <div class="js-hook-types"></div>
             <div class="js-hook-list"></div>
           </div>
           <p class="yarns">Yarns</p>
@@ -33,8 +33,12 @@
         </div>
         <div class="glossary heading">Glossary
           <div class="inner">
-            <input placeholder="Enter term">
-            <input placeholder="Enter description">
+            <div class="glossary-input">
+              <input class="js-term-input" placeholder="Enter term">
+              <input class="js-desc-input" placeholder="Enter description">
+              <button class="js-glossary-confirm">+</button>
+            </div>
+            <div class="js-glossary-list"></div>
           </div>
         </div>
         <div class="notes heading">Notes

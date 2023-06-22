@@ -11,6 +11,7 @@ class CrochetPattern extends Pattern {
     super(PatternTypes.USCrochet);
     this.hooks = [];
     this.yarns = [];
+    this.glossary = [];
   }
 }
 
@@ -18,7 +19,7 @@ const PatternTypes = {
   USCrochet: 'US Crochet'
 };
 
-const HookSizes = {
+const USHookSizes = {
   B: 2.25,
   C: 2.75,
   D: 3.25,
@@ -51,18 +52,26 @@ const yarnUnitsInputElement = document.querySelector('.js-yarn-units');
 const yarnAmtInputElement = document.querySelector('.js-yarn-amt');
 const yarnConfirmInputElement = document.querySelector('.js-yarn-confirm');
 const yarnListElement = document.querySelector('.js-yarn-list');
+const glossaryTermInputElement = document.querySelector('.js-term-input');
+const glossaryDescInputElement = document.querySelector('.js-desc-input');
+const glossaryConfirmInputElement = document.querySelector('.js-glossary-confirm');
+const glossaryListElement = document.querySelector('.js-glossary-list');
 
-const renderOptions = () =>
+const renderPatternOptions = () =>
   renderElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
-const renderHooks = () => {
-  renderElement(hookListElement, selectedPattern.hooks, generateHookHTML);
+const renderHookList = () => {
+  renderElement(hookListElement, selectedPattern.hooks, generateHookListHTML);
 };
-const renderYarn = () => {
+const renderYarnList = () => {
   renderElement(yarnListElement, selectedPattern.yarns, generateYarnHTML);
-  setDeleteListeners('yarn', selectedPattern.yarns, renderYarn);
+  setDeleteListeners('yarn', selectedPattern.yarns, renderYarnList);
 };
+const renderGlossary = () => {
+  renderElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
+  setDeleteListeners('glossary', selectedPattern.glossary, renderGlossary);
+}
 
-renderOptions(true);
+renderPatternOptions(true);
 
 patternSelectElement.addEventListener('click', () => {
   const idx = patternSelectElement.selectedIndex;
@@ -78,7 +87,6 @@ patternSelectElement.addEventListener('click', () => {
           return new Pattern();
       }
     })();
-    console.log(selectedPattern);
     setupPattern();
   }
 });
@@ -87,10 +95,13 @@ patternSelectElement.addEventListener('blur', () => dropdownOpened = false);
 
 function setupPattern() {
   document.querySelector('.js-pattern-body').classList.remove('is-hidden');
+  // render input stuff once so we can change output appearance in listener
+  renderElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
+  renderElement(yarnUnitsInputElement, [Units.meters, Units.yards, Units.skeins], generateOptionHTML);
+
 
   if (selectedPattern.type === PatternTypes.USCrochet) {
     // TODO - make CSS grid to store these in orderly fashion
-    renderElement(hookInputElement, Object.keys(HookSizes), generateButtonsHTML);
     document.querySelectorAll('.js-hook-size-button')
       .forEach((button) => {
         button.addEventListener('click', () => {
@@ -101,21 +112,24 @@ function setupPattern() {
             selectedPattern.hooks[button.value] = true;
             button.classList.add('selected');
           }
-          renderHooks();
+          renderHookList();
         });
       });
-    renderElement(yarnUnitsInputElement, [Units.meters, Units.yards, Units.skeins], generateOptionHTML);
 
     yarnConfirmInputElement.addEventListener('click', () => {
       const yarnName = yarnNameInputElement.value;
       const yarnAmt = Number(yarnAmtInputElement.value);
       const yarnUnits = yarnUnitsInputElement.value;
       selectedPattern.yarns.push([yarnName, yarnAmt, yarnUnits]);
-      renderYarn();
+      renderYarnList();
     });
 
-    renderHooks();
-    renderYarn();
+    glossaryConfirmInputElement.addEventListener('click', () => {
+      const newTerm = glossaryTermInputElement.value;
+      const newDesc = glossaryDescInputElement.value;
+      selectedPattern.glossary.push([newTerm, newDesc]);
+      renderGlossary();
+    });
   }
 }
 
@@ -144,19 +158,27 @@ function generateOptionHTML(option, index) {
   return `<option value="${option}">${option}</option>`;
 }
 
-function generateButtonsHTML(option, index) {
-  return `<button class="js-hook-size-button" value="${index}">${option}/${HookSizes[option]}</button>`;
+function generateHookSizeButtonsHTML(option, index) {
+  let classes = 'js-hook-size-button';
+  if (selectedPattern.hooks[index])
+    classes += ' selected';
+  return `<button class="${classes}" value="${index}">${option}/${USHookSizes[option]}</button>`;
 }
 
-function generateHookHTML(selected, index) {
+function generateHookListHTML(selected, index) {
   if (!selected) return '';
-  return `<p>
-  ${Object.keys(HookSizes)[index]} /
-  ${Object.values(HookSizes)[index]}</p>`
+  return `<p>US 
+  ${Object.keys(USHookSizes)[index]} /
+  ${Object.values(USHookSizes)[index]}</p>`
 }
 
 function generateYarnHTML(yarn, index) {
   return `<p>${yarn[0]}</p>
   <input class="yarn-amt" type="number" value="${yarn[1]}"><p>${yarn[2]}</p>
   <button class="js-delete-yarn-button">-</button>`;
+}
+
+function generateGlossaryEntryHTML(entry, index) {
+  return `<p><span class="glossary-term">${entry[0]}</span>: ${entry[1]}</p>
+  <button class="js-delete-glossary-button">-</button>`;
 }
