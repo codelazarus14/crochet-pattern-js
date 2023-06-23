@@ -43,13 +43,17 @@
         </div>
         <div class="notes heading">Notes
           <div class="inner">
-            <input placeholder="Enter some notes">
+            <input class="js-notes-input" placeholder="Enter some notes">
           </div>
         </div>
         <div class="steps heading">Steps
           <div class="inner">
-            <input class="row-number" type="number">
-            <input placeholder="Instructions for the first row">
+            <div class="steps-input">
+              <input class="js-row-input" placeholder="e.g. 5, 5-10">
+              <input class="js-instr-input" placeholder="Instructions for the first row">
+              <button class="js-step-confirm">+</button>
+            </div>
+            <div class="js-steps-list"></div>
           </div>
         </div>
       </div>

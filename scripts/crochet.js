@@ -12,6 +12,9 @@ class CrochetPattern extends Pattern {
     this.hooks = [];
     this.yarns = [];
     this.glossary = [];
+    this.notes = '';
+    this.steps = [];
+    this.currMaxStep = 0;
   }
 }
 
@@ -56,6 +59,11 @@ const glossaryTermInputElement = document.querySelector('.js-term-input');
 const glossaryDescInputElement = document.querySelector('.js-desc-input');
 const glossaryConfirmInputElement = document.querySelector('.js-glossary-confirm');
 const glossaryListElement = document.querySelector('.js-glossary-list');
+const notesInputElement = document.querySelector('.js-notes-input');
+const stepRowInputElement = document.querySelector('.js-row-input');
+const stepInstrInputElement = document.querySelector('.js-instr-input');
+const stepConfirmElement = document.querySelector('.js-step-confirm');
+const stepsListElement = document.querySelector('.js-steps-list');
 
 const renderPatternOptions = () =>
   renderElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
@@ -65,10 +73,15 @@ const renderHookList = () => {
 const renderYarnList = () => {
   renderElement(yarnListElement, selectedPattern.yarns, generateYarnHTML);
   setDeleteListeners('yarn', selectedPattern.yarns, renderYarnList);
+  // TODO: set update listeners on yarn amount changes (in list)
 };
 const renderGlossary = () => {
   renderElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
   setDeleteListeners('glossary', selectedPattern.glossary, renderGlossary);
+}
+const renderSteps = () => {
+  renderElement(stepsListElement, selectedPattern.steps, generateStepHTML);
+  // TODO: add step deletion, reverse-checking (put !! next to newly-bad steps)
 }
 
 renderPatternOptions(true);
@@ -117,7 +130,7 @@ function setupPattern() {
       });
 
     yarnConfirmInputElement.addEventListener('click', () => {
-      const yarnName = yarnNameInputElement.value;
+      const yarnName = yarnNameInputElement.value.trim();
       const yarnAmt = Number(yarnAmtInputElement.value);
       const yarnUnits = yarnUnitsInputElement.value;
       selectedPattern.yarns.push([yarnName, yarnAmt, yarnUnits]);
@@ -125,10 +138,47 @@ function setupPattern() {
     });
 
     glossaryConfirmInputElement.addEventListener('click', () => {
-      const newTerm = glossaryTermInputElement.value;
-      const newDesc = glossaryDescInputElement.value;
+      const newTerm = glossaryTermInputElement.value.trim();
+      const newDesc = glossaryDescInputElement.value.trim();
       selectedPattern.glossary.push([newTerm, newDesc]);
       renderGlossary();
+    });
+
+    notesInputElement.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        selectedPattern.notes = notesInputElement.value.trim();
+        console.log(selectedPattern);
+      }
+    });
+
+    stepConfirmElement.addEventListener('click', (event) => {
+      let startIdx, endIdx;
+      const rowsInput = stepRowInputElement.value.trim();
+      const instrInput = stepInstrInputElement.value.trim();
+      // allow 1 | 1,2 | 1-2
+      const regex = /^[0-9]+((?![,-])|(,|(\s*-\s*))\s*[0-9]+)$/;
+      
+      if (!rowsInput.match(regex)) 
+        return console.log('invalid input format: not \d | \d,\d | \d-\d!');
+      
+      const separatorIdx = Math.max(rowsInput.indexOf(','), rowsInput.indexOf('-'));
+      // row 1 vs. rows [1,3]
+      if (separatorIdx < 0) {
+        startIdx = Number(rowsInput);
+      } else {
+        startIdx = Number(rowsInput.slice(0, separatorIdx));
+        endIdx = Number(rowsInput.slice(separatorIdx + 1));
+      }
+      if (startIdx !== selectedPattern.currMaxStep + 1) 
+        return console.log('must start on next row!');
+      if (endIdx && endIdx < startIdx) 
+        return console.log('row end < start!');
+      if (startIdx === endIdx) 
+        endIdx = undefined;
+        
+      selectedPattern.steps.push([startIdx, endIdx, instrInput]);
+      selectedPattern.currMaxStep = endIdx || startIdx;
+      renderSteps();
     });
   }
 }
@@ -181,4 +231,10 @@ function generateYarnHTML(yarn, index) {
 function generateGlossaryEntryHTML(entry, index) {
   return `<p><span class="glossary-term">${entry[0]}</span>: ${entry[1]}</p>
   <button class="js-delete-glossary-button">-</button>`;
+}
+
+function generateStepHTML(step, index) {
+  const rowString = step[1] ? `Rows ${step[0]} - ${step[1]}` : `Row ${step[0]}`;
+  return `<p class="step-rows">${rowString}</p>
+  <p class="step-instrs">${step[2]}</p>`;
 }
