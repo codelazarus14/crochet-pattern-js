@@ -8,11 +8,27 @@
   <body>
     <header>Crochet Pattern Creator</header>
     <main>
-      <div class="pattern-select">
-        <!-- TODO: replace <select> with custom dropdown in js
-          https://www.w3schools.com/Css/css_dropdowns.asp -->
-        <label for="pattern-types">Choose a project type:</label>
-        <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
+      <div class="pattern-options">Basic Info
+        <div class="options-container">
+          <div class="options-input">
+            <p class="title">Title:</p>
+            <input class="js-pattern-title" placeholder="Enter title">
+          </div>
+          <div class="options-input">
+            <p class="author">Author:</p>
+            <input class="js-pattern-author" placeholder="Enter author">
+          </div>
+          <div class="options-input">
+            <p class="desc">Description:</p>
+            <input class="js-pattern-desc" placeholder="Enter a description">
+          </div>
+          <!-- TODO: replace <select> with custom dropdown in js
+            https://www.w3schools.com/Css/css_dropdowns.asp -->
+          <div class="options-input">
+            <label for="pattern-types">Choose a project type:</label>
+            <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
+          </div>
+        </div>
       </div>
       <div class="pattern-body js-pattern-body is-hidden">
         <div class="materials heading">Materials

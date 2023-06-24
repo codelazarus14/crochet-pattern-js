@@ -1,14 +1,15 @@
 class Pattern {
-  type;
-
-  constructor(type) {
+  constructor(title, author, desc, type) {
+    this.title = title;
+    this.author = author;
+    this.desc = desc;
     this.type = type;
   }
 }
 
 class CrochetPattern extends Pattern {
-  constructor() {
-    super(PatternTypes.USCrochet);
+  constructor(title, author, desc) {
+    super(title, author, desc, PatternTypes.USCrochet);
     this.hooks = [];
     this.yarns = [];
     this.glossary = [];
@@ -47,19 +48,28 @@ const Units = {
 let dropdownOpened = false;
 let selectedPattern;
 
+const patternTitleInputElement = document.querySelector('.js-pattern-title');
+const patternAuthorInputElement = document.querySelector('.js-pattern-author');
+const patternDescInputElement = document.querySelector('.js-pattern-desc');
 const patternSelectElement = document.querySelector('.js-pattern-types');
+
 const hookInputElement = document.querySelector('.js-hook-types');
 const hookListElement = document.querySelector('.js-hook-list');
+
 const yarnNameInputElement = document.querySelector('.js-yarn-name');
 const yarnUnitsInputElement = document.querySelector('.js-yarn-units');
 const yarnAmtInputElement = document.querySelector('.js-yarn-amt');
 const yarnConfirmInputElement = document.querySelector('.js-yarn-confirm');
 const yarnListElement = document.querySelector('.js-yarn-list');
+
 const glossaryTermInputElement = document.querySelector('.js-term-input');
 const glossaryDescInputElement = document.querySelector('.js-desc-input');
 const glossaryConfirmInputElement = document.querySelector('.js-glossary-confirm');
+
 const glossaryListElement = document.querySelector('.js-glossary-list');
+
 const notesInputElement = document.querySelector('.js-notes-input');
+
 const stepRowInputElement = document.querySelector('.js-row-input');
 const stepInstrInputElement = document.querySelector('.js-instr-input');
 const stepConfirmElement = document.querySelector('.js-step-confirm');
@@ -87,6 +97,9 @@ const renderSteps = () => {
 renderPatternOptions(true);
 
 patternSelectElement.addEventListener('click', () => {
+  const title = patternTitleInputElement.value.trim();
+  const author = patternAuthorInputElement.value.trim();
+  const desc = patternDescInputElement.value.trim();
   const idx = patternSelectElement.selectedIndex;
   if (!dropdownOpened) {
     dropdownOpened = true;
@@ -95,7 +108,7 @@ patternSelectElement.addEventListener('click', () => {
     selectedPattern = (() => {
       switch (patternSelectElement.options[idx].text) {
         case PatternTypes.USCrochet:
-          return new CrochetPattern();
+          return new CrochetPattern(title, author, desc);
         default:
           return new Pattern();
       }
