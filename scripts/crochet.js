@@ -84,6 +84,7 @@ const renderYarnList = () => {
   renderElement(yarnListElement, selectedPattern.yarns, generateYarnHTML);
   setDeleteListeners('yarn', selectedPattern.yarns, renderYarnList);
   // TODO: set update listeners on yarn amount changes (in list)
+  setUpdateListeners('yarn-amt', selectedPattern.yarns);
 };
 const renderGlossary = () => {
   renderElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
@@ -91,7 +92,8 @@ const renderGlossary = () => {
 }
 const renderSteps = () => {
   renderElement(stepsListElement, selectedPattern.steps, generateStepHTML);
-  // TODO: add step deletion, reverse-checking (put !! next to newly-bad steps)
+  setDeleteListeners('step', selectedPattern.steps, renderSteps);
+  // TODO: add step deletion reverse-checking (put !! next to newly-bad steps)
 }
 
 renderPatternOptions(true);
@@ -159,14 +161,14 @@ function setupPattern() {
       renderGlossary();
     });
 
-    notesInputElement.addEventListener('keydown', (event) => {
+    notesInputElement.addEventListener('keydown', event => {
       if (event.key === 'Enter') {
         selectedPattern.notes = notesInputElement.value.trim();
         console.log(selectedPattern);
       }
     });
 
-    stepConfirmElement.addEventListener('click', (event) => {
+    stepConfirmElement.addEventListener('click', () => {
       let startIdx, endIdx;
       const rowsInput = stepRowInputElement.value.trim();
       const instrInput = stepInstrInputElement.value.trim();
@@ -196,6 +198,24 @@ function setupPattern() {
       renderSteps();
     });
   }
+}
+
+function setUpdateListeners(listName, itemList) {
+  const update = (input, i) => itemList[i][1] = Number(input.value);
+
+  document.querySelectorAll(`.js-update-${listName}`)
+    .forEach((updateInput, index) => {
+      updateInput.addEventListener('click', () => {
+        update(updateInput, index);
+      });
+      // keydown is too soon to capture input change
+      updateInput.addEventListener('keyup', event => {
+        if (event.key !== 'ArrowDown' && event.key != 'ArrowUp')
+          event.preventDefault();
+        else update(updateInput, index);
+      });
+    });
+  
 }
 
 function setDeleteListeners(listName, itemList, renderFunc) {
@@ -239,7 +259,7 @@ function generateHookListHTML(selected, index) {
 
 function generateYarnHTML(yarn, index) {
   return `<p>${yarn[0]}</p>
-  <input class="yarn-amt" type="number" value="${yarn[1]}"><p>${yarn[2]}</p>
+  <input class="yarn-amt js-update-yarn-amt" type="number" value="${yarn[1]}"><p>${yarn[2]}</p>
   <button class="js-delete-yarn-button">-</button>`;
 }
 
@@ -251,5 +271,6 @@ function generateGlossaryEntryHTML(entry, index) {
 function generateStepHTML(step, index) {
   const rowString = step[1] ? `Rows ${step[0]} - ${step[1]}` : `Row ${step[0]}`;
   return `<p class="step-rows">${rowString}</p>
-  <p class="step-instrs">${step[2]}</p>`;
+  <p class="step-instrs">${step[2]}</p>
+  <button class="js-delete-step-button">-</button>`;
 }

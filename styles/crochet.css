@@ -6,17 +6,13 @@ body {
   display: none !important;
 }
 
-header {
-  font-size: large;
-}
-
 main {
-  margin-top: 20px;
+  margin-top: 1em;
 }
 
 header,
 main {
-  box-shadow: 3px 3px rgba(130, 210, 230, 1);
+  box-shadow: 0.4rem 0.4rem rgba(130, 210, 230, 1);
 }
 
 header,
@@ -24,25 +20,29 @@ main,
 .pattern-options,
 .heading {
   background-color: wheat;
-  border: 3px solid rgb(235, 210, 155);
+  border: 0.5rem solid rgb(235, 210, 155);
+  border-radius: 0.5rem;
 }
 
 .pattern-options {
-  border-width: 0 0 2px 0;
+  font-size: 2rem;
+  border-radius: 0;
+  border-width: 0 0 0.5rem 0;
 }
 
 header,
 .pattern-options,
 .pattern-body {
-  padding: 20px;
+  padding: 1.25rem;
   display: flex;
-  justify-content: center;
-}
-
-.pattern-options,
-.pattern-body {
   flex-direction: column;
   align-items: center;
+}
+
+.github-repo img {
+  background-color: white;
+  padding: 0.2rem;
+  border-radius: 100%;
 }
 
 .pattern-body,
@@ -53,7 +53,7 @@ header,
 select,
 button {
   border: none;
-  padding: 6px;
+  padding: 0.5em;
   cursor: pointer; 
   background-color: rgba(130, 210, 230, 0.5);
 }
@@ -65,12 +65,13 @@ select:hover {
 
 .selected {
   background-color: rgba(130, 210, 230, 1);
-  box-shadow: 2px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0.2em 0.2em rgba(0, 0, 0, 0.15);
 }
 
 .options-container,
 .options-input {
   display: flex;
+  font-size: 0.8em;
 }
 
 .options-container {
@@ -84,23 +85,19 @@ select:hover {
 }
 
 .heading {
-  font-size: large;
-  padding: 10px;
-  margin: 10px 0;
+  font-size: 2rem;
+  padding: 0.5em;
+  margin: 0.2em 0;
 }
 
 .hooks,
 .yarns {
-  font-size: 18px;
+  font-size: 0.75em;
 }
- 
-/* a[type="number"] {
-  max-width: 40px;
-} */
 
 .inner {
-  font-size: 15px;
-  padding: 10px;
+  font-size: 0.6em;
+  padding: 0.75em;
   display: flex;
   align-items: center;
   justify-content: space-between;
