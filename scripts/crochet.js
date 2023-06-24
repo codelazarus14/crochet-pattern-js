@@ -108,6 +108,8 @@ patternSelectElement.addEventListener('blur', () => dropdownOpened = false);
 
 function setupPattern() {
   document.querySelector('.js-pattern-body').classList.remove('is-hidden');
+  // TODO - clear all listeners/refresh page
+  
   // render input stuff once so we can change output appearance in listener
   renderElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
   renderElement(yarnUnitsInputElement, [Units.meters, Units.yards, Units.skeins], generateOptionHTML);
