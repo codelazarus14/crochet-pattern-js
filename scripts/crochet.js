@@ -268,21 +268,21 @@ function generateHookListHTML(selected, index) {
 }
 
 function generateYarnHTML(yarn, index) {
-  return `<p>${yarn[0]}</p>
+  return `<div class="yarn-list-item"><p>${yarn[0]}</p>
   <input class="yarn-amt js-update-yarn-amt" type="number" value="${yarn[1]}">
   <p>${yarn[2]}</p>
-  <button class="js-delete-yarn-button">-</button>`;
+  <button class="js-delete-yarn-button">-</button></div>`;
 }
 
 function generateGlossaryEntryHTML(entry, index) {
-  return `<p><span class="glossary-term">${entry[0]}</span></p>
+  return `<div class="glossary-list-item"><p><span class="glossary-term">${entry[0]}</span></p>
   <p>${entry[1]}</p>
-  <button class="js-delete-glossary-button">-</button>`;
+  <button class="js-delete-glossary-button">-</button></div>`;
 }
 
 function generateStepHTML(step, index) {
   const rowString = step[1] ? `Rows ${step[0]} - ${step[1]}` : `Row ${step[0]}`;
-  return `<p class="step-rows">${rowString}</p>
+  return `<div class="step-list-item"><p class="step-rows">${rowString}</p>
   <p class="step-instrs">${step[2]}</p>
-  <button class="js-delete-step-button">-</button>`;
+  <button class="js-delete-step-button">-</button></div>`;
 }

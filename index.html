@@ -16,80 +16,89 @@
         </div>
       </nav>
     </header>
-    <main>
-      <div class="pattern-options">Basic Info
-        <div class="options-container">
-          <div class="options-input">
-            <p class="title">Title:</p>
-            <input class="js-pattern-title" placeholder="Enter title">
-          </div>
-          <div class="options-input">
-            <p class="author">Author:</p>
-            <input class="js-pattern-author" placeholder="Enter author">
-          </div>
-          <div class="options-input">
-            <p class="desc">Description:</p>
-            <input class="js-pattern-desc" placeholder="Enter a description">
-          </div>
-          <!-- TODO: replace <select> with custom dropdown in js
-            https://www.w3schools.com/Css/css_dropdowns.asp -->
-          <div class="options-input">
-            <label for="pattern-types">Choose a project type:</label>
-            <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
-          </div>
-        </div>
+    <div class="page-content">
+      <div class="sidebar">
+        <a href="#">Test 1</a>
+        <a href="#">Test 2</a>
+        <a href="#">Test 3</a>
+        <a href="#">Test 4</a>
       </div>
-      <div class="pattern-body js-pattern-body is-hidden">
-        <div class="materials heading">Materials
-          <p class="hooks">Hooks</p>
-          <div class="inner">
-            <div class="js-hook-list"></div>
-            <div class="hook-types-grid js-hook-types"></div>
-          </div>
-          <p class="yarns">Yarns</p>
-          <div class="inner">
-            <div class="yarn-list-grid js-yarn-list"></div>
-            <div class="yarn-input-grid">
-              <input class="js-yarn-name" placeholder="Enter yarn name">
-              <input class="js-yarn-amt" type="number" value="1" min="1">
-              <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
-              <button class="js-yarn-confirm">+</button>
+      <main>
+        <div class="pattern-options">Basic Info
+          <div class="options-container">
+            <div class="options-input">
+              <p class="title">Title:</p>
+              <input class="js-pattern-title" placeholder="Enter title">
+            </div>
+            <div class="options-input">
+              <p class="author">Author:</p>
+              <input class="js-pattern-author" placeholder="Enter author">
+            </div>
+            <div class="options-input">
+              <p class="desc">Description:</p>
+              <input class="js-pattern-desc" placeholder="Enter a description">
+            </div>
+            <!-- TODO: replace <select> with custom dropdown in js
+              https://www.w3schools.com/Css/css_dropdowns.asp -->
+            <div class="options-input">
+              <label for="pattern-types">Choose a project type:</label>
+              <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
             </div>
           </div>
         </div>
-        <div class="glossary heading">Glossary
-          <div class="inner">
-            <div class="glossary-list-grid js-glossary-list"></div>
-            <div class="glossary-input-grid">
-              <input class="js-term-input" placeholder="Enter term">
-              <input class="js-desc-input" placeholder="Enter description">
-              <button class="js-glossary-confirm">+</button>
+        <div class="pattern-body js-pattern-body is-hidden">
+          <div class="materials heading">Materials
+            <p class="hooks">Hooks</p>
+            <div class="inner">
+              <div class="hook-list js-hook-list"></div>
+              <div class="hook-types-grid js-hook-types"></div>
+            </div>
+            <p class="yarns">Yarns</p>
+            <div class="inner">
+              <div class="yarn-list js-yarn-list"></div>
+              <div class="yarn-input-grid">
+                <input class="js-yarn-name" placeholder="Enter yarn name">
+                <input class="js-yarn-amt" type="number" value="1" min="1">
+                <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
+                <button class="js-yarn-confirm">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="glossary heading">Glossary
+            <div class="inner">
+              <div class="glossary-list js-glossary-list"></div>
+              <div class="glossary-input-grid">
+                <input class="js-term-input" placeholder="Enter term">
+                <input class="js-desc-input" placeholder="Enter description">
+                <button class="js-glossary-confirm">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="notes heading">Notes
+            <div class="inner">
+              <input class="notes-input js-notes-input" placeholder="Enter some notes">
+            </div>
+          </div>
+          <div class="steps heading">Steps
+            <div class="inner">
+              <div class="step-list js-steps-list"></div>
+              <div class="step-input-grid">
+                <input class="js-row-input" placeholder="e.g. 5, 5-10">
+                <input class="js-instr-input" placeholder="Instructions for the first row">
+                <button class="js-step-confirm">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="submit heading">
+            <div class="inner">
+              <button class="submit-button js-submit-button">Submit</button>
+              <div class="js-result"></div>
             </div>
           </div>
         </div>
-        <div class="notes heading">Notes
-          <div class="inner">
-            <input class="notes-input js-notes-input" placeholder="Enter some notes">
-          </div>
-        </div>
-        <div class="steps heading">Steps
-          <div class="inner">
-            <div class="step-list-grid js-steps-list"></div>
-            <div class="step-input-grid">
-              <input class="js-row-input" placeholder="e.g. 5, 5-10">
-              <input class="js-instr-input" placeholder="Instructions for the first row">
-              <button class="js-step-confirm">+</button>
-            </div>
-          </div>
-        </div>
-        <div class="submit heading">
-          <div class="inner">
-            <button class="submit-button js-submit-button">Submit</button>
-            <div class="js-result"></div>
-          </div>
-        </div>
-      </div>
-    </main>
+      </main>
+    </div>
     <script src="scripts/crochet.js"></script>
+    <script src="scripts/sticky.js"></script>
   </body>
 </html>

@@ -1,3 +1,9 @@
+:root {
+  --top: 1em;
+  --blue-color: rgb(140, 215, 235);
+  --purple-color: rgb(160, 185, 235);
+}
+
 body {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
@@ -6,17 +12,46 @@ body {
   display: none !important;
 }
 
-main {
-  margin-top: 1em;
+.page-content {
+  margin-top: var(--top);
 }
 
-header,
 main {
-  box-shadow: 0.4rem 0.4rem rgba(130, 210, 230, 1);
+  margin-left: 9.5em;
+}
+
+.sidebar {
+  font-size: 1.5em;
+  width: 5em;
+  position: absolute;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar a {
+  margin: 0.5em;
+  text-decoration: none;
+  border-radius: 15%;
+  color: inherit;
+}
+
+.sticky {
+  top: var(--top);
+  position: fixed;
 }
 
 header,
 main,
+.sidebar {
+  box-shadow: 0.4rem 0.4rem var(--blue-color);
+;
+}
+
+header,
+main,
+.sidebar,
 .heading,
 .pattern-body {
   background-color: wheat;
@@ -50,21 +85,25 @@ header,
 }
 
 select,
-button {
+button,
+.sidebar a {
   border: none;
   padding: 0.5em;
   cursor: pointer; 
-  background-color: rgba(130, 210, 230, 0.5);
+  background-color: var(--blue-color);
+  box-shadow: -0.2em -0.2em inset rgba(0, 0, 0, 0.15);
 }
 
 button:hover,
-select:hover {
-  background-color: rgba(130, 210, 230, 0.8);
+select:hover,
+.sidebar a:hover {
+  opacity: 0.8;
+  box-shadow: -0.1em -0.1em inset rgba(0, 0, 0, 0.15);
 }
 
 .selected {
-  background-color: rgba(130, 210, 230, 1);
-  box-shadow: 0.2em 0.2em rgba(0, 0, 0, 0.15);
+  font-weight: bold;
+  background-color: var(--purple-color);
 }
 
 .pattern-options {
@@ -105,38 +144,38 @@ select:hover {
   flex-direction: column;
 }
 
+.hook-list, 
+.yarn-list,
+.glossary-list,
+.step-list {
+  display: flex;
+  flex-direction: column;
+}
+
 .hook-types-grid,
 .yarn-input-grid,
-.yarn-list-grid,
+.yarn-list-item,
 .glossary-input-grid,
-.glossary-list-grid,
+.glossary-list-item,
 .step-input-grid,
-.step-list-grid {
+.step-list-item {
   display: grid;
   align-items: center;
-  justify-items: center;
   column-gap: 1em;
 }
 
 .hook-types-grid {
   grid-template-columns: repeat(10, 1fr);
-  justify-items: stretch;
   column-gap: 0;
 }
 
 .yarn-input-grid,
-.glossary-input-grid,
-.step-input-grid {
-  align-items: stretch;
-}
-
-.yarn-input-grid,
-.yarn-list-grid {
+.yarn-list-item {
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .glossary-input-grid,
-.glossary-list-grid {
+.glossary-list-item {
   grid-template-columns: 1fr 1fr 1fr;
 }
 
@@ -145,7 +184,7 @@ select:hover {
 }
 
 .step-input-grid,
-.step-list-grid {
+.step-list-item {
   grid-template-columns: 1fr 1fr 1fr;
 }
 
