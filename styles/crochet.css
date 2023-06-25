@@ -102,10 +102,55 @@ select:hover {
   font-size: 0.6em;
   padding: 0.75em;
   display: flex;
+  flex-direction: column;
+}
+
+.hook-types-grid,
+.yarn-input-grid,
+.yarn-list-grid,
+.glossary-input-grid,
+.glossary-list-grid,
+.step-input-grid,
+.step-list-grid {
+  display: grid;
   align-items: center;
-  justify-content: space-between;
+  justify-items: center;
+  column-gap: 1em;
+}
+
+.hook-types-grid {
+  grid-template-columns: repeat(10, 1fr);
+  justify-items: stretch;
+  column-gap: 0;
+}
+
+.yarn-input-grid,
+.glossary-input-grid,
+.step-input-grid {
+  align-items: stretch;
+}
+
+.yarn-input-grid,
+.yarn-list-grid {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.glossary-input-grid,
+.glossary-list-grid {
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .glossary-term {
   font-weight: bold;
+}
+
+.step-input-grid,
+.step-list-grid {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.submit-button {
+  width: 5rem;
+  font-size: 1rem;
+  padding: 1rem;
 }

@@ -43,43 +43,49 @@
         <div class="materials heading">Materials
           <p class="hooks">Hooks</p>
           <div class="inner">
-            <div class="js-hook-types"></div>
             <div class="js-hook-list"></div>
+            <div class="hook-types-grid js-hook-types"></div>
           </div>
           <p class="yarns">Yarns</p>
           <div class="inner">
-            <div class="yarn-input">
+            <div class="yarn-list-grid js-yarn-list"></div>
+            <div class="yarn-input-grid">
               <input class="js-yarn-name" placeholder="Enter yarn name">
               <input class="js-yarn-amt" type="number" value="1" min="1">
               <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
               <button class="js-yarn-confirm">+</button>
             </div>
-            <div class="js-yarn-list"></div>
           </div>
         </div>
         <div class="glossary heading">Glossary
           <div class="inner">
-            <div class="glossary-input">
+            <div class="glossary-list-grid js-glossary-list"></div>
+            <div class="glossary-input-grid">
               <input class="js-term-input" placeholder="Enter term">
               <input class="js-desc-input" placeholder="Enter description">
               <button class="js-glossary-confirm">+</button>
             </div>
-            <div class="js-glossary-list"></div>
           </div>
         </div>
         <div class="notes heading">Notes
           <div class="inner">
-            <input class="js-notes-input" placeholder="Enter some notes">
+            <input class="notes-input js-notes-input" placeholder="Enter some notes">
           </div>
         </div>
         <div class="steps heading">Steps
           <div class="inner">
-            <div class="steps-input">
+            <div class="step-list-grid js-steps-list"></div>
+            <div class="step-input-grid">
               <input class="js-row-input" placeholder="e.g. 5, 5-10">
               <input class="js-instr-input" placeholder="Instructions for the first row">
               <button class="js-step-confirm">+</button>
             </div>
-            <div class="js-steps-list"></div>
+          </div>
+        </div>
+        <div class="submit heading">
+          <div class="inner">
+            <button class="submit-button js-submit-button">Submit</button>
+            <div class="js-result"></div>
           </div>
         </div>
       </div>

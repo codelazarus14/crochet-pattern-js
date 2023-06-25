@@ -78,6 +78,9 @@ const stepInstrInputElement = document.querySelector('.js-instr-input');
 const stepConfirmElement = document.querySelector('.js-step-confirm');
 const stepsListElement = document.querySelector('.js-steps-list');
 
+const submitElement = document.querySelector('.js-submit-button');
+const resultElement = document.querySelector('.js-result');
+
 const renderPatternOptions = () =>
   renderElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
 const renderHookList = () => {
@@ -201,6 +204,10 @@ function setupPattern() {
       renderSteps();
     });
   }
+
+  submitElement.addEventListener('click', () => {
+    resultElement.innerHTML = JSON.stringify(selectedPattern);
+  })
 }
 
 function setUpdateListeners(listName, itemList) {
@@ -262,12 +269,14 @@ function generateHookListHTML(selected, index) {
 
 function generateYarnHTML(yarn, index) {
   return `<p>${yarn[0]}</p>
-  <input class="yarn-amt js-update-yarn-amt" type="number" value="${yarn[1]}"><p>${yarn[2]}</p>
+  <input class="yarn-amt js-update-yarn-amt" type="number" value="${yarn[1]}">
+  <p>${yarn[2]}</p>
   <button class="js-delete-yarn-button">-</button>`;
 }
 
 function generateGlossaryEntryHTML(entry, index) {
-  return `<p><span class="glossary-term">${entry[0]}</span>: ${entry[1]}</p>
+  return `<p><span class="glossary-term">${entry[0]}</span></p>
+  <p>${entry[1]}</p>
   <button class="js-delete-glossary-button">-</button>`;
 }
 
