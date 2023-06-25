@@ -46,6 +46,7 @@ const Units = {
 }
 
 let dropdownOpened = false;
+let previousPattern;
 let selectedPattern;
 
 const patternTitleInputElement = document.querySelector('.js-pattern-title');
@@ -70,6 +71,8 @@ const glossaryListElement = document.querySelector('.js-glossary-list');
 
 const notesInputElement = document.querySelector('.js-notes-input');
 
+// TODO: step inputs added as modular pieces on top of each other
+// supporting drag-and-drop/rearrange
 const stepRowInputElement = document.querySelector('.js-row-input');
 const stepInstrInputElement = document.querySelector('.js-instr-input');
 const stepConfirmElement = document.querySelector('.js-step-confirm');
@@ -83,7 +86,6 @@ const renderHookList = () => {
 const renderYarnList = () => {
   renderElement(yarnListElement, selectedPattern.yarns, generateYarnHTML);
   setDeleteListeners('yarn', selectedPattern.yarns, renderYarnList);
-  // TODO: set update listeners on yarn amount changes (in list)
   setUpdateListeners('yarn-amt', selectedPattern.yarns);
 };
 const renderGlossary = () => {
@@ -93,7 +95,6 @@ const renderGlossary = () => {
 const renderSteps = () => {
   renderElement(stepsListElement, selectedPattern.steps, generateStepHTML);
   setDeleteListeners('step', selectedPattern.steps, renderSteps);
-  // TODO: add step deletion reverse-checking (put !! next to newly-bad steps)
 }
 
 renderPatternOptions(true);
@@ -103,18 +104,21 @@ patternSelectElement.addEventListener('click', () => {
   const author = patternAuthorInputElement.value.trim();
   const desc = patternDescInputElement.value.trim();
   const idx = patternSelectElement.selectedIndex;
+  const type = patternSelectElement.options[idx].text;
   if (!dropdownOpened) {
     dropdownOpened = true;
   } else {
     dropdownOpened = false;
+    if (previousPattern && previousPattern.type === type) return;
     selectedPattern = (() => {
-      switch (patternSelectElement.options[idx].text) {
+      switch (type) {
         case PatternTypes.USCrochet:
           return new CrochetPattern(title, author, desc);
         default:
           return new Pattern();
       }
     })();
+    previousPattern = selectedPattern;
     setupPattern();
   }
 });
@@ -123,7 +127,6 @@ patternSelectElement.addEventListener('blur', () => dropdownOpened = false);
 
 function setupPattern() {
   document.querySelector('.js-pattern-body').classList.remove('is-hidden');
-  // TODO - clear all listeners/refresh page
   
   // render input stuff once so we can change output appearance in listener
   renderElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
