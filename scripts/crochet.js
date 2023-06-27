@@ -76,6 +76,7 @@ const notesInputElement = document.querySelector('.js-notes-input');
 
 // TODO: step inputs added as modular pieces on top of each other
 // supporting drag-and-drop/rearrange
+// also TODO: give row input default value based on current step
 const stepRowInputElement = document.querySelector('.js-row-input');
 const stepInstrInputElement = document.querySelector('.js-instr-input');
 const stepConfirmElement = document.querySelector('.js-step-confirm');
