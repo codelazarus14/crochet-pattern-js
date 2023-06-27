@@ -45,7 +45,10 @@ const Units = {
   skeins: "skeins"
 }
 
+const yarnUnits = [Units.meters, Units.yards, Units.skeins];
+
 let dropdownOpened = false;
+let selectDropdowns = [];
 let previousPattern;
 let selectedPattern;
 
@@ -89,7 +92,8 @@ const renderHookList = () => {
 const renderYarnList = () => {
   renderElement(yarnListElement, selectedPattern.yarns, generateYarnHTML);
   setDeleteListeners('yarn', selectedPattern.yarns, renderYarnList);
-  setUpdateListeners('yarn-amt', selectedPattern.yarns);
+  addNumInputUpdateListeners('yarn-amt', selectedPattern.yarns);
+  addSelectUpdateListeners('yarn-units', selectedPattern.yarns);
 };
 const renderGlossary = () => {
   renderElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
@@ -106,8 +110,7 @@ patternSelectElement.addEventListener('click', () => {
   const title = patternTitleInputElement.value.trim();
   const author = patternAuthorInputElement.value.trim();
   const desc = patternDescInputElement.value.trim();
-  const idx = patternSelectElement.selectedIndex;
-  const type = patternSelectElement.options[idx].text;
+  const type = patternSelectElement.value;
   if (!dropdownOpened) {
     dropdownOpened = true;
   } else {
@@ -130,10 +133,10 @@ patternSelectElement.addEventListener('blur', () => dropdownOpened = false);
 
 function setupPattern() {
   document.querySelector('.js-pattern-body').classList.remove('is-hidden');
-  
+
   // render input stuff once so we can change output appearance in listener
   renderElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
-  renderElement(yarnUnitsInputElement, [Units.meters, Units.yards, Units.skeins], generateOptionHTML);
+  renderElement(yarnUnitsInputElement, yarnUnits, generateOptionHTML);
 
 
   if (selectedPattern.type === PatternTypes.USCrochet) {
@@ -155,8 +158,8 @@ function setupPattern() {
     yarnConfirmInputElement.addEventListener('click', () => {
       const yarnName = yarnNameInputElement.value.trim();
       const yarnAmt = Number(yarnAmtInputElement.value);
-      const yarnUnits = yarnUnitsInputElement.value;
-      selectedPattern.yarns.push([yarnName, yarnAmt, yarnUnits]);
+      const yarnUnitsIdx = yarnUnitsInputElement.selectedIndex;
+      selectedPattern.yarns.push([yarnName, yarnAmt, yarnUnitsIdx]);
       renderYarnList();
     });
 
@@ -180,10 +183,10 @@ function setupPattern() {
       const instrInput = stepInstrInputElement.value.trim();
       // allow 1 | 1,2 | 1-2
       const regex = /^[0-9]+((?![,-])|(,|(\s*-\s*))\s*[0-9]+)$/;
-      
-      if (!rowsInput.match(regex)) 
+
+      if (!rowsInput.match(regex))
         return console.log('invalid input format: not \d | \d,\d | \d-\d!');
-      
+
       const separatorIdx = Math.max(rowsInput.indexOf(','), rowsInput.indexOf('-'));
       // row 1 vs. rows [1,3]
       if (separatorIdx < 0) {
@@ -192,13 +195,13 @@ function setupPattern() {
         startIdx = Number(rowsInput.slice(0, separatorIdx));
         endIdx = Number(rowsInput.slice(separatorIdx + 1));
       }
-      if (startIdx !== selectedPattern.currMaxStep + 1) 
+      if (startIdx !== selectedPattern.currMaxStep + 1)
         return console.log('must start on next row!');
-      if (endIdx && endIdx < startIdx) 
+      if (endIdx && endIdx < startIdx)
         return console.log('row end < start!');
-      if (startIdx === endIdx) 
+      if (startIdx === endIdx)
         endIdx = undefined;
-        
+
       selectedPattern.steps.push([startIdx, endIdx, instrInput]);
       selectedPattern.currMaxStep = endIdx || startIdx;
       renderSteps();
@@ -210,7 +213,28 @@ function setupPattern() {
   })
 }
 
-function setUpdateListeners(listName, itemList) {
+function addSelectUpdateListeners(listName, itemList) {
+  document.querySelectorAll(`.js-update-${listName}`)
+    .forEach((updateInput, index) => {
+      renderElement(updateInput, yarnUnits, generateOptionHTML);
+      updateInput.selectedIndex = itemList[index][2];
+
+      updateInput.addEventListener('click', () => {
+        const selected = updateInput.selectedIndex;
+        if (!selectDropdowns[index]) {
+          selectDropdowns[index] = true;
+        } else {
+          selectDropdowns[index] = false;
+          itemList[index][2] = selected;
+        }
+      });
+      updateInput.addEventListener('blur', () => {
+        selectDropdowns[index] = false;
+      });
+    });
+}
+
+function addNumInputUpdateListeners(listName, itemList) {
   const update = (input, i) => itemList[i][1] = Number(input.value);
 
   document.querySelectorAll(`.js-update-${listName}`)
@@ -225,7 +249,6 @@ function setUpdateListeners(listName, itemList) {
         else update(updateInput, index);
       });
     });
-  
 }
 
 function setDeleteListeners(listName, itemList, renderFunc) {
@@ -262,27 +285,28 @@ function generateHookSizeButtonsHTML(option, index) {
 
 function generateHookListHTML(selected, index) {
   if (!selected) return '';
-  return `<p>US 
+  return `<div>US 
   ${Object.keys(USHookSizes)[index]} /
-  ${Object.values(USHookSizes)[index]}</p>`
+  ${Object.values(USHookSizes)[index]}</div>`
 }
 
 function generateYarnHTML(yarn, index) {
-  return `<div class="yarn-list-item"><p>${yarn[0]}</p>
+  return `<div class="yarn-list-item">
+  <div>${yarn[0]}</div>
   <input class="yarn-amt js-update-yarn-amt" type="number" value="${yarn[1]}">
-  <p>${yarn[2]}</p>
+  <select class="js-update-yarn-units"></select>
   <button class="js-delete-yarn-button">-</button></div>`;
 }
 
 function generateGlossaryEntryHTML(entry, index) {
-  return `<div class="glossary-list-item"><p><span class="glossary-term">${entry[0]}</span></p>
-  <p>${entry[1]}</p>
+  return `<div class="glossary-list-item"><div><span class="glossary-term">${entry[0]}</span></div>
+  <div>${entry[1]}</div>
   <button class="js-delete-glossary-button">-</button></div>`;
 }
 
 function generateStepHTML(step, index) {
   const rowString = step[1] ? `Rows ${step[0]} - ${step[1]}` : `Row ${step[0]}`;
-  return `<div class="step-list-item"><p class="step-rows">${rowString}</p>
-  <p class="step-instrs">${step[2]}</p>
+  return `<div class="step-list-item"><div class="step-rows">${rowString}</div>
+  <div class="step-instrs">${step[2]}</div>
   <button class="js-delete-step-button">-</button></div>`;
 }

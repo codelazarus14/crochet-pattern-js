@@ -46,7 +46,6 @@ header,
 main,
 .sidebar {
   box-shadow: 0.4rem 0.4rem var(--blue-color);
-;
 }
 
 header,
@@ -89,7 +88,7 @@ button,
 .sidebar a {
   border: none;
   padding: 0.5em;
-  cursor: pointer; 
+  cursor: pointer;
   background-color: var(--blue-color);
   box-shadow: -0.2em -0.2em inset rgba(0, 0, 0, 0.15);
 }
@@ -98,6 +97,10 @@ button:hover,
 select:hover,
 .sidebar a:hover {
   opacity: 0.8;
+}
+
+button:active,
+.sidebar a:active {
   box-shadow: -0.1em -0.1em inset rgba(0, 0, 0, 0.15);
 }
 
@@ -139,12 +142,13 @@ select:hover,
 
 .inner {
   font-size: 0.6em;
+  margin: 0.5em 0;
   padding: 0.75em;
   display: flex;
   flex-direction: column;
 }
 
-.hook-list, 
+.hook-list,
 .yarn-list,
 .glossary-list,
 .step-list {
@@ -162,6 +166,7 @@ select:hover,
   display: grid;
   align-items: center;
   column-gap: 1em;
+  padding: 1em;
 }
 
 .hook-types-grid {
@@ -171,21 +176,32 @@ select:hover,
 
 .yarn-input-grid,
 .yarn-list-item {
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 2em;
+}
+
+.yarn-input-grid select,
+.yarn-list select {
+  max-width: 7em;
 }
 
 .glossary-input-grid,
-.glossary-list-item {
-  grid-template-columns: 1fr 1fr 1fr;
+.glossary-list-item,
+.step-input-grid,
+.step-list-item {
+  grid-template-columns: 1fr 1fr 2em;
 }
 
 .glossary-term {
   font-weight: bold;
 }
 
-.step-input-grid,
+.yarn-list-item,
+.glossary-list-item,
 .step-list-item {
-  grid-template-columns: 1fr 1fr 1fr;
+  left: 50%;
+  margin: 0.5em 0;
+  background-color: wheat;
+  border-radius: 2%/20%;
 }
 
 .submit-button {
