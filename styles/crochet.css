@@ -40,7 +40,7 @@ main {
 }
 
 .sticky {
-  top: var(--top);
+  top: 0;
   position: fixed;
 }
 

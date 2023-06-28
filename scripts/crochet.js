@@ -85,76 +85,68 @@ const stepsListElement = document.querySelector('.js-steps-list');
 const submitElement = document.querySelector('.js-submit-button');
 const resultElement = document.querySelector('.js-result');
 
-const renderPatternOptions = () =>
+const renderPatternOptions = () => {
   renderElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
+  addSelectListener(patternSelectElement, selectPattern);
+}
 const renderHookList = () => {
   renderElement(hookListElement, selectedPattern.hooks, generateHookListHTML);
-};
+}
 const renderYarnList = () => {
-  renderElement(yarnListElement, selectedPattern.yarns, generateYarnHTML);
-  setDeleteListeners('yarn', selectedPattern.yarns, renderYarnList);
-  addNumInputUpdateListeners('yarn-amt', selectedPattern.yarns);
-  addSelectUpdateListeners('yarn-units', selectedPattern.yarns);
-};
+  renderElement(yarnListElement, selectedPattern.yarns, generateYarnListHTML);
+  addDeleteListeners('yarn', selectedPattern.yarns, renderYarnList);
+  addNumInputListeners('.js-update-yarn-amt', selectedPattern.yarns, 1);
+  addSelectListeners('.js-update-yarn-units', selectedPattern.yarns, 2);
+}
 const renderGlossary = () => {
   renderElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
-  setDeleteListeners('glossary', selectedPattern.glossary, renderGlossary);
+  addDeleteListeners('glossary', selectedPattern.glossary, renderGlossary);
 }
 const renderSteps = () => {
   renderElement(stepsListElement, selectedPattern.steps, generateStepHTML);
-  setDeleteListeners('step', selectedPattern.steps, renderSteps);
+  addDeleteListeners('step', selectedPattern.steps, renderSteps);
 }
 
-renderPatternOptions(true);
+renderPatternOptions();
 
 patternSelectElement.addEventListener('click', () => {
-  const title = patternTitleInputElement.value.trim();
-  const author = patternAuthorInputElement.value.trim();
-  const desc = patternDescInputElement.value.trim();
   const type = patternSelectElement.value;
   if (!dropdownOpened) {
     dropdownOpened = true;
   } else {
     dropdownOpened = false;
-    if (previousPattern && previousPattern.type === type) return;
-    selectedPattern = (() => {
-      switch (type) {
-        case PatternTypes.USCrochet:
-          return new CrochetPattern(title, author, desc);
-        default:
-          return new Pattern();
-      }
-    })();
-    previousPattern = selectedPattern;
-    setupPattern();
+    selectPattern(type);
   }
 });
 
-patternSelectElement.addEventListener('blur', () => dropdownOpened = false);
+function selectPattern(type) {
+  const title = patternTitleInputElement.value.trim();
+  const author = patternAuthorInputElement.value.trim();
+  const desc = patternDescInputElement.value.trim();
+
+  if (previousPattern && previousPattern.type === type) return;
+  selectedPattern = (() => {
+    switch (type) {
+      case PatternTypes.USCrochet:
+        return new CrochetPattern(title, author, desc);
+      default:
+        return new Pattern();
+    }
+  })();
+  previousPattern = selectedPattern;
+  setupPattern();
+}
 
 function setupPattern() {
   document.querySelector('.js-pattern-body').classList.remove('is-hidden');
 
-  // render input stuff once so we can change output appearance in listener
-  renderElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
-  renderElement(yarnUnitsInputElement, yarnUnits, generateOptionHTML);
-
-
   if (selectedPattern.type === PatternTypes.USCrochet) {
-    // TODO - make CSS grid to store these in orderly fashion
-    document.querySelectorAll('.js-hook-size-button')
-      .forEach((button) => {
-        button.addEventListener('click', () => {
-          if (button.classList.contains('selected')) {
-            selectedPattern.hooks[button.value] = false;
-            button.classList.remove('selected');
-          } else {
-            selectedPattern.hooks[button.value] = true;
-            button.classList.add('selected');
-          }
-          renderHookList();
-        });
-      });
+    // render input stuff once
+    renderElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
+    addHookButtonListeners();
+
+    renderElement(yarnUnitsInputElement, yarnUnits, generateOptionHTML);
+    addNumInputListener(yarnAmtInputElement);
 
     yarnConfirmInputElement.addEventListener('click', () => {
       const yarnName = yarnNameInputElement.value.trim();
@@ -179,30 +171,9 @@ function setupPattern() {
     });
 
     stepConfirmElement.addEventListener('click', () => {
-      let startIdx, endIdx;
       const rowsInput = stepRowInputElement.value.trim();
+      const [startIdx, endIdx] = evaluateRowInput(rowsInput);
       const instrInput = stepInstrInputElement.value.trim();
-      // allow 1 | 1,2 | 1-2
-      const regex = /^[0-9]+((?![,-])|(,|(\s*-\s*))\s*[0-9]+)$/;
-
-      if (!rowsInput.match(regex))
-        return console.log('invalid input format: not \d | \d,\d | \d-\d!');
-
-      const separatorIdx = Math.max(rowsInput.indexOf(','), rowsInput.indexOf('-'));
-      // row 1 vs. rows [1,3]
-      if (separatorIdx < 0) {
-        startIdx = Number(rowsInput);
-      } else {
-        startIdx = Number(rowsInput.slice(0, separatorIdx));
-        endIdx = Number(rowsInput.slice(separatorIdx + 1));
-      }
-      if (startIdx !== selectedPattern.currMaxStep + 1)
-        return console.log('must start on next row!');
-      if (endIdx && endIdx < startIdx)
-        return console.log('row end < start!');
-      if (startIdx === endIdx)
-        endIdx = undefined;
-
       selectedPattern.steps.push([startIdx, endIdx, instrInput]);
       selectedPattern.currMaxStep = endIdx || startIdx;
       renderSteps();
@@ -211,48 +182,72 @@ function setupPattern() {
 
   submitElement.addEventListener('click', () => {
     resultElement.innerHTML = JSON.stringify(selectedPattern);
-  })
+  });
 }
 
-function addSelectUpdateListeners(listName, itemList) {
-  document.querySelectorAll(`.js-update-${listName}`)
-    .forEach((updateInput, index) => {
-      renderElement(updateInput, yarnUnits, generateOptionHTML);
-      updateInput.selectedIndex = itemList[index][2];
+function addHookButtonListeners() {
+  document.querySelectorAll('.js-hook-size-button')
+  .forEach((button) => {
+    button.addEventListener('click', () => {
+      if (button.classList.contains('selected')) {
+        selectedPattern.hooks[button.value] = false;
+        button.classList.remove('selected');
+      } else {
+        selectedPattern.hooks[button.value] = true;
+        button.classList.add('selected');
+      }
+      renderHookList();
+    });
+  });
+}
 
-      updateInput.addEventListener('click', () => {
-        const selected = updateInput.selectedIndex;
-        if (!selectDropdowns[index]) {
-          selectDropdowns[index] = true;
-        } else {
-          selectDropdowns[index] = false;
-          itemList[index][2] = selected;
-        }
-      });
-      updateInput.addEventListener('blur', () => {
-        selectDropdowns[index] = false;
-      });
+function addSelectListeners(listName, itemList, idx) {
+  // idx = index of property within each item
+  document.querySelectorAll(listName)
+    .forEach((updateInput, index) => {
+      addSelectListener(updateInput, updateListItem, [itemList[index], idx]);
     });
 }
 
-function addNumInputUpdateListeners(listName, itemList) {
-  const update = (input, i) => itemList[i][1] = Number(input.value);
+function addSelectListener(element, updateFunc, funcArgs) {
+  if (updateFunc) {
+    element.addEventListener('change', () => {
+      updateFunc.apply(null, funcArgs.concat([element.selectedIndex]));
+    });
+  }
+}
 
-  document.querySelectorAll(`.js-update-${listName}`)
+function addNumInputListeners(listName, itemList, idx) {
+  document.querySelectorAll(listName)
     .forEach((updateInput, index) => {
-      updateInput.addEventListener('click', () => {
-        update(updateInput, index);
-      });
-      // keydown is too soon to capture input change
-      updateInput.addEventListener('keyup', event => {
-        if (event.key !== 'ArrowDown' && event.key != 'ArrowUp')
-          event.preventDefault();
-        else update(updateInput, index);
-      });
+      addNumInputListener(updateInput, updateListItem, [itemList[index], idx]);
     });
 }
 
-function setDeleteListeners(listName, itemList, renderFunc) {
+function addNumInputListener(element, updateFunc, funcArgs) {
+  element.addEventListener('keydown', event => {
+    if (!filterNumInput(event.key))
+      event.preventDefault();
+  });
+  if (updateFunc) {
+    element.addEventListener('change', () => {
+      updateFunc.apply(null, funcArgs.concat([Number(element.value)]));
+    });
+  }
+}
+
+function filterNumInput(key) {
+  // allow numbers, inc/dec w arrows and delete
+  return (isFinite(key) && key !== ' ') || 
+  key === 'ArrowDown' || key === 'ArrowUp' || 
+  key === "Backspace" || key === "Delete";
+}
+
+function updateListItem(list, idx, value) {
+  list[idx] = value;
+}
+
+function addDeleteListeners(listName, itemList, renderFunc) {
   document.querySelectorAll(`.js-delete-${listName}-button`)
     .forEach((deleteButton, index) => {
       deleteButton.addEventListener('click', () => {
@@ -260,6 +255,35 @@ function setDeleteListeners(listName, itemList, renderFunc) {
         renderFunc();
       });
     });
+}
+
+function evaluateRowInput(rowsInput) {
+  let start, end;
+  // allow 1 | 1,2 | 1-2
+  const regex = /^[0-9]+((?![,-])|(,|(\s*-\s*))\s*[0-9]+)$/;
+
+  if (!rowsInput.match(regex)) {
+    return console.log('invalid input format: not \d | \d,\d | \d-\d!');
+  }
+
+  const separatorIdx = Math.max(rowsInput.indexOf(','), rowsInput.indexOf('-'));
+  // row 1 vs. rows [1,3]
+  if (separatorIdx < 0) {
+    start = Number(rowsInput);
+  } else {
+    start = Number(rowsInput.slice(0, separatorIdx));
+    end = Number(rowsInput.slice(separatorIdx + 1));
+  }
+  if (start !== selectedPattern.currMaxStep + 1) {
+    return console.log('must start on next row!');
+  }
+  if (end && end < start) {
+    return console.log('row end < start!');
+  }
+  if (start === end)
+    endIdx = undefined;
+  
+  return [start, end];
 }
 
 function renderElement(element, elementData, htmlGenerator) {
@@ -273,8 +297,9 @@ function renderElement(element, elementData, htmlGenerator) {
   element.innerHTML = html;
 }
 
-function generateOptionHTML(option, index) {
-  return `<option value="${option}">${option}</option>`;
+function generateOptionHTML(option, index, selected) {
+  return `<option value="${option}" 
+    ${selected ? 'selected' : ''}>${option}</option>`;
 }
 
 function generateHookSizeButtonsHTML(option, index) {
@@ -291,11 +316,16 @@ function generateHookListHTML(selected, index) {
   ${Object.values(USHookSizes)[index]}</div>`
 }
 
-function generateYarnHTML(yarn, index) {
+function generateYarnListHTML(yarn, index) {
+  let units = '';
+  yarnUnits.forEach((unit, idx) => {
+    units += generateOptionHTML(unit, 1, idx === yarn[2]);
+  });
+
   return `<div class="yarn-list-item">
   <div>${yarn[0]}</div>
-  <input class="yarn-amt js-update-yarn-amt" type="number" value="${yarn[1]}">
-  <select class="js-update-yarn-units"></select>
+  <input class="yarn-amt js-update-yarn-amt" type="number" value="${yarn[1]}" min="1">
+  <select class="js-update-yarn-units">${units}</select>
   <button class="js-delete-yarn-button">-</button></div>`;
 }
 
