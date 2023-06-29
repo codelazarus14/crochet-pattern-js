@@ -149,6 +149,7 @@ function setupPattern() {
     addNumInputListener(yarnAmtInputElement);
 
     yarnConfirmInputElement.addEventListener('click', () => {
+      if (!yarnNameInputElement.checkValidity()) return;
       const yarnName = yarnNameInputElement.value.trim();
       const yarnAmt = Number(yarnAmtInputElement.value);
       const yarnUnitsIdx = yarnUnitsInputElement.selectedIndex;
@@ -157,7 +158,9 @@ function setupPattern() {
     });
 
     glossaryConfirmInputElement.addEventListener('click', () => {
+      if (!glossaryTermInputElement.checkValidity()) return;
       const newTerm = glossaryTermInputElement.value.trim();
+      if (!glossaryDescInputElement.checkValidity()) return;
       const newDesc = glossaryDescInputElement.value.trim();
       selectedPattern.glossary.push([newTerm, newDesc]);
       renderGlossary();
@@ -171,14 +174,25 @@ function setupPattern() {
     });
 
     stepConfirmElement.addEventListener('click', () => {
+      if (!stepRowInputElement.checkValidity()) return;
       const rowsInput = stepRowInputElement.value.trim();
       const [startIdx, endIdx] = evaluateRowInput(rowsInput);
+      if (!stepInstrInputElement.checkValidity()) return;
       const instrInput = stepInstrInputElement.value.trim();
       selectedPattern.steps.push([startIdx, endIdx, instrInput]);
       selectedPattern.currMaxStep = endIdx || startIdx;
       renderSteps();
     });
   }
+
+  document.querySelectorAll('form')
+    .forEach(form => {
+      form.addEventListener('submit', () => {
+        // TODO: only clear input fields instead of all (incl dropdowns)
+        form.reset();
+        return false;
+      });
+    });
 
   submitElement.addEventListener('click', () => {
     resultElement.innerHTML = JSON.stringify(selectedPattern);
@@ -187,18 +201,18 @@ function setupPattern() {
 
 function addHookButtonListeners() {
   document.querySelectorAll('.js-hook-size-button')
-  .forEach((button) => {
-    button.addEventListener('click', () => {
-      if (button.classList.contains('selected')) {
-        selectedPattern.hooks[button.value] = false;
-        button.classList.remove('selected');
-      } else {
-        selectedPattern.hooks[button.value] = true;
-        button.classList.add('selected');
-      }
-      renderHookList();
+    .forEach((button) => {
+      button.addEventListener('click', () => {
+        if (button.classList.contains('selected')) {
+          selectedPattern.hooks[button.value] = false;
+          button.classList.remove('selected');
+        } else {
+          selectedPattern.hooks[button.value] = true;
+          button.classList.add('selected');
+        }
+        renderHookList();
+      });
     });
-  });
 }
 
 function addSelectListeners(listName, itemList, idx) {
@@ -238,9 +252,9 @@ function addNumInputListener(element, updateFunc, funcArgs) {
 
 function filterNumInput(key) {
   // allow numbers, inc/dec w arrows and delete
-  return (isFinite(key) && key !== ' ') || 
-  key === 'ArrowDown' || key === 'ArrowUp' || 
-  key === "Backspace" || key === "Delete";
+  return (isFinite(key) && key !== ' ') ||
+    key === 'ArrowDown' || key === 'ArrowUp' ||
+    key === "Backspace" || key === "Delete";
 }
 
 function updateListItem(list, idx, value) {
@@ -259,12 +273,6 @@ function addDeleteListeners(listName, itemList, renderFunc) {
 
 function evaluateRowInput(rowsInput) {
   let start, end;
-  // allow 1 | 1,2 | 1-2
-  const regex = /^[0-9]+((?![,-])|(,|(\s*-\s*))\s*[0-9]+)$/;
-
-  if (!rowsInput.match(regex)) {
-    return console.log('invalid input format: not \d | \d,\d | \d-\d!');
-  }
 
   const separatorIdx = Math.max(rowsInput.indexOf(','), rowsInput.indexOf('-'));
   // row 1 vs. rows [1,3]
@@ -275,14 +283,15 @@ function evaluateRowInput(rowsInput) {
     end = Number(rowsInput.slice(separatorIdx + 1));
   }
   if (start !== selectedPattern.currMaxStep + 1) {
-    return console.log('must start on next row!');
+    // TODO- show invalid form field like the others
+    return console.error('must start on next row!');
   }
   if (end && end < start) {
-    return console.log('row end < start!');
+    return console.error('row end < start!');
   }
   if (start === end)
-    endIdx = undefined;
-  
+    end = undefined;
+
   return [start, end];
 }
 

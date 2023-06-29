@@ -3,7 +3,8 @@
   --blue-color: rgb(140, 215, 235);
   --purple-color: rgb(160, 185, 235);
   --wheat-border: rgb(235, 210, 155);
-  --shadow: rgba(0, 0, 0, 0.15);
+  --shadow-color: rgba(0, 0, 0, 0.15);
+  --invalid-color: rgb(220, 0, 0);
 }
 
 body {
@@ -92,7 +93,7 @@ button,
   padding: 0.5em;
   cursor: pointer;
   background-color: var(--blue-color);
-  box-shadow: -0.2em -0.2em inset var(--shadow);
+  box-shadow: -0.2em -0.2em inset var(--shadow-color);
 }
 
 button:hover,
@@ -103,11 +104,15 @@ select:hover,
 
 button:active,
 .sidebar a:active {
-  box-shadow: -0.1em -0.1em inset var(--shadow);
+  box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
 
 input[type="number"] {
   max-width: 4em;
+}
+
+input:invalid:focus {
+  border: 2px solid var(--invalid-color);
 }
 
 .selected {

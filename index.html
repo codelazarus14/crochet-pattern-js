@@ -26,24 +26,27 @@
       <main>
         <div class="pattern-options">Basic Info
           <div class="options-container">
-            <div class="options-input">
-              <p class="title">Title:</p>
-              <input class="js-pattern-title" placeholder="Enter title">
-            </div>
-            <div class="options-input">
-              <p class="author">Author:</p>
-              <input class="js-pattern-author" placeholder="Enter author">
-            </div>
-            <div class="options-input">
-              <p class="desc">Description:</p>
-              <input class="js-pattern-desc" placeholder="Enter a description">
-            </div>
-            <!-- TODO: replace <select> with custom dropdown in js
-              https://www.w3schools.com/Css/css_dropdowns.asp -->
-            <div class="options-input">
-              <label for="pattern-types">Choose a project type:</label>
-              <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
-            </div>
+            <!-- TODO: disable page refresh from js? -->
+            <form onsubmit="return false">
+              <div class="options-input">
+                <p class="title">Title:</p>
+                <input class="js-pattern-title" placeholder="Enter title" required>
+              </div>
+              <div class="options-input">
+                <p class="author">Author:</p>
+                <input class="js-pattern-author" placeholder="Enter author" required>
+              </div>
+              <div class="options-input">
+                <p class="desc">Description:</p>
+                <input class="js-pattern-desc" placeholder="Enter a description">
+              </div>
+              <!-- TODO: replace <select> with custom dropdown in js
+                https://www.w3schools.com/Css/css_dropdowns.asp -->
+              <div class="options-input">
+                <label for="pattern-types">Choose a project type:</label>
+                <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
+              </div>
+            </form>
           </div>
         </div>
         <div class="pattern-body js-pattern-body is-hidden">
@@ -56,22 +59,26 @@
             <p class="yarns">Yarns</p>
             <div class="inner">
               <div class="yarn-list js-yarn-list"></div>
-              <div class="yarn-input-grid">
-                <input class="js-yarn-name" placeholder="Enter yarn name">
-                <input class="js-yarn-amt" type="number" value="1" min="1">
-                <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
-                <button class="js-yarn-confirm">+</button>
-              </div>
+              <form onsubmit="return false">
+                <div class="yarn-input-grid">
+                  <input class="js-yarn-name" placeholder="Enter yarn name" required>
+                  <input class="js-yarn-amt" type="number" value="1" min="1">
+                  <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
+                  <button type="submit" class="js-yarn-confirm">+</button>
+                </div>
+              </form>
             </div>
           </div>
           <div class="glossary heading">Glossary
             <div class="inner">
               <div class="glossary-list js-glossary-list"></div>
-              <div class="glossary-input-grid">
-                <input class="js-term-input" placeholder="Enter term">
-                <input class="js-desc-input" placeholder="Enter description">
-                <button class="js-glossary-confirm">+</button>
-              </div>
+              <form onsubmit="return false">
+                <div class="glossary-input-grid">
+                  <input class="js-term-input" placeholder="Enter term" required>
+                  <input class="js-desc-input" placeholder="Enter description" required>
+                  <button type="submit" class="js-glossary-confirm">+</button>
+                </div>
+              </form>
             </div>
           </div>
           <div class="notes heading">Notes
@@ -82,11 +89,13 @@
           <div class="steps heading">Steps
             <div class="inner">
               <div class="step-list js-steps-list"></div>
-              <div class="step-input-grid">
-                <input class="js-row-input" placeholder="e.g. 5, 5-10">
-                <input class="js-instr-input" placeholder="Instructions for the first row">
-                <button class="js-step-confirm">+</button>
-              </div>
+              <form onsubmit="return false">
+                <div class="step-input-grid">
+                  <input class="js-row-input" placeholder="e.g. 5, 5-10" pattern="\s*[0-9]+((?![,-])|(\s*,\s*|(\s*-\s*))\s*[0-9]+)\s*" required>
+                  <input class="js-instr-input" placeholder="Instructions for the first row" required>
+                  <button type="submit" class="js-step-confirm">+</button>
+                </div>
+              </form>
             </div>
           </div>
           <div class="submit heading">
