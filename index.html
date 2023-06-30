@@ -27,7 +27,7 @@
         <div class="pattern-options">Basic Info
           <div class="options-container">
             <!-- TODO: disable page refresh from js? -->
-            <form onsubmit="return false">
+            <form class="js-pattern-options-form" onsubmit="return false">
               <div class="options-input">
                 <p class="title">Title:</p>
                 <input class="js-pattern-title" placeholder="Enter title" required>
@@ -59,7 +59,7 @@
             <p class="yarns">Yarns</p>
             <div class="inner">
               <div class="yarn-list js-yarn-list"></div>
-              <form onsubmit="return false">
+              <form class="js-yarn-form" onsubmit="return false">
                 <div class="yarn-input-grid">
                   <input class="js-yarn-name" placeholder="Enter yarn name" required>
                   <input class="js-yarn-amt" type="number" value="1" min="1">
@@ -72,7 +72,7 @@
           <div class="glossary heading">Glossary
             <div class="inner">
               <div class="glossary-list js-glossary-list"></div>
-              <form onsubmit="return false">
+              <form class="js-glossary-form" onsubmit="return false">
                 <div class="glossary-input-grid">
                   <input class="js-term-input" placeholder="Enter term" required>
                   <input class="js-desc-input" placeholder="Enter description" required>
@@ -89,9 +89,9 @@
           <div class="steps heading">Steps
             <div class="inner">
               <div class="step-list js-steps-list"></div>
-              <form onsubmit="return false">
+              <form class="js-step-form" onsubmit="return false">
                 <div class="step-input-grid">
-                  <input class="js-row-input" placeholder="e.g. 5, 5-10" pattern="\s*[0-9]+((?![,-])|(\s*,\s*|(\s*-\s*))\s*[0-9]+)\s*" required>
+                  <input class="js-row-input" placeholder="e.g. 1, 1-5" pattern="\s*[0-9]+((?![,-])|(\s*,\s*|(\s*-\s*))\s*[0-9]+)\s*" required>
                   <input class="js-instr-input" placeholder="Instructions for the first row" required>
                   <button type="submit" class="js-step-confirm">+</button>
                 </div>

@@ -47,11 +47,10 @@ const Units = {
 
 const yarnUnits = [Units.meters, Units.yards, Units.skeins];
 
-let dropdownOpened = false;
-let selectDropdowns = [];
 let previousPattern;
 let selectedPattern;
 
+const patternOptionsFormElement = document.querySelector('.js-pattern-options-form');
 const patternTitleInputElement = document.querySelector('.js-pattern-title');
 const patternAuthorInputElement = document.querySelector('.js-pattern-author');
 const patternDescInputElement = document.querySelector('.js-pattern-desc');
@@ -60,23 +59,24 @@ const patternSelectElement = document.querySelector('.js-pattern-types');
 const hookInputElement = document.querySelector('.js-hook-types');
 const hookListElement = document.querySelector('.js-hook-list');
 
+const yarnFormElement = document.querySelector('.js-yarn-form');
 const yarnNameInputElement = document.querySelector('.js-yarn-name');
 const yarnUnitsInputElement = document.querySelector('.js-yarn-units');
 const yarnAmtInputElement = document.querySelector('.js-yarn-amt');
 const yarnConfirmInputElement = document.querySelector('.js-yarn-confirm');
 const yarnListElement = document.querySelector('.js-yarn-list');
 
+const glossaryFormElement = document.querySelector('.js-glossary-form');
 const glossaryTermInputElement = document.querySelector('.js-term-input');
 const glossaryDescInputElement = document.querySelector('.js-desc-input');
 const glossaryConfirmInputElement = document.querySelector('.js-glossary-confirm');
-
 const glossaryListElement = document.querySelector('.js-glossary-list');
 
 const notesInputElement = document.querySelector('.js-notes-input');
 
 // TODO: step inputs added as modular pieces on top of each other
 // supporting drag-and-drop/rearrange
-// also TODO: give row input default value based on current step
+const stepFormElement = document.querySelector('.js-step-form');
 const stepRowInputElement = document.querySelector('.js-row-input');
 const stepInstrInputElement = document.querySelector('.js-instr-input');
 const stepConfirmElement = document.querySelector('.js-step-confirm');
@@ -87,7 +87,6 @@ const resultElement = document.querySelector('.js-result');
 
 const renderPatternOptions = () => {
   renderElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
-  addSelectListener(patternSelectElement, selectPattern);
 }
 const renderHookList = () => {
   renderElement(hookListElement, selectedPattern.hooks, generateHookListHTML);
@@ -108,15 +107,19 @@ const renderSteps = () => {
 }
 
 renderPatternOptions();
+// clear all inputs
+onload = () =>
+  document.querySelectorAll('input, .js-pattern-types').forEach(elem => elem.value = elem.defaultValue);
 
-patternSelectElement.addEventListener('click', () => {
+patternSelectElement.addEventListener('change', () => {
+  patternOptionsFormElement.requestSubmit();
+  if (!patternOptionsFormElement.checkValidity())
+    patternSelectElement.value = patternSelectElement.defaultValue;
+});
+
+patternOptionsFormElement.addEventListener('submit', () => {
   const type = patternSelectElement.value;
-  if (!dropdownOpened) {
-    dropdownOpened = true;
-  } else {
-    dropdownOpened = false;
-    selectPattern(type);
-  }
+  selectPattern(type);
 });
 
 function selectPattern(type) {
@@ -148,8 +151,7 @@ function setupPattern() {
     renderElement(yarnUnitsInputElement, yarnUnits, generateOptionHTML);
     addNumInputListener(yarnAmtInputElement);
 
-    yarnConfirmInputElement.addEventListener('click', () => {
-      if (!yarnNameInputElement.checkValidity()) return;
+    yarnFormElement.addEventListener('submit', () => {
       const yarnName = yarnNameInputElement.value.trim();
       const yarnAmt = Number(yarnAmtInputElement.value);
       const yarnUnitsIdx = yarnUnitsInputElement.selectedIndex;
@@ -157,10 +159,8 @@ function setupPattern() {
       renderYarnList();
     });
 
-    glossaryConfirmInputElement.addEventListener('click', () => {
-      if (!glossaryTermInputElement.checkValidity()) return;
+    glossaryFormElement.addEventListener('submit', () => {
       const newTerm = glossaryTermInputElement.value.trim();
-      if (!glossaryDescInputElement.checkValidity()) return;
       const newDesc = glossaryDescInputElement.value.trim();
       selectedPattern.glossary.push([newTerm, newDesc]);
       renderGlossary();
@@ -173,11 +173,11 @@ function setupPattern() {
       }
     });
 
-    stepConfirmElement.addEventListener('click', () => {
-      if (!stepRowInputElement.checkValidity()) return;
+    // default value = ''
+    stepRowInputElement.value = 1;
+    stepFormElement.addEventListener('submit', () => {
       const rowsInput = stepRowInputElement.value.trim();
       const [startIdx, endIdx] = evaluateRowInput(rowsInput);
-      if (!stepInstrInputElement.checkValidity()) return;
       const instrInput = stepInstrInputElement.value.trim();
       selectedPattern.steps.push([startIdx, endIdx, instrInput]);
       selectedPattern.currMaxStep = endIdx || startIdx;
@@ -185,14 +185,17 @@ function setupPattern() {
     });
   }
 
-  document.querySelectorAll('form')
-    .forEach(form => {
-      form.addEventListener('submit', () => {
-        // TODO: only clear input fields instead of all (incl dropdowns)
-        form.reset();
-        return false;
-      });
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', () => {
+      form.querySelectorAll('input')
+        .forEach(input => {
+          if (input.classList === stepRowInputElement.classList)
+            input.value = selectedPattern.currMaxStep + 1;
+          else
+            input.value = input.defaultValue;
+        });
     });
+  });
 
   submitElement.addEventListener('click', () => {
     resultElement.innerHTML = JSON.stringify(selectedPattern);
