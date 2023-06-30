@@ -160,21 +160,14 @@ input:invalid:focus {
   flex-direction: column;
 }
 
-.hook-list,
-.yarn-list,
-.glossary-list,
-.step-list {
+[class$="list"] {
   display: flex;
   flex-direction: column;
 }
 
 .hook-types-grid,
-.yarn-input-grid,
-.yarn-list-item,
-.glossary-input-grid,
-.glossary-list-item,
-.step-input-grid,
-.step-list-item {
+[class$="list-item"],
+[class$="input-grid"] {
   display: grid;
   align-items: center;
   column-gap: 1em;
@@ -207,13 +200,17 @@ input:invalid:focus {
   font-weight: bold;
 }
 
-.yarn-list-item,
-.glossary-list-item,
-.step-list-item {
+[class$="list-item"] {
   left: 50%;
   margin: 0.5em 0;
   background-color: wheat;
   border-radius: 2%/20%;
+  box-shadow: -0.2em -0.2em inset var(--purple-color);
+}
+
+[class$="list-item"] button,
+[class$="list-item"] select {
+  background-color: var(--purple-color);
 }
 
 .submit-button {
