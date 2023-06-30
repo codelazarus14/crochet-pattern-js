@@ -175,6 +175,16 @@ function setupPattern() {
 
     // default value = ''
     stepRowInputElement.value = 1;
+    stepRowInputElement.addEventListener('input', () => {
+      const input = stepRowInputElement.value.trim();
+      const result = evaluateRowInput(input);
+      // turn errmsg into invalid form entry
+      if (typeof result === 'string')
+        stepRowInputElement.setCustomValidity(result);
+      else
+        stepRowInputElement.setCustomValidity('');
+    });
+
     stepFormElement.addEventListener('submit', () => {
       const rowsInput = stepRowInputElement.value.trim();
       const [startIdx, endIdx] = evaluateRowInput(rowsInput);
@@ -286,11 +296,10 @@ function evaluateRowInput(rowsInput) {
     end = Number(rowsInput.slice(separatorIdx + 1));
   }
   if (start !== selectedPattern.currMaxStep + 1) {
-    // TODO- show invalid form field like the others
-    return console.error('must start on next row!');
+    return 'Please start on the next row.';
   }
   if (end && end < start) {
-    return console.error('row end < start!');
+    return 'Row starting index must be less than end.';
   }
   if (start === end)
     end = undefined;

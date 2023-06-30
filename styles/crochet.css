@@ -107,7 +107,8 @@ button:active,
   box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
 
-input[type="number"] {
+input[type="number"],
+.row-input {
   max-width: 4em;
 }
 
