@@ -1,28 +1,3 @@
-class Pattern {
-  constructor(title, author, desc, type) {
-    this.title = title;
-    this.author = author;
-    this.desc = desc;
-    this.type = type;
-  }
-}
-
-class CrochetPattern extends Pattern {
-  constructor(title, author, desc) {
-    super(title, author, desc, PatternTypes.USCrochet);
-    this.hooks = [];
-    this.yarns = [];
-    this.glossary = [];
-    this.notes = '';
-    this.steps = [];
-    this.currMaxStep = 0;
-  }
-}
-
-const PatternTypes = {
-  USCrochet: 'US Crochet'
-};
-
 const USHookSizes = {
   B: 2.25,
   C: 2.75,
@@ -36,25 +11,7 @@ const USHookSizes = {
   K: 6.50
 }
 
-const Units = {
-  mm: "mm",
-  in: "in",
-  feet: "feet",
-  yards: "yards",
-  meters: "meters",
-  skeins: "skeins"
-}
-
 const yarnUnits = [Units.meters, Units.yards, Units.skeins];
-
-let previousPattern;
-let selectedPattern;
-
-const patternOptionsFormElement = document.querySelector('.js-pattern-options-form');
-const patternTitleInputElement = document.querySelector('.js-pattern-title');
-const patternAuthorInputElement = document.querySelector('.js-pattern-author');
-const patternDescInputElement = document.querySelector('.js-pattern-desc');
-const patternSelectElement = document.querySelector('.js-pattern-types');
 
 const hookInputElement = document.querySelector('.js-hook-types');
 const hookListElement = document.querySelector('.js-hook-list');
@@ -76,6 +33,7 @@ const notesInputElement = document.querySelector('.js-notes-input');
 
 // TODO: step inputs added as modular pieces on top of each other
 // supporting drag-and-drop/rearrange
+// also add Sections w separate row counters
 const stepFormElement = document.querySelector('.js-step-form');
 const stepRowInputElement = document.querySelector('.js-row-input');
 const stepInstrInputElement = document.querySelector('.js-instr-input');
@@ -85,9 +43,6 @@ const stepsListElement = document.querySelector('.js-steps-list');
 const submitElement = document.querySelector('.js-submit-button');
 const resultElement = document.querySelector('.js-result');
 
-const renderPatternOptions = () => {
-  renderElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
-}
 const renderHookList = () => {
   renderElement(hookListElement, selectedPattern.hooks, generateHookListHTML);
 }
@@ -106,94 +61,64 @@ const renderSteps = () => {
   addDeleteListeners('step', selectedPattern.steps, renderSteps);
 }
 
-renderPatternOptions();
 // clear all inputs
-onload = () =>
+onload = () => {
+  renderPatternOptions();
   document.querySelectorAll('input, .js-pattern-types').forEach(elem => elem.value = elem.defaultValue);
-
-patternSelectElement.addEventListener('change', () => {
-  patternOptionsFormElement.requestSubmit();
-  if (!patternOptionsFormElement.checkValidity())
-    patternSelectElement.value = patternSelectElement.defaultValue;
-});
-
-patternOptionsFormElement.addEventListener('submit', () => {
-  const type = patternSelectElement.value;
-  selectPattern(type);
-});
-
-function selectPattern(type) {
-  const title = patternTitleInputElement.value.trim();
-  const author = patternAuthorInputElement.value.trim();
-  const desc = patternDescInputElement.value.trim();
-
-  if (previousPattern && previousPattern.type === type) return;
-  selectedPattern = (() => {
-    switch (type) {
-      case PatternTypes.USCrochet:
-        return new CrochetPattern(title, author, desc);
-      default:
-        return new Pattern();
-    }
-  })();
-  previousPattern = selectedPattern;
-  setupPattern();
 }
 
-function setupPattern() {
+function setupCrochet() {
   document.querySelector('.js-pattern-body').classList.remove('is-hidden');
+  
+  // render input stuff once
+  renderElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
+  addHookButtonListeners();
 
-  if (selectedPattern.type === PatternTypes.USCrochet) {
-    // render input stuff once
-    renderElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
-    addHookButtonListeners();
+  renderElement(yarnUnitsInputElement, yarnUnits, generateOptionHTML);
+  addNumInputListener(yarnAmtInputElement);
 
-    renderElement(yarnUnitsInputElement, yarnUnits, generateOptionHTML);
-    addNumInputListener(yarnAmtInputElement);
+  yarnFormElement.addEventListener('submit', () => {
+    const yarnName = yarnNameInputElement.value.trim();
+    const yarnAmt = Number(yarnAmtInputElement.value);
+    const yarnUnitsIdx = yarnUnitsInputElement.selectedIndex;
+    selectedPattern.yarns.push([yarnName, yarnAmt, yarnUnitsIdx]);
+    renderYarnList();
+  });
 
-    yarnFormElement.addEventListener('submit', () => {
-      const yarnName = yarnNameInputElement.value.trim();
-      const yarnAmt = Number(yarnAmtInputElement.value);
-      const yarnUnitsIdx = yarnUnitsInputElement.selectedIndex;
-      selectedPattern.yarns.push([yarnName, yarnAmt, yarnUnitsIdx]);
-      renderYarnList();
-    });
+  glossaryFormElement.addEventListener('submit', () => {
+    const newTerm = glossaryTermInputElement.value.trim();
+    const newDesc = glossaryDescInputElement.value.trim();
+    selectedPattern.glossary.push([newTerm, newDesc]);
+    renderGlossary();
+  });
 
-    glossaryFormElement.addEventListener('submit', () => {
-      const newTerm = glossaryTermInputElement.value.trim();
-      const newDesc = glossaryDescInputElement.value.trim();
-      selectedPattern.glossary.push([newTerm, newDesc]);
-      renderGlossary();
-    });
+  notesInputElement.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+      selectedPattern.notes = notesInputElement.value.trim();
+      console.log(selectedPattern);
+    }
+  });
 
-    notesInputElement.addEventListener('keydown', event => {
-      if (event.key === 'Enter') {
-        selectedPattern.notes = notesInputElement.value.trim();
-        console.log(selectedPattern);
-      }
-    });
+  // default value = ''
+  stepRowInputElement.value = 1;
+  stepRowInputElement.addEventListener('input', () => {
+    const input = stepRowInputElement.value.trim();
+    const result = evaluateRowInput(input);
+    // turn errmsg into invalid form entry
+    if (typeof result === 'string')
+      stepRowInputElement.setCustomValidity(result);
+    else
+      stepRowInputElement.setCustomValidity('');
+  });
 
-    // default value = ''
-    stepRowInputElement.value = 1;
-    stepRowInputElement.addEventListener('input', () => {
-      const input = stepRowInputElement.value.trim();
-      const result = evaluateRowInput(input);
-      // turn errmsg into invalid form entry
-      if (typeof result === 'string')
-        stepRowInputElement.setCustomValidity(result);
-      else
-        stepRowInputElement.setCustomValidity('');
-    });
-
-    stepFormElement.addEventListener('submit', () => {
-      const rowsInput = stepRowInputElement.value.trim();
-      const [startIdx, endIdx] = evaluateRowInput(rowsInput);
-      const instrInput = stepInstrInputElement.value.trim();
-      selectedPattern.steps.push([startIdx, endIdx, instrInput]);
-      selectedPattern.currMaxStep = endIdx || startIdx;
-      renderSteps();
-    });
-  }
+  stepFormElement.addEventListener('submit', () => {
+    const rowsInput = stepRowInputElement.value.trim();
+    const [startIdx, endIdx] = evaluateRowInput(rowsInput);
+    const instrInput = stepInstrInputElement.value.trim();
+    selectedPattern.steps.push([startIdx, endIdx, instrInput]);
+    selectedPattern.currMaxStep = endIdx || startIdx;
+    renderSteps();
+  });
 
   document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', () => {
@@ -228,62 +153,6 @@ function addHookButtonListeners() {
     });
 }
 
-function addSelectListeners(listName, itemList, idx) {
-  // idx = index of property within each item
-  document.querySelectorAll(listName)
-    .forEach((updateInput, index) => {
-      addSelectListener(updateInput, updateListItem, [itemList[index], idx]);
-    });
-}
-
-function addSelectListener(element, updateFunc, funcArgs) {
-  if (updateFunc) {
-    element.addEventListener('change', () => {
-      updateFunc.apply(null, funcArgs.concat([element.selectedIndex]));
-    });
-  }
-}
-
-function addNumInputListeners(listName, itemList, idx) {
-  document.querySelectorAll(listName)
-    .forEach((updateInput, index) => {
-      addNumInputListener(updateInput, updateListItem, [itemList[index], idx]);
-    });
-}
-
-function addNumInputListener(element, updateFunc, funcArgs) {
-  element.addEventListener('keydown', event => {
-    if (!filterNumInput(event.key))
-      event.preventDefault();
-  });
-  if (updateFunc) {
-    element.addEventListener('change', () => {
-      updateFunc.apply(null, funcArgs.concat([Number(element.value)]));
-    });
-  }
-}
-
-function filterNumInput(key) {
-  // allow numbers, inc/dec w arrows and delete
-  return (isFinite(key) && key !== ' ') ||
-    key === 'ArrowDown' || key === 'ArrowUp' ||
-    key === "Backspace" || key === "Delete";
-}
-
-function updateListItem(list, idx, value) {
-  list[idx] = value;
-}
-
-function addDeleteListeners(listName, itemList, renderFunc) {
-  document.querySelectorAll(`.js-delete-${listName}-button`)
-    .forEach((deleteButton, index) => {
-      deleteButton.addEventListener('click', () => {
-        itemList.splice(index, 1);
-        renderFunc();
-      });
-    });
-}
-
 function evaluateRowInput(rowsInput) {
   let start, end;
 
@@ -305,22 +174,6 @@ function evaluateRowInput(rowsInput) {
     end = undefined;
 
   return [start, end];
-}
-
-function renderElement(element, elementData, htmlGenerator) {
-  console.log(selectedPattern);
-  let html = '';
-
-  elementData.forEach((item, index) => {
-    html += htmlGenerator(item, index);
-  });
-
-  element.innerHTML = html;
-}
-
-function generateOptionHTML(option, index, selected) {
-  return `<option value="${option}" 
-    ${selected ? 'selected' : ''}>${option}</option>`;
 }
 
 function generateHookSizeButtonsHTML(option, index) {
