@@ -116,7 +116,9 @@ input:invalid:focus {
   border: 2px solid var(--invalid-color);
 }
 
-/* TODO: stop selected buttons from expanding size of container */
+/* TODO: stop selected buttons from expanding size of container 
+also TODO: set max width on text elements before wrapping
+*/
 .selected {
   font-weight: bold;
   background-color: var(--purple-color);
@@ -191,9 +193,7 @@ input:invalid:focus {
 }
 
 .glossary-input-grid,
-.glossary-list-item,
-.step-input-grid,
-.step-list-item {
+.glossary-list-item {
   grid-template-columns: 4em 1fr 1fr 2em;
 }
 
@@ -203,6 +203,11 @@ input:invalid:focus {
 
 .notes-input-grid {
   grid-template-columns: 4em 1fr;
+}
+
+.step-input-grid,
+.step-list-item {
+  grid-template-columns: 4em 4em 1fr 2em;
 }
 
 [class$="list-item"] {
