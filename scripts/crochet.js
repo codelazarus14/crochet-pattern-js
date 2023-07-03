@@ -43,9 +43,11 @@ const stepsListElement = document.querySelector('.js-steps-list');
 const submitElement = document.querySelector('.js-submit-button');
 const resultElement = document.querySelector('.js-result');
 
-const renderHookList = () => {
-  renderElement(hookListElement, selectedPattern.hooks, generateHookListHTML);
-}
+// unused - we seem to be using button visuals now
+//
+// const renderHookList = () => {
+//   renderElement(hookListElement, selectedPattern.hooks, generateHookListHTML);
+// }
 const renderYarnList = () => {
   renderElement(yarnListElement, selectedPattern.yarns, generateYarnListHTML);
   addDeleteListeners('yarn', selectedPattern.yarns, renderYarnList);
@@ -54,7 +56,7 @@ const renderYarnList = () => {
 }
 const renderGlossary = () => {
   renderElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
-  addDeleteListeners('glossary', selectedPattern.glossary, renderGlossary);
+  addDeleteListeners('term', selectedPattern.glossary, renderGlossary);
 }
 const renderSteps = () => {
   renderElement(stepsListElement, selectedPattern.steps, generateStepHTML);
@@ -148,7 +150,7 @@ function addHookButtonListeners() {
           selectedPattern.hooks[button.value] = true;
           button.classList.add('selected');
         }
-        renderHookList();
+        // renderHookList();
       });
     });
 }
@@ -183,35 +185,47 @@ function generateHookSizeButtonsHTML(option, index) {
   return `<button class="${classes}" value="${index}">${option}/${USHookSizes[option]}</button>`;
 }
 
-function generateHookListHTML(selected, index) {
-  if (!selected) return '';
-  return `<div>US 
-  ${Object.keys(USHookSizes)[index]} /
-  ${Object.values(USHookSizes)[index]}</div>`
-}
+// function generateHookListHTML(selected, index) {
+//   if (!selected) return '';
+//   return `<div>US 
+//   ${Object.keys(USHookSizes)[index]} /
+//   ${Object.values(USHookSizes)[index]}</div>`
+// }
+
+// TODO: make output list items have editable text fields
+
+// TODO: make scrollbars once lists get too big
 
 function generateYarnListHTML(yarn, index) {
   let units = '';
   yarnUnits.forEach((unit, idx) => {
     units += generateOptionHTML(unit, 1, idx === yarn[2]);
   });
+  const imageUpload = generateImageUploadHTML();
 
   return `<div class="yarn-list-item">
+  <div class="js-update-yarn-image">${imageUpload}</div>
   <div>${yarn[0]}</div>
-  <input class="yarn-amt js-update-yarn-amt" type="number" value="${yarn[1]}" min="1">
+  <input class="js-update-yarn-amt" type="number" value="${yarn[1]}" min="1">
   <select class="js-update-yarn-units">${units}</select>
   <button class="js-delete-yarn-button">-</button></div>`;
 }
 
 function generateGlossaryEntryHTML(entry, index) {
-  return `<div class="glossary-list-item"><div><span class="glossary-term">${entry[0]}</span></div>
+  return `<div class="glossary-list-item">
+  <div class="js-update-term-image">${generateImageUploadHTML()}</div>
+  <div><span class="glossary-term">${entry[0]}</span></div>
   <div>${entry[1]}</div>
-  <button class="js-delete-glossary-button">-</button></div>`;
+  <button class="js-delete-term-button">-</button></div>`;
 }
 
 function generateStepHTML(step, index) {
   const rowString = step[1] ? `Rows ${step[0]} - ${step[1]}` : `Row ${step[0]}`;
-  return `<div class="step-list-item"><div class="step-rows">${rowString}</div>
+  const imageUpload = generateImageUploadHTML();
+
+  return `<div class="step-list-item">
+  <div class="step-image">${imageUpload}</div>
+  <div class="step-rows">${rowString}</div>
   <div class="step-instrs">${step[2]}</div>
   <button class="js-delete-step-button">-</button></div>`;
 }

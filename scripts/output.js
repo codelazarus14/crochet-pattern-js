@@ -13,3 +13,7 @@ function generateOptionHTML(option, index, selected) {
   return `<option value="${option}" 
     ${selected ? 'selected' : ''}>${option}</option>`;
 }
+
+function generateImageUploadHTML(option, index) {
+  return `<button class="image-attach">Upload Image?!?</button>`;
+}

@@ -62,6 +62,9 @@
               <div class="yarn-list js-yarn-list"></div>
               <form class="js-yarn-form" onsubmit="return false">
                 <div class="yarn-input-grid">
+                  <div class="js-yarn-image">
+                    <button class="image-attach">Upload Image?!?</button>
+                  </div>
                   <input class="js-yarn-name" placeholder="Enter yarn name" required>
                   <input class="js-yarn-amt" type="number" value="1" min="1">
                   <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
@@ -75,6 +78,9 @@
               <div class="glossary-list js-glossary-list"></div>
               <form class="js-glossary-form" onsubmit="return false">
                 <div class="glossary-input-grid">
+                  <div class="js-term-image">
+                    <button class="image-attach">Upload Image?!?</button>
+                  </div>
                   <input class="js-term-input" placeholder="Enter term" required>
                   <input class="js-desc-input" placeholder="Enter description" required>
                   <button type="submit" class="js-glossary-confirm">+</button>
@@ -84,7 +90,12 @@
           </div>
           <div class="notes heading">Notes
             <div class="inner">
-              <input class="notes-input js-notes-input" placeholder="Enter some notes">
+              <div class="notes-input-grid">
+                <div class="js-notes-image">
+                  <button class="image-attach">Upload Image?!?</button>
+                </div>
+                <input class="notes-input js-notes-input" placeholder="Enter some notes">
+              </div>
             </div>
           </div>
           <div class="steps heading">Steps
@@ -92,6 +103,9 @@
               <div class="step-list js-steps-list"></div>
               <form class="js-step-form" onsubmit="return false">
                 <div class="step-input-grid">
+                  <div class="js-step-image">
+                    <button class="image-attach">Upload Image?!?</button>
+                  </div>
                   <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="\s*[0-9]+((?![,-])|(\s*,\s*|(\s*-\s*))\s*[0-9]+)\s*" required>
                   <input class="js-instr-input" placeholder="Instructions for the first row" required>
                   <button type="submit" class="js-step-confirm">+</button>

@@ -116,6 +116,7 @@ input:invalid:focus {
   border: 2px solid var(--invalid-color);
 }
 
+/* TODO: stop selected buttons from expanding size of container */
 .selected {
   font-weight: bold;
   background-color: var(--purple-color);
@@ -181,7 +182,7 @@ input:invalid:focus {
 
 .yarn-input-grid,
 .yarn-list-item {
-  grid-template-columns: 1fr 4em 7em 2em;
+  grid-template-columns: 4em 1fr 4em 7em 2em;
 }
 
 .yarn-input-grid select,
@@ -193,11 +194,15 @@ input:invalid:focus {
 .glossary-list-item,
 .step-input-grid,
 .step-list-item {
-  grid-template-columns: 1fr 1fr 2em;
+  grid-template-columns: 4em 1fr 1fr 2em;
 }
 
 .glossary-term {
   font-weight: bold;
+}
+
+.notes-input-grid {
+  grid-template-columns: 4em 1fr;
 }
 
 [class$="list-item"] {
