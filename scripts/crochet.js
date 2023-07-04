@@ -34,11 +34,8 @@ const notesInputElement = document.querySelector('.js-notes-input');
 // TODO: step inputs added as modular pieces on top of each other
 // supporting drag-and-drop/rearrange
 // also add Sections w separate row counters
-const stepFormElement = document.querySelector('.js-step-form');
-const stepRowInputElement = document.querySelector('.js-row-input');
-const stepInstrInputElement = document.querySelector('.js-instr-input');
-const stepConfirmElement = document.querySelector('.js-step-confirm');
-const stepsListElement = document.querySelector('.js-steps-list');
+let headSectionElement = document.querySelector('.js-section')
+const sectionAddElement = document.querySelector('.js-add-section');
 
 const submitElement = document.querySelector('.js-submit-button');
 const resultElement = document.querySelector('.js-result');
@@ -58,9 +55,11 @@ const renderGlossary = () => {
   renderElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
   addDeleteListeners('term', selectedPattern.glossary, renderGlossary);
 }
-const renderSteps = () => {
-  renderElement(stepsListElement, selectedPattern.steps, generateStepHTML);
-  addDeleteListeners('step', selectedPattern.steps, renderSteps);
+const renderSteps = (section) => {
+  const idx = section.dataset.sectionNumber;
+  const stepListElement = section.querySelector('.js-steps-list');
+  renderElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
+  addDeleteListeners('step', selectedPattern.steps[idx], renderSteps);
 }
 
 // clear all inputs
@@ -101,34 +100,31 @@ function setupCrochet() {
     }
   });
 
-  // default value = ''
-  stepRowInputElement.value = 1;
-  stepRowInputElement.addEventListener('input', () => {
-    const input = stepRowInputElement.value.trim();
-    const result = evaluateRowInput(input);
-    // turn errmsg into invalid form entry
-    if (typeof result === 'string')
-      stepRowInputElement.setCustomValidity(result);
-    else
-      stepRowInputElement.setCustomValidity('');
-  });
+  addStepSectionListeners(headSectionElement);
+  sectionAddElement.addEventListener('click', () => {
+    const newSection = headSectionElement.cloneNode(true);
+    const oldHeading = headSectionElement.querySelector('.js-section-heading');
+    const newHeading = newSection.querySelector('.js-section-heading');
+    const newList = newSection.querySelector('.js-steps-list');
 
-  stepFormElement.addEventListener('submit', () => {
-    const rowsInput = stepRowInputElement.value.trim();
-    const [startIdx, endIdx] = evaluateRowInput(rowsInput);
-    const instrInput = stepInstrInputElement.value.trim();
-    selectedPattern.steps.push([startIdx, endIdx, instrInput]);
-    selectedPattern.currMaxStep = endIdx || startIdx;
-    renderSteps();
+    const oldNum = Number(headSectionElement.dataset.sectionNumber);
+    if (!oldNum) 
+      oldHeading.innerHTML = 'Section 1';
+    newSection.dataset.sectionNumber = oldNum + 1;
+    newHeading.innerHTML = `Section ${Number(newSection.dataset.sectionNumber) + 1}`;
+    // clear deep-copied list items
+    while (newList.firstChild) newList.removeChild(newList.firstChild);
+
+    headSectionElement.after(newSection);
+    addStepSectionListeners(newSection);
+    headSectionElement = newSection;
   });
 
   document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', () => {
       form.querySelectorAll('input')
         .forEach(input => {
-          if (input.classList === stepRowInputElement.classList)
-            input.value = selectedPattern.currMaxStep + 1;
-          else
+          if (!input.classList.contains('js-row-input'))
             input.value = input.defaultValue;
         });
     });
@@ -155,7 +151,44 @@ function addHookButtonListeners() {
     });
 }
 
-function evaluateRowInput(rowsInput) {
+function addStepSectionListeners(section) {
+  const sectionNum = section.dataset.sectionNumber;
+  const formElement = section.querySelector('.js-step-form');
+  const rowInput = section.querySelector('.js-row-input');
+  const instrInput = section.querySelector('.js-instr-input');
+
+  // initial values 
+  rowInput.dataset.currStep = 0;
+  rowInput.value = 1;
+
+  rowInput.addEventListener('input', () => {
+    const input = rowInput.value.trim();
+    const currStep = Number(rowInput.dataset.currStep);
+    const result = evaluateRowInput(input, currStep);
+    // turn errmsg into invalid form entry
+    if (typeof result === 'string')
+      rowInput.setCustomValidity(result);
+    else
+      rowInput.setCustomValidity('');
+  });
+
+  formElement.addEventListener('submit', () => {
+    const input = rowInput.value.trim();
+    const currStep = Number(rowInput.dataset.currStep);
+    const [startIdx, endIdx] = evaluateRowInput(input, currStep);
+    const instr = instrInput.value.trim();
+    if (selectedPattern.steps[sectionNum])
+      selectedPattern.steps[sectionNum].push([startIdx, endIdx, instr]);
+    else selectedPattern.steps[sectionNum] = [[startIdx, endIdx, instr]];
+    rowInput.dataset.currStep = endIdx || startIdx;
+    rowInput.value = Number(rowInput.dataset.currStep) + 1;
+    // TODO: remove/merge ambiguity with "forall submit forms clear fields" above?
+    instrInput.value = instrInput.defaultValue;
+    renderSteps(section);
+  });
+}
+
+function evaluateRowInput(rowsInput, currStep) {
   let start, end;
 
   const separatorIdx = Math.max(rowsInput.indexOf(','), rowsInput.indexOf('-'));
@@ -166,7 +199,7 @@ function evaluateRowInput(rowsInput) {
     start = Number(rowsInput.slice(0, separatorIdx));
     end = Number(rowsInput.slice(separatorIdx + 1));
   }
-  if (start !== selectedPattern.currMaxStep + 1) {
+  if (start !== currStep + 1) {
     return 'Please start on the next row.';
   }
   if (end && end < start) {

@@ -15,7 +15,6 @@ class CrochetPattern extends Pattern {
     this.glossary = [];
     this.notes = '';
     this.steps = [];
-    this.currMaxStep = 0;
   }
 }
 
