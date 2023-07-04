@@ -33,7 +33,6 @@ const notesInputElement = document.querySelector('.js-notes-input');
 
 // TODO: step inputs added as modular pieces on top of each other
 // supporting drag-and-drop/rearrange
-// also add Sections w separate row counters
 let headSectionElement = document.querySelector('.js-section')
 const sectionAddElement = document.querySelector('.js-add-section');
 
@@ -55,11 +54,11 @@ const renderGlossary = () => {
   renderElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
   addDeleteListeners('term', selectedPattern.glossary, renderGlossary);
 }
-const renderSteps = (section) => {
-  const idx = section.dataset.sectionNumber;
-  const stepListElement = section.querySelector('.js-steps-list');
+const renderSteps = (idx) => {
+  // TODO: fix broken delete listeners argh
+  const stepListElement = document.querySelector(`[data-section-number="${idx}"] .js-steps-list`);
   renderElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
-  addDeleteListeners('step', selectedPattern.steps[idx], renderSteps);
+  addDeleteListeners('step', selectedPattern.steps[idx], renderSteps, idx);
 }
 
 // clear all inputs
@@ -102,14 +101,14 @@ function setupCrochet() {
 
   addStepSectionListeners(headSectionElement);
   sectionAddElement.addEventListener('click', () => {
-    const newSection = headSectionElement.cloneNode(true);
     const oldHeading = headSectionElement.querySelector('.js-section-heading');
+    oldHeading.classList.remove('is-hidden');
+
+    const newSection = headSectionElement.cloneNode(true);
     const newHeading = newSection.querySelector('.js-section-heading');
     const newList = newSection.querySelector('.js-steps-list');
 
     const oldNum = Number(headSectionElement.dataset.sectionNumber);
-    if (!oldNum) 
-      oldHeading.innerHTML = 'Section 1';
     newSection.dataset.sectionNumber = oldNum + 1;
     newHeading.innerHTML = `Section ${Number(newSection.dataset.sectionNumber) + 1}`;
     // clear deep-copied list items
@@ -184,7 +183,7 @@ function addStepSectionListeners(section) {
     rowInput.value = Number(rowInput.dataset.currStep) + 1;
     // TODO: remove/merge ambiguity with "forall submit forms clear fields" above?
     instrInput.value = instrInput.defaultValue;
-    renderSteps(section);
+    renderSteps(sectionNum);
   });
 }
 
