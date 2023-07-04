@@ -7,7 +7,9 @@
   --invalid-color: rgb(220, 0, 0);
 }
 
-body {
+/* todo: split up stylesheets */
+
+body * {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -24,7 +26,7 @@ main {
 }
 
 .sidebar {
-  font-size: 1.5em;
+  font-size: 1.5rem;
   width: 5em;
   position: absolute;
   overflow-x: hidden;
@@ -55,10 +57,17 @@ header,
 main,
 .sidebar,
 .heading,
-.pattern-body {
+.pattern-body,
+.section-heading {
   background-color: wheat;
   border: 0.5rem solid var(--wheat-border);
   border-radius: 0.5rem;
+}
+
+header,
+.pattern-options,
+.inner {
+  align-items: center;
 }
 
 .pattern-body {
@@ -72,7 +81,6 @@ header,
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .github-repo img {
@@ -108,7 +116,8 @@ button:active,
 }
 
 [class*="confirm"],
-[class*="delete"] {
+[class*="delete"],
+.image-attach {
   font-size: 0.8em;
   font-weight: bold;
 }
@@ -116,6 +125,12 @@ button:active,
 .selected {
   font-weight: bold;
   background-color: var(--purple-color);
+}
+
+input,
+select,
+button {
+  font-size: 0.8em;
 }
 
 input[type="number"],
@@ -127,9 +142,7 @@ input:invalid:focus {
   border: 2px solid var(--invalid-color);
 }
 
-/* TODO: stop selected buttons from expanding size of container 
-also TODO: set max width on text elements before wrapping
-*/
+/* TODO: set max width on text elements before wrapping */
 
 .pattern-options {
   font-size: 2rem;
@@ -148,7 +161,11 @@ also TODO: set max width on text elements before wrapping
 .options-input {
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content:space-between;
+}
+
+.options-input * {
+  margin-right: 1em;
 }
 
 .heading {
@@ -178,6 +195,7 @@ also TODO: set max width on text elements before wrapping
 .hook-types-grid,
 [class$="list-item"],
 [class$="input-grid"] {
+  min-width: 20em;
   display: grid;
   align-items: center;
   column-gap: 1em;
@@ -185,13 +203,13 @@ also TODO: set max width on text elements before wrapping
 }
 
 .hook-types-grid {
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(10, 3.5em);
   column-gap: 0;
 }
 
 .yarn-input-grid,
 .yarn-list-item {
-  grid-template-columns: 4em 1fr 4em 7em 2em;
+  grid-template-columns: 5em 1fr 4em 7em 2em;
 }
 
 .yarn-input-grid select,
@@ -201,7 +219,7 @@ also TODO: set max width on text elements before wrapping
 
 .glossary-input-grid,
 .glossary-list-item {
-  grid-template-columns: 4em 1fr 1fr 2em;
+  grid-template-columns: 5em 1fr 1fr 2em;
 }
 
 .glossary-term {
@@ -209,12 +227,21 @@ also TODO: set max width on text elements before wrapping
 }
 
 .notes-input-grid {
-  grid-template-columns: 4em 1fr;
+  grid-template-columns: 5em 1fr;
 }
 
 .step-input-grid,
 .step-list-item {
-  grid-template-columns: 4em 6em 1fr 2em;
+  grid-template-columns: 5em 6em 1fr 2em;
+}
+
+.section-grid {
+  display: grid;
+}
+
+.section-heading {
+  font-weight: bold;
+  padding: 0.5em;
 }
 
 [class$="list-item"] {
@@ -231,7 +258,6 @@ also TODO: set max width on text elements before wrapping
 }
 
 .submit-button {
-  width: 5rem;
-  font-size: 1rem;
-  padding: 1rem;
+  font-size: 1em;
+  padding: 1em;
 }

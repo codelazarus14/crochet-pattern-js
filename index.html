@@ -6,7 +6,6 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico?v=2">
   </head>
   <body>
-    <!-- TODO: add data attrs to buttons?-->
     <header>
       <h1>Crochet Pattern Generator</h1>
       <nav>
@@ -44,7 +43,7 @@
               <!-- TODO: replace <select> with custom dropdown in js
                 https://www.w3schools.com/Css/css_dropdowns.asp -->
               <div class="options-input">
-                <label for="pattern-types">Choose a project type:</label>
+                <label for="pattern-types">Pattern type:</label>
                 <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
               </div>
             </form>
@@ -100,21 +99,23 @@
           </div>
           <div class="steps heading">Steps
             <div class="inner">
-              <div class="section js-section" data-section-number="0">
-                <div class="js-section-heading"></div>
-                <div class="step-list js-steps-list"></div>
-                <form class="js-step-form" onsubmit="return false">
-                  <div class="step-input-grid">
-                    <div class="js-step-image">
-                      <button class="image-attach">Upload Image?!?</button>
+              <div class="section-grid">
+                <div class="section js-section" data-section-number="0">
+                  <div class="section-heading js-section-heading is-hidden">Section 1</div>
+                  <div class="step-list js-steps-list"></div>
+                  <form class="js-step-form" onsubmit="return false">
+                    <div class="step-input-grid">
+                      <div class="js-step-image">
+                        <button class="image-attach">Upload Image?!?</button>
+                      </div>
+                      <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="\s*[0-9]+((?![,-])|(\s*,\s*|(\s*-\s*))\s*[0-9]+)\s*" required>
+                      <input class="js-instr-input" placeholder="Instructions for the first row" required>
+                      <button type="submit" class="js-step-confirm">+</button>
                     </div>
-                    <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="\s*[0-9]+((?![,-])|(\s*,\s*|(\s*-\s*))\s*[0-9]+)\s*" required>
-                    <input class="js-instr-input" placeholder="Instructions for the first row" required>
-                    <button type="submit" class="js-step-confirm">+</button>
-                  </div>
-                </form>
+                  </form>
+                </div>
+                <button class="add-section js-add-section">Add Section</button>
               </div>
-              <button class="add-section js-add-section">Add Section</button>
             </div>
           </div>
           <div class="submit heading">
