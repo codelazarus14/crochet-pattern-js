@@ -2,7 +2,8 @@ function filterNumInput(key) {
   // allow numbers, inc/dec w arrows and delete
   return (isFinite(key) && key !== ' ') ||
     key === 'ArrowDown' || key === 'ArrowUp' ||
-    key === "Backspace" || key === "Delete";
+    key === "Backspace" || key === "Delete" || 
+    key === 'Tab';
 }
 
 // TODO: sanitize inputs or escape generated HTML
@@ -55,7 +56,7 @@ function addDeleteListeners(listElem, itemList, renderFunc, renderParams) {
     .forEach((deleteButton, index) => {
       deleteButton.addEventListener('click', () => {
         itemList.splice(index, 1);
-        renderFunc(renderParams);
+        renderFunc.apply(null, renderParams);
       });
     });
 }

@@ -257,6 +257,11 @@ input:invalid:focus {
   background-color: var(--purple-color);
 }
 
+.add-section-button {
+  font-size: 0.9em;
+  padding: 0.5em 2em;
+}
+
 .submit-button {
   font-size: 1em;
   padding: 1em;

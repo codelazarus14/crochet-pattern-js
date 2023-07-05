@@ -14,7 +14,7 @@ class CrochetPattern extends Pattern {
     this.yarns = [];
     this.glossary = [];
     this.notes = '';
-    this.steps = [];
+    this.steps = [[]];
   }
 }
 

@@ -14,7 +14,7 @@ const USHookSizes = {
 const yarnUnits = [Units.meters, Units.yards, Units.skeins];
 
 const hookInputElement = document.querySelector('.js-hook-types');
-const hookListElement = document.querySelector('.js-hook-list');
+// const hookListElement = document.querySelector('.js-hook-list');
 
 const yarnFormElement = document.querySelector('.js-yarn-form');
 const yarnNameInputElement = document.querySelector('.js-yarn-name');
@@ -33,8 +33,8 @@ const notesInputElement = document.querySelector('.js-notes-input');
 
 // TODO: step inputs added as modular pieces on top of each other
 // supporting drag-and-drop/rearrange
-let headSectionElement = document.querySelector('.js-section')
-const sectionAddElement = document.querySelector('.js-add-section');
+const sectionGridElement = document.querySelector('.js-section-grid');
+const sectionAddElement = document.querySelector('.js-add-section-button');
 
 const submitElement = document.querySelector('.js-submit-button');
 const resultElement = document.querySelector('.js-result');
@@ -45,37 +45,61 @@ const resultElement = document.querySelector('.js-result');
 //   renderElement(hookListElement, selectedPattern.hooks, generateHookListHTML);
 // }
 const renderYarnList = () => {
-  renderElement(yarnListElement, selectedPattern.yarns, generateYarnListHTML);
+  renderListElement(yarnListElement, selectedPattern.yarns, generateYarnListHTML);
   addDeleteListeners(yarnListElement, selectedPattern.yarns, renderYarnList);
   addNumInputListeners('.js-update-yarn-amt', selectedPattern.yarns, 1);
   addSelectListeners('.js-update-yarn-units', selectedPattern.yarns, 2);
 }
 const renderGlossary = () => {
-  renderElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
+  renderListElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
   addDeleteListeners(glossaryListElement, selectedPattern.glossary, renderGlossary);
 }
-const renderSteps = (idx) => {
-  // TODO: fix broken delete listeners argh
-  const stepListElement = document.querySelector(`[data-section-number="${idx}"] .js-steps-list`);
-  renderElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
-  addDeleteListeners(stepListElement, selectedPattern.steps[idx], renderSteps, idx);
+
+const renderSectionHeading = (section, idx) => {
+  section.querySelector('.js-section-heading')
+    .innerHTML = generateSectionHeadingHTML(idx);
+}
+const renderSectionSteps = (section, idx) => {
+  const stepListElement = section.querySelector('.js-steps-list');
+  renderListElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
+  addDeleteListeners(stepListElement, selectedPattern.steps[idx], renderSectionSteps, [section, idx]);
+}
+const renderSectionStepInput = (section, idx) => {
+  section.querySelector('.js-step-form')
+    .innerHTML = generateStepInputHTML();
+  addStepInputListeners(section, idx);
+}
+const renderSectionGrid = () => {
+  renderListElement(sectionGridElement, selectedPattern.steps, generateSectionHTML);
+  const sections = sectionGridElement.querySelectorAll('.js-section');
+
+  sections.forEach((section, index) => {
+    if (sections.length > 1)
+      renderSectionHeading(section, index);
+    else
+      section.querySelector('.js-section-heading').remove();
+    renderSectionSteps(section, index);
+    renderSectionStepInput(section, index);
+  });
 }
 
-// clear all inputs
 onload = () => {
   renderPatternOptions();
+  // clear all inputs
   document.querySelectorAll('input, .js-pattern-types').forEach(elem => elem.value = elem.defaultValue);
 }
 
 function setupCrochet() {
   document.querySelector('.js-pattern-body').classList.remove('is-hidden');
-  
+
   // render input stuff once
-  renderElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
+  renderListElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
   addHookButtonListeners();
 
-  renderElement(yarnUnitsInputElement, yarnUnits, generateOptionHTML);
+  renderListElement(yarnUnitsInputElement, yarnUnits, generateOptionHTML);
   addNumInputListener(yarnAmtInputElement);
+
+  renderSectionGrid();
 
   yarnFormElement.addEventListener('submit', () => {
     const yarnName = yarnNameInputElement.value.trim();
@@ -99,24 +123,9 @@ function setupCrochet() {
     }
   });
 
-  addStepSectionListeners(headSectionElement);
   sectionAddElement.addEventListener('click', () => {
-    const oldHeading = headSectionElement.querySelector('.js-section-heading');
-    oldHeading.classList.remove('is-hidden');
-
-    const newSection = headSectionElement.cloneNode(true);
-    const newHeading = newSection.querySelector('.js-section-heading');
-    const newList = newSection.querySelector('.js-steps-list');
-
-    const oldNum = Number(headSectionElement.dataset.sectionNumber);
-    newSection.dataset.sectionNumber = oldNum + 1;
-    newHeading.innerHTML = `Section ${Number(newSection.dataset.sectionNumber) + 1}`;
-    // clear deep-copied list items
-    while (newList.firstChild) newList.removeChild(newList.firstChild);
-
-    headSectionElement.after(newSection);
-    addStepSectionListeners(newSection);
-    headSectionElement = newSection;
+    selectedPattern.steps.push([]);
+    renderSectionGrid();
   });
 
   document.querySelectorAll('form').forEach(form => {
@@ -150,15 +159,21 @@ function addHookButtonListeners() {
     });
 }
 
-function addStepSectionListeners(section) {
-  const sectionNum = section.dataset.sectionNumber;
+function addStepInputListeners(section, idx) {
   const formElement = section.querySelector('.js-step-form');
   const rowInput = section.querySelector('.js-row-input');
   const instrInput = section.querySelector('.js-instr-input');
 
-  // initial values 
-  rowInput.dataset.currStep = 0;
-  rowInput.value = 1;
+  const sectionSteps = selectedPattern.steps[idx];
+  // take end, or if UND, start idx of final step in section
+  if (sectionSteps.length > 0) {
+    const currStep =
+      sectionSteps[sectionSteps.length - 1][1] ||
+      sectionSteps[sectionSteps.length - 1][0];
+    rowInput.dataset.currStep = currStep;
+  } else
+    rowInput.dataset.currStep = 0;
+  rowInput.value = Number(rowInput.dataset.currStep) + 1;
 
   rowInput.addEventListener('input', () => {
     const input = rowInput.value.trim();
@@ -176,14 +191,14 @@ function addStepSectionListeners(section) {
     const currStep = Number(rowInput.dataset.currStep);
     const [startIdx, endIdx] = evaluateRowInput(input, currStep);
     const instr = instrInput.value.trim();
-    if (selectedPattern.steps[sectionNum])
-      selectedPattern.steps[sectionNum].push([startIdx, endIdx, instr]);
-    else selectedPattern.steps[sectionNum] = [[startIdx, endIdx, instr]];
+    if (selectedPattern.steps[idx])
+      selectedPattern.steps[idx].push([startIdx, endIdx, instr]);
+    else selectedPattern.steps[idx] = [[startIdx, endIdx, instr]];
     rowInput.dataset.currStep = endIdx || startIdx;
     rowInput.value = Number(rowInput.dataset.currStep) + 1;
     // TODO: remove/merge ambiguity with "forall submit forms clear fields" above?
     instrInput.value = instrInput.defaultValue;
-    renderSteps(sectionNum);
+    renderSectionSteps(section, idx);
   });
 }
 
@@ -249,6 +264,26 @@ function generateGlossaryEntryHTML(entry, index) {
   <div><span class="glossary-term">${entry[0]}</span></div>
   <div>${entry[1]}</div>
   <button class="js-delete-button">-</button></div>`;
+}
+
+function generateSectionHTML(section, idx) {
+  return `<div class="section js-section" data-section-number="${idx}">
+  <div class="section-heading js-section-heading"></div>
+  <div class="step-list js-steps-list"></div>
+  <form class="js-step-form" onsubmit="return false"></form></div>`;
+}
+
+function generateSectionHeadingHTML(idx) {
+  return `Section ${idx + 1}`;
+}
+
+function generateStepInputHTML() {
+  const regex = '\\s*[0-9]+((?![,-])|(\\s*,\\s*|(\\s*-\\s*))\\s*[0-9]+)\\s*';
+  return `<div class="step-input-grid">
+  <div class="js-step-image">${generateImageUploadHTML()}</div>
+  <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" required>
+  <input class="js-instr-input" placeholder="Instructions for the first row" required>
+  <button type="submit" class="js-step-confirm">+</button></div>`;
 }
 
 function generateStepHTML(step, index) {

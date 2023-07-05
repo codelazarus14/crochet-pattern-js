@@ -10,7 +10,7 @@ const patternDescInputElement = document.querySelector('.js-pattern-desc');
 const patternSelectElement = document.querySelector('.js-pattern-types');
 
 const renderPatternOptions = () => {
-  renderElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
+  renderListElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
 }
 
 patternSelectElement.addEventListener('change', () => {

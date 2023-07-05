@@ -1,4 +1,4 @@
-function renderElement(element, elementData, htmlGenerator) {
+function renderListElement(listElement, elementData, htmlGenerator) {
   console.log(selectedPattern);
   let html = '';
 
@@ -6,7 +6,7 @@ function renderElement(element, elementData, htmlGenerator) {
     html += htmlGenerator(item, index);
   });
 
-  element.innerHTML = html;
+  listElement.innerHTML = html;
 }
 
 function generateOptionHTML(option, index, selected) {
