@@ -46,19 +46,19 @@ const resultElement = document.querySelector('.js-result');
 // }
 const renderYarnList = () => {
   renderElement(yarnListElement, selectedPattern.yarns, generateYarnListHTML);
-  addDeleteListeners('yarn', selectedPattern.yarns, renderYarnList);
+  addDeleteListeners(yarnListElement, selectedPattern.yarns, renderYarnList);
   addNumInputListeners('.js-update-yarn-amt', selectedPattern.yarns, 1);
   addSelectListeners('.js-update-yarn-units', selectedPattern.yarns, 2);
 }
 const renderGlossary = () => {
   renderElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
-  addDeleteListeners('term', selectedPattern.glossary, renderGlossary);
+  addDeleteListeners(glossaryListElement, selectedPattern.glossary, renderGlossary);
 }
 const renderSteps = (idx) => {
   // TODO: fix broken delete listeners argh
   const stepListElement = document.querySelector(`[data-section-number="${idx}"] .js-steps-list`);
   renderElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
-  addDeleteListeners('step', selectedPattern.steps[idx], renderSteps, idx);
+  addDeleteListeners(stepListElement, selectedPattern.steps[idx], renderSteps, idx);
 }
 
 // clear all inputs
@@ -240,7 +240,7 @@ function generateYarnListHTML(yarn, index) {
   <div>${yarn[0]}</div>
   <input class="js-update-yarn-amt" type="number" value="${yarn[1]}" min="1">
   <select class="js-update-yarn-units">${units}</select>
-  <button class="js-delete-yarn-button">-</button></div>`;
+  <button class="js-delete-button">-</button></div>`;
 }
 
 function generateGlossaryEntryHTML(entry, index) {
@@ -248,7 +248,7 @@ function generateGlossaryEntryHTML(entry, index) {
   <div class="js-update-term-image">${generateImageUploadHTML()}</div>
   <div><span class="glossary-term">${entry[0]}</span></div>
   <div>${entry[1]}</div>
-  <button class="js-delete-term-button">-</button></div>`;
+  <button class="js-delete-button">-</button></div>`;
 }
 
 function generateStepHTML(step, index) {
@@ -259,5 +259,5 @@ function generateStepHTML(step, index) {
   <div class="step-image">${imageUpload}</div>
   <div class="step-rows">${rowString}</div>
   <div class="step-instrs">${step[2]}</div>
-  <button class="js-delete-step-button">-</button></div>`;
+  <button class="js-delete-button">-</button></div>`;
 }

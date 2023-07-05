@@ -49,9 +49,9 @@ function addNumInputListener(element, updateFunc, funcArgs) {
   }
 }
 
-function addDeleteListeners(listName, itemList, renderFunc, renderParams) {
-  console.log(itemList);
-  document.querySelectorAll(`.js-delete-${listName}-button`)
+function addDeleteListeners(listElem, itemList, renderFunc, renderParams) {
+  console.log(listElem);
+  listElem.querySelectorAll(`.js-delete-button`)
     .forEach((deleteButton, index) => {
       deleteButton.addEventListener('click', () => {
         itemList.splice(index, 1);
