@@ -1,0 +1,23 @@
+:root {
+  --blue-color: rgb(140, 215, 235);
+  --purple-color: rgb(160, 185, 235);
+  --wheat-border: rgb(235, 210, 155);
+  --shadow-color: rgba(0, 0, 0, 0.15);
+  --invalid-color: rgb(220, 0, 0);
+}
+
+body * {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+.page-content {
+  margin-top: 1em;
+}
+
+main {
+  margin-left: 9.5em;
+}
