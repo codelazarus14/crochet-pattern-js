@@ -93,8 +93,6 @@ input:invalid:focus {
   border: 2px solid var(--invalid-color);
 }
 
-/* TODO: set max width on text elements before wrapping */
-
 .pattern-options {
   font-size: 2rem;
 }
@@ -122,7 +120,7 @@ input:invalid:focus {
 .heading {
   font-size: 2rem;
   padding: 0.5em;
-  margin: 0.2em 0;
+  margin: 0.5em;
 }
 
 .hooks,
@@ -138,6 +136,10 @@ input:invalid:focus {
   flex-direction: column;
 }
 
+[class$="container"] {
+  max-width: 80%;
+}
+
 [class$="list"] {
   display: flex;
   flex-direction: column;
@@ -146,7 +148,6 @@ input:invalid:focus {
 .hook-types-grid,
 [class$="list-item"],
 [class$="input-grid"] {
-  min-width: 20em;
   display: grid;
   align-items: center;
   column-gap: 1em;
@@ -196,11 +197,16 @@ input:invalid:focus {
 }
 
 [class$="list-item"] {
-  left: 50%;
   margin: 0.5em 0;
   background-color: wheat;
   border-radius: 2%/20%;
   box-shadow: -0.2em -0.2em inset var(--purple-color);
+}
+
+[class$="list-item"] *,
+.result {
+  overflow: hidden;
+  overflow-wrap: break-word;
 }
 
 [class$="list-item"] button,

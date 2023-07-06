@@ -84,9 +84,10 @@ const renderSectionGrid = () => {
 }
 
 onload = () => {
+  // TODO: select not working on safari?
   renderPatternOptions();
   // clear all inputs
-  document.querySelectorAll('input, .js-pattern-types').forEach(elem => elem.value = elem.defaultValue);
+  document.querySelectorAll('input, textarea, .js-pattern-types').forEach(elem => elem.value = elem.defaultValue);
 }
 
 function setupCrochet() {
@@ -226,7 +227,7 @@ function evaluateRowInput(rowsInput, currStep) {
 }
 
 function generateHookSizeButtonsHTML(option, index) {
-  let classes = 'js-hook-size-button';
+  let classes = 'hook-size-button js-hook-size-button';
   if (selectedPattern.hooks[index])
     classes += ' selected';
   return `<button class="${classes}" value="${index}">${option}/${USHookSizes[option]}</button>`;

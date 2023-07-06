@@ -60,55 +60,65 @@
             </div>
             <p class="yarns">Yarns</p>
             <div class="inner">
-              <div class="yarn-list js-yarn-list"></div>
-              <form class="js-yarn-form" onsubmit="return false">
-                <div class="yarn-input-grid">
-                  <div class="js-yarn-image">
-                    <button class="image-attach">Upload Image?!?</button>
+              <div class="yarn-container">
+                <div class="yarn-list js-yarn-list"></div>
+                <form class="js-yarn-form" onsubmit="return false">
+                  <div class="yarn-input-grid">
+                    <div class="js-yarn-image">
+                      <button class="image-attach">Upload Image?!?</button>
+                    </div>
+                    <input class="js-yarn-name" placeholder="Enter yarn name" required>
+                    <input class="js-yarn-amt" type="number" value="1" min="1">
+                    <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
+                    <button type="submit" class="js-yarn-confirm">+</button>
                   </div>
-                  <input class="js-yarn-name" placeholder="Enter yarn name" required>
-                  <input class="js-yarn-amt" type="number" value="1" min="1">
-                  <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
-                  <button type="submit" class="js-yarn-confirm">+</button>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
           <div class="glossary heading">Glossary
             <div class="inner">
-              <div class="glossary-list js-glossary-list"></div>
-              <form class="js-glossary-form" onsubmit="return false">
-                <div class="glossary-input-grid">
-                  <div class="js-term-image">
-                    <button class="image-attach">Upload Image?!?</button>
+              <div class="glossary-container">
+                <div class="glossary-list js-glossary-list"></div>
+                <form class="js-glossary-form" onsubmit="return false">
+                  <div class="glossary-input-grid">
+                    <div class="js-term-image">
+                      <button class="image-attach">Upload Image?!?</button>
+                    </div>
+                    <input class="js-term-input" placeholder="Enter term" required>
+                    <input class="js-desc-input" placeholder="Enter description" required>
+                    <button type="submit" class="js-glossary-confirm">+</button>
                   </div>
-                  <input class="js-term-input" placeholder="Enter term" required>
-                  <input class="js-desc-input" placeholder="Enter description" required>
-                  <button type="submit" class="js-glossary-confirm">+</button>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
           <div class="notes heading">Notes
             <div class="inner">
-              <div class="notes-input-grid">
-                <div class="js-notes-image">
-                  <button class="image-attach">Upload Image?!?</button>
+              <div class="notes-container">
+                <div class="notes-input-grid">
+                  <div class="js-notes-image">
+                    <button class="image-attach">Upload Image?!?</button>
+                  </div>
+                  <textarea rows="3" cols="30" class="notes-input js-notes-input" placeholder="Enter some notes"></textarea>
                 </div>
-                <input class="notes-input js-notes-input" placeholder="Enter some notes">
               </div>
             </div>
           </div>
           <div class="steps heading">Steps
             <div class="inner">
-              <div class="section-grid js-section-grid"></div>
-              <button class="add-section-button js-add-section-button">Add Section</button>
+              <div class="steps-container">                
+                <div class="section-grid js-section-grid"></div>
+                <button class="add-section-button js-add-section-button">Add Section</button>
+              </div>
             </div>
           </div>
           <div class="submit heading">
             <div class="inner">
-              <button class="submit-button js-submit-button">Submit</button>
-              <div class="js-result"></div>
+              <div class="submit-container">
+                <button class="submit-button js-submit-button">Submit</button>
+                <div class="result js-result"></div>
+              </div>
             </div>
           </div>
         </div>
