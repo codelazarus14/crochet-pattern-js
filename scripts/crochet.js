@@ -242,8 +242,6 @@ function generateHookSizeButtonsHTML(option, index) {
 
 // TODO: make output list items have editable text fields
 
-// TODO: make scrollbars once lists get too big
-
 function generateYarnListHTML(yarn, index) {
   let units = '';
   yarnUnits.forEach((unit, idx) => {

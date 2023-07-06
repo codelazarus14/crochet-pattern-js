@@ -140,7 +140,10 @@ input:invalid:focus {
   max-width: 80%;
 }
 
+/* TODO: custom scrollbar with discrete 'resting points'? */
 [class$="list"] {
+  max-height: 17em;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
