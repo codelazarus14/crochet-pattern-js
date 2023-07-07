@@ -14,6 +14,9 @@ class CrochetPattern extends Pattern {
     this.yarns = [];
     this.glossary = [];
     this.notes = '';
+    // 2d array of steps ordered by sections,
+    // each step consists of:
+    // [startIdx, endIdx, instrs, errorFlag]
     this.steps = [[]];
   }
 }

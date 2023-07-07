@@ -31,8 +31,7 @@ const glossaryListElement = document.querySelector('.js-glossary-list');
 
 const notesInputElement = document.querySelector('.js-notes-input');
 
-// TODO: step inputs added as modular pieces on top of each other
-// supporting drag-and-drop/rearrange
+// TODO: step inputs added as modular pieces supporting drag-and-drop/rearrange
 const sectionGridElement = document.querySelector('.js-section-grid');
 const sectionAddElement = document.querySelector('.js-add-section-button');
 
@@ -61,6 +60,12 @@ const renderSectionHeading = (section, idx) => {
 }
 const renderSectionSteps = (section, idx) => {
   const stepListElement = section.querySelector('.js-steps-list');
+  const rowInput = section.querySelector('.js-row-input');
+  checkStepIndexes(idx);
+  // only set value if step input is ready, so avoid 
+  // nullref and wait for addStepInputListeners() to do it
+  if (rowInput) 
+    setRowInputValue(rowInput, idx);
   renderListElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
   addDeleteListeners(stepListElement, selectedPattern.steps[idx], renderSectionSteps, [section, idx]);
 }
@@ -165,16 +170,7 @@ function addStepInputListeners(section, idx) {
   const rowInput = section.querySelector('.js-row-input');
   const instrInput = section.querySelector('.js-instr-input');
 
-  const sectionSteps = selectedPattern.steps[idx];
-  // take end, or if UND, start idx of final step in section
-  if (sectionSteps.length > 0) {
-    const currStep =
-      sectionSteps[sectionSteps.length - 1][1] ||
-      sectionSteps[sectionSteps.length - 1][0];
-    rowInput.dataset.currStep = currStep;
-  } else
-    rowInput.dataset.currStep = 0;
-  rowInput.value = Number(rowInput.dataset.currStep) + 1;
+  setRowInputValue(rowInput, idx);
 
   rowInput.addEventListener('input', () => {
     const input = rowInput.value.trim();
@@ -193,14 +189,24 @@ function addStepInputListeners(section, idx) {
     const [startIdx, endIdx] = evaluateRowInput(input, currStep);
     const instr = instrInput.value.trim();
     if (selectedPattern.steps[idx])
-      selectedPattern.steps[idx].push([startIdx, endIdx, instr]);
-    else selectedPattern.steps[idx] = [[startIdx, endIdx, instr]];
-    rowInput.dataset.currStep = endIdx || startIdx;
-    rowInput.value = Number(rowInput.dataset.currStep) + 1;
+      selectedPattern.steps[idx].push([startIdx, endIdx, instr, false]);
+    else selectedPattern.steps[idx] = [[startIdx, endIdx, instr, false]];
     // TODO: remove/merge ambiguity with "forall submit forms clear fields" above?
     instrInput.value = instrInput.defaultValue;
     renderSectionSteps(section, idx);
   });
+}
+
+function setRowInputValue(rowInputElem, idx) {
+  const sectionSteps = selectedPattern.steps[idx];
+
+  // if section already exists, use final start/end idx
+  const currStep =  sectionSteps.length > 0 ? 
+    sectionSteps[sectionSteps.length - 1][1] || 
+    sectionSteps[sectionSteps.length - 1][0] 
+  : 0;
+  rowInputElem.dataset.currStep = currStep;
+  rowInputElem.value = currStep + 1;
 }
 
 function evaluateRowInput(rowsInput, currStep) {
@@ -224,6 +230,23 @@ function evaluateRowInput(rowsInput, currStep) {
     end = undefined;
 
   return [start, end];
+}
+
+function checkStepIndexes(sectionIdx) {
+  const sectionSteps = selectedPattern.steps[sectionIdx];
+  let foundError = sectionSteps[0] && sectionSteps[0][0] !== 1;
+
+  for (let i = 0; i < sectionSteps.length; i++) {
+    const prevStepEnd = sectionSteps[i][1] || sectionSteps[i][0];
+    const nextStepStart = sectionSteps[i+1] && sectionSteps[i+1][0];
+
+    // mark every step affected (after error)
+    sectionSteps[i][3] = foundError;
+    if (!foundError && nextStepStart) {
+      // detect gap between rows
+      foundError = nextStepStart !== prevStepEnd + 1;
+    }
+  }
 }
 
 function generateHookSizeButtonsHTML(option, index) {
@@ -286,10 +309,12 @@ function generateStepInputHTML() {
 }
 
 function generateStepHTML(step, index) {
-  const rowString = step[1] ? `Rows ${step[0]} - ${step[1]}` : `Row ${step[0]}`;
+  const rowString = 
+    step[1] ? `Rows ${step[0]} - ${step[1]}` : `Row ${step[0]}`;
   const imageUpload = generateImageUploadHTML();
+  const rowIndexError = step[3] ? 'step-index-error' : '';
 
-  return `<div class="step-list-item">
+  return `<div class="${rowIndexError} step-list-item">
   <div class="step-image">${imageUpload}</div>
   <div class="step-rows">${rowString}</div>
   <div class="step-instrs">${step[2]}</div>
