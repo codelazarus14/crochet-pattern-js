@@ -191,7 +191,7 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
   grid-template-columns: 5em 6em 1fr 2em;
 }
 
-.step-index-error .step-rows {
+.step-index-error {
   font-weight: bold;
   color: var(--invalid-color);
 }

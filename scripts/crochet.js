@@ -316,9 +316,10 @@ function generateStepHTML(step, index) {
   const imageUpload = generateImageUploadHTML();
   const rowIndexError = step[3] ? 'step-index-error' : '';
 
-  return `<div class="${rowIndexError} step-list-item">
+  return `<div class="step-list-item">
   <div class="step-image">${imageUpload}</div>
-  <div class="step-rows">${rowString}</div>
+  <div class="step-rows">
+    <span class="${rowIndexError}">${rowString}</span></div>
   <div class="step-instrs">${step[2]}</div>
   <button class="js-delete-button">-</button></div>`;
 }
