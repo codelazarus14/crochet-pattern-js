@@ -31,16 +31,16 @@
           <div class="options-container">
             <form class="js-pattern-options-form">
               <div class="options-input">
-                <p class="title">Title:</p>
-                <input class="js-pattern-title" placeholder="Enter title" required>
+                <label for="title">Title:</label>
+                <input class="js-pattern-title" name="title" placeholder="Enter title" required>
               </div>
               <div class="options-input">
-                <p class="author">Author:</p>
-                <input class="js-pattern-author" placeholder="Enter author" required>
+                <label for="author">Author:</label>
+                <input class="js-pattern-author" name="author" placeholder="Enter author" required>
               </div>
               <div class="options-input">
-                <p class="desc">Description:</p>
-                <input class="js-pattern-desc" placeholder="Enter a description">
+                <label for="description">Description:</label>
+                <input class="js-pattern-desc" name="description" placeholder="Enter a description">
               </div>
               <!-- TODO: replace <select> with custom dropdown in js
                 https://www.w3schools.com/Css/css_dropdowns.asp -->
@@ -55,6 +55,7 @@
           <div class="materials heading">Materials
             <p class="hooks">Hooks</p>
             <div class="inner">
+              <!-- TODO: accessibility -->
               <div class="hook-list js-hook-list"></div>
               <div class="hook-types-grid js-hook-types"></div>
             </div>
@@ -67,9 +68,18 @@
                     <div class="js-yarn-image">
                       <button class="image-attach">Upload Image?!?</button>
                     </div>
-                    <input class="js-yarn-name" placeholder="Enter yarn name" required>
-                    <input class="js-yarn-amt" type="number" value="1" min="1">
-                    <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
+                    <div class="js-yarn-name-input">
+                      <label for="yarn-name">Name:</label>
+                      <input class="js-yarn-name" name="yarn-name" placeholder="Enter yarn name" required>
+                    </div>
+                    <div class="js-yarn-amt-input">
+                      <label for="yarn-amt">Amount:</label>
+                      <input class="js-yarn-amt" name="yarn-amt" type="number" value="1" min="1">
+                    </div>
+                    <div class="js-yarn-units-input">
+                      <label for="yarn-units">Units:</label>
+                      <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
+                    </div>
                     <button type="submit" class="js-yarn-confirm">+</button>
                   </div>
                 </form>
@@ -85,8 +95,14 @@
                     <div class="js-term-image">
                       <button class="image-attach">Upload Image?!?</button>
                     </div>
-                    <input class="js-term-input" placeholder="Enter term" required>
-                    <input class="js-desc-input" placeholder="Enter description" required>
+                    <div class="js-term-input">
+                      <label for="term">Term:</label>
+                      <input class="js-term" name="term" placeholder="Enter term" required>
+                    </div>
+                    <div class="js-desc-input">
+                      <label for="description">Description:</label>
+                      <input class="js-desc" name="description" placeholder="Enter description" required>
+                    </div>
                     <button type="submit" class="js-glossary-confirm">+</button>
                   </div>
                 </form>

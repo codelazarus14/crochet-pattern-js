@@ -24,8 +24,8 @@ const yarnConfirmInputElement = document.querySelector('.js-yarn-confirm');
 const yarnListElement = document.querySelector('.js-yarn-list');
 
 const glossaryFormElement = document.querySelector('.js-glossary-form');
-const glossaryTermInputElement = document.querySelector('.js-term-input');
-const glossaryDescInputElement = document.querySelector('.js-desc-input');
+const glossaryTermInputElement = document.querySelector('.js-term');
+const glossaryDescInputElement = document.querySelector('.js-desc');
 const glossaryConfirmInputElement = document.querySelector('.js-glossary-confirm');
 const glossaryListElement = document.querySelector('.js-glossary-list');
 
@@ -266,6 +266,7 @@ function generateHookSizeButtonsHTML(option, index) {
 // }
 
 // TODO: make output list items have editable text fields
+// TODO: add labels to all generated inputs
 
 function generateYarnListHTML(yarn, index) {
   let units = '';

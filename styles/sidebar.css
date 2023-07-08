@@ -1,6 +1,10 @@
 .sidebar {
   font-size: 1.5rem;
   width: 5em;
+  background-color: wheat;
+  border: 0.5rem solid var(--wheat-border);
+  border-radius: 0.5rem;
+  box-shadow: 0.4rem 0.4rem var(--blue-color);
   position: absolute;
   overflow-x: hidden;
   display: flex;
@@ -10,9 +14,22 @@
 
 .sidebar a {
   margin: 0.5em;
+  padding: 0.5em;
   text-decoration: none;
-  border-radius: 15%;
+  background-color: var(--blue-color);
   color: inherit;
+  border: none;
+  border-radius: 0.35em;
+  box-shadow: -0.2em -0.2em inset var(--shadow-color);
+  cursor: pointer;
+}
+
+.sidebar a:hover {
+  opacity: 0.8;
+}
+
+.sidebar a:active {
+  box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
 
 .sticky {
