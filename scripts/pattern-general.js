@@ -19,7 +19,8 @@ patternSelectElement.addEventListener('change', () => {
     patternSelectElement.value = patternSelectElement.defaultValue;
 });
 
-patternOptionsFormElement.addEventListener('submit', () => {
+patternOptionsFormElement.addEventListener('submit', e => {
+  e.preventDefault();
   const type = patternSelectElement.value;
   selectPattern(type);
 });

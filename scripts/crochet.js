@@ -135,7 +135,8 @@ function setupCrochet() {
   });
 
   document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', () => {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
       form.querySelectorAll('input')
         .forEach(input => {
           if (!input.classList.contains('js-row-input'))
@@ -183,7 +184,8 @@ function addStepInputListeners(section, idx) {
       rowInput.setCustomValidity('');
   });
 
-  formElement.addEventListener('submit', () => {
+  formElement.addEventListener('submit', e => {
+    e.preventDefault();
     const input = rowInput.value.trim();
     const currStep = Number(rowInput.dataset.currStep);
     const [startIdx, endIdx] = evaluateRowInput(input, currStep);
@@ -292,7 +294,7 @@ function generateSectionHTML(section, idx) {
   return `<div class="section js-section" data-section-number="${idx}">
   <div class="section-heading js-section-heading"></div>
   <div class="step-list js-steps-list"></div>
-  <form class="js-step-form" onsubmit="return false"></form></div>`;
+  <form class="js-step-form"></form></div>`;
 }
 
 function generateSectionHeadingHTML(idx) {
