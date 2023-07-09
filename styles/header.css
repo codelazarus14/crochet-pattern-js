@@ -1,0 +1,32 @@
+header {
+  padding: 1.25rem;
+  background-color: wheat;
+  border: 0.5rem solid var(--wheat-border);
+  border-radius: 0.5rem;
+  box-shadow: 0.4rem 0.4rem var(--blue-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header nav {
+  background-color: antiquewhite;
+  border-radius: 1em;
+  display: flex;
+}
+
+header nav img {
+  width: 2em;
+  margin: 0.35em;
+  padding: 0.35em;
+  background-color: white;
+  vertical-align: middle;
+}
+
+.github-repo img {
+  border-radius: 100%;
+}
+
+.test-page-link img {
+  border-radius: 25%;
+}

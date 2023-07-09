@@ -1,10 +1,3 @@
-header,
-main {
-  box-shadow: 0.4rem 0.4rem var(--blue-color);
-}
-
-header,
-main,
 .heading,
 .pattern-body,
 .section-heading {
@@ -13,7 +6,6 @@ main,
   border-radius: 0.5rem;
 }
 
-header,
 .pattern-options,
 .inner {
   align-items: center;
@@ -24,7 +16,6 @@ header,
   border-radius: 0;
 }
 
-header,
 .pattern-options,
 .pattern-body {
   padding: 1.25rem;
@@ -32,19 +23,22 @@ header,
   flex-direction: column;
 }
 
-.github-repo img {
-  padding: 0.2rem;
-  background-color: white;
-  border-radius: 100%;
-}
-
 .pattern-body,
 .inner {
   background-color: antiquewhite;
 }
 
+input,
 select,
-button {
+button,
+.submit-button {
+  font-size: 0.8em;
+  border-radius: 0.35em;
+}
+
+select,
+button,
+.submit-button {
   padding: 0.5em;
   border: none;
   background-color: var(--blue-color);
@@ -53,12 +47,14 @@ button {
 }
 
 button:hover,
-select:hover {
+select:hover,
+.submit-button:hover {
   opacity: 0.8;
 }
 
 button:active,
-select:active {
+select:active,
+.submit-button:active {
   box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
 
@@ -78,13 +74,6 @@ input {
   padding: 0.35em;
   margin: 0.35em;
   border: 2px solid transparent;
-}
-
-input,
-select,
-button {
-  font-size: 0.8em;
-  border-radius: 0.35em;
 }
 
 input[type="number"],
@@ -215,8 +204,7 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
   box-shadow: -0.2em -0.2em inset var(--purple-color);
 }
 
-[class$="list-item"] *,
-.result {
+[class$="list-item"] * {
   overflow: hidden;
   overflow-wrap: break-word;
 }
@@ -231,7 +219,13 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
   font-size: 0.9em;
 }
 
-.submit-button {
+.submit-container * {
   font-size: 1em;
   padding: 1em;
+  margin: 1em;
+}
+
+.submit-button {
+  text-decoration: none;
+  color: inherit;
 }

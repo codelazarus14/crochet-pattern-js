@@ -13,6 +13,8 @@ const USHookSizes = {
 
 const yarnUnits = [Units.meters, Units.yards, Units.skeins];
 
+// TODO: load existing pattern from storage
+
 const hookInputElement = document.querySelector('.js-hook-types');
 // const hookListElement = document.querySelector('.js-hook-list');
 
@@ -36,7 +38,7 @@ const sectionGridElement = document.querySelector('.js-section-grid');
 const sectionAddElement = document.querySelector('.js-add-section-button');
 
 const submitElement = document.querySelector('.js-submit-button');
-const resultElement = document.querySelector('.js-result');
+const resetElement = document.querySelector('.js-reset-button');
 
 // unused - we seem to be using button visuals now
 //
@@ -89,6 +91,10 @@ const renderSectionGrid = () => {
 }
 
 onload = () => {
+  resetPage();
+}
+
+function resetPage() {
   // TODO: select not working on safari?
   renderPatternOptions();
   // clear all inputs
@@ -146,7 +152,13 @@ function setupCrochet() {
   });
 
   submitElement.addEventListener('click', () => {
-    resultElement.innerHTML = JSON.stringify(selectedPattern);
+    const submittedPattern = JSON.stringify(selectedPattern);
+    localStorage.setItem('submittedPattern', submittedPattern);
+  });
+
+  resetElement.addEventListener('click', () => {
+    localStorage.removeItem('submittedPattern');
+    location.reload();
   });
 }
 

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Crochet Patterns</title>
+    <title>Crochet Patterns | Generator</title>
     <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/header.css">  
     <link rel="stylesheet" href="styles/sidebar.css">
     <link rel="stylesheet" href="styles/crochet.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico?v=2">
@@ -11,12 +12,10 @@
     <header>
       <h1>Crochet Pattern Generator</h1>
       <nav>
-        <div class="github-repo">
-          <a href="https://github.com/codelazarus14/crochet-pattern-js" target="_blank">
-            <!-- https://wcag.com/resource/what-is-wcag/ -->
-            <img src="images/github.svg" alt="Github logo">
-          </a>
-        </div>
+        <a class="github-repo" href="https://github.com/codelazarus14/crochet-pattern-js" target="_blank">
+          <!-- https://wcag.com/resource/what-is-wcag/ -->
+          <img src="images/github.svg" alt="Github logo">
+        </a>
       </nav>
     </header>
     <div class="page-content">
@@ -132,8 +131,8 @@
           <div class="submit heading">
             <div class="inner">
               <div class="submit-container">
-                <button class="submit-button js-submit-button">Submit</button>
-                <div class="result js-result"></div>
+                <a class="submit-button js-submit-button" href="pattern-preview.html">Submit</a>
+                <button class="reset-button js-reset-button">Reset Pattern</button>
               </div>
             </div>
           </div>

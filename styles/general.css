@@ -20,4 +20,8 @@ body * {
 
 main {
   margin-left: 9.5em;
+  background-color: wheat;
+  border: 0.5rem solid var(--wheat-border);
+  border-radius: 0.5rem;
+  box-shadow: 0.4rem 0.4rem var(--blue-color);
 }
