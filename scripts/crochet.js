@@ -153,11 +153,11 @@ function setupCrochet() {
 
   submitElement.addEventListener('click', () => {
     const submittedPattern = JSON.stringify(selectedPattern);
-    localStorage.setItem('submittedPattern', submittedPattern);
+    localStorage.setItem(PATTERN_KEY, submittedPattern);
   });
 
   resetElement.addEventListener('click', () => {
-    localStorage.removeItem('submittedPattern');
+    localStorage.removeItem(PATTERN_KEY);
     location.reload();
   });
 }

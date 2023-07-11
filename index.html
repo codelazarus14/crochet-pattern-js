@@ -10,7 +10,7 @@
   </head>
   <body>
     <header>
-      <h1>Crochet Pattern Generator</h1>
+      <h1 class="heading">Crochet Pattern Generator</h1>
       <nav>
         <a class="github-repo" href="https://github.com/codelazarus14/crochet-pattern-js" target="_blank">
           <!-- https://wcag.com/resource/what-is-wcag/ -->
@@ -26,8 +26,8 @@
         <a href="#">Test 4</a>
       </div>
       <main>
-        <div class="pattern-options">Basic Info
-          <div class="options-container">
+        <div class="pattern-options">Pattern Options
+          <div class="pattern-options-grid">
             <form class="js-pattern-options-form">
               <div class="options-input">
                 <label for="title">Title:</label>
@@ -48,13 +48,15 @@
                 <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
               </div>
             </form>
+            <div class="load-pattern-options">
+              <button class="load-pattern-button js-load-pattern-button">Load Saved Pattern</button>
+            </div>
           </div>
         </div>
         <div class="pattern-body js-pattern-body is-hidden">
           <div class="materials heading">Materials
             <p class="hooks">Hooks</p>
             <div class="inner">
-              <!-- TODO: accessibility -->
               <div class="hook-list js-hook-list"></div>
               <div class="hook-types-grid js-hook-types"></div>
             </div>

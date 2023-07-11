@@ -1,3 +1,5 @@
+const PATTERN_KEY = 'submittedPattern';
+
 class Pattern {
   constructor(title, author, desc, type) {
     this.title = title;
