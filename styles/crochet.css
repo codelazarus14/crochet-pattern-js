@@ -54,7 +54,8 @@ button,
 
 button:hover,
 select:hover,
-.submit-button:hover {
+.submit-button:hover,
+.close-button:hover {
   opacity: 0.8;
 }
 
@@ -62,6 +63,18 @@ button:active,
 select:focus,
 .submit-button:active {
   box-shadow: -0.1em -0.1em inset var(--shadow-color);
+}
+
+.load-pattern-options {
+  min-width: 11em;
+}
+
+.load-pattern-alert {
+  font-size: 0.8em;
+  padding: 0.2em;
+  color: var(--invalid-color);
+  display: flex;
+  align-items: center;
 }
 
 [class*="confirm"],

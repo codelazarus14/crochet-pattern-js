@@ -162,6 +162,14 @@ function setupCrochet() {
   });
 }
 
+function populateCrochetPatternFields() {
+  setupCrochet();
+  renderYarnList();
+  renderGlossary();
+  notesInputElement.value = selectedPattern.notes;
+  renderSectionGrid();
+}
+
 function addHookButtonListeners() {
   document.querySelectorAll('.js-hook-size-button')
     .forEach((button) => {
