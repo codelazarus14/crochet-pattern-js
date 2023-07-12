@@ -65,8 +65,8 @@ select:focus,
   box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
 
-.load-pattern-options {
-  min-width: 11em;
+.load-pattern-options .inner {
+  font-size: 1em;
 }
 
 .load-pattern-alert {
@@ -157,6 +157,27 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
   padding: 1em;
 }
 
+[class$="list-item"] {
+  margin: 0.5em 0;
+  background-color: wheat;
+  border-radius: 1em;
+  box-shadow: -0.2em -0.2em inset var(--purple-color);
+}
+
+[class$="list-item"] * {
+  overflow: hidden;
+  overflow-wrap: break-word;
+}
+
+[class$="list-item"] button,
+[class$="list-item"] select {
+  background-color: var(--purple-color);
+}
+
+.pattern-list-item {
+  grid-template-columns: 1fr 1fr 4em 2em;
+}
+
 .hook-types-grid {
   grid-template-columns: repeat(10, 3.5em);
   column-gap: 0;
@@ -177,7 +198,8 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
   grid-template-columns: 5em 1fr 1fr 2em;
 }
 
-.glossary-term {
+.glossary-term,
+.pattern-title {
   font-weight: bold;
 }
 
@@ -202,23 +224,6 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
 .section-heading {
   font-weight: bold;
   padding: 0.5em;
-}
-
-[class$="list-item"] {
-  margin: 0.5em 0;
-  background-color: wheat;
-  border-radius: 1em;
-  box-shadow: -0.2em -0.2em inset var(--purple-color);
-}
-
-[class$="list-item"] * {
-  overflow: hidden;
-  overflow-wrap: break-word;
-}
-
-[class$="list-item"] button,
-[class$="list-item"] select {
-  background-color: var(--purple-color);
 }
 
 .add-section-button {

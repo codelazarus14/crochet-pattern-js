@@ -1,5 +1,6 @@
 let previousPattern;
 let selectedPattern;
+let savedPatterns;
 
 // common pattern header code
 
@@ -9,10 +10,24 @@ const patternAuthorInputElement = document.querySelector('.js-pattern-author');
 const patternDescInputElement = document.querySelector('.js-pattern-desc');
 const patternSelectElement = document.querySelector('.js-pattern-types');
 
-const loadPatternElement = document.querySelector('.js-load-pattern-button');
+const loadPatternList = document.querySelector('.js-load-pattern-list');
 const missingPatternAlert = document.querySelector('.js-load-pattern-alert');
 
+const renderPatternList = () => {
+  if (savedPatterns.length < 1) {
+    missingPatternAlert.classList.remove('is-hidden');
+  } else {
+    missingPatternAlert.classList.add('is-hidden');
+  }
+  renderListElement(loadPatternList, savedPatterns, generatePatternListItem);
+  addPatternListListeners();
+}
+
 const renderPatternOptions = () => {
+  const saved = localStorage.getItem(PATTERN_KEY);
+  savedPatterns = saved ? JSON.parse(saved) : [];
+  renderPatternList();
+
   renderListElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
   patternSelectElement.innerHTML = generateDefaultSelectOption('Choose here') + patternSelectElement.innerHTML;
 
@@ -26,17 +41,6 @@ const renderPatternOptions = () => {
     e.preventDefault();
     const type = patternSelectElement.value;
     selectPattern(type);
-  });
-
-  loadPatternElement.addEventListener('click', () => {
-    const storedPattern = localStorage.getItem(PATTERN_KEY);
-    if (storedPattern) {
-      missingPatternAlert.classList.add('is-hidden');
-      selectedPattern = JSON.parse(storedPattern);
-      populatePatternFields();
-    } else {
-      missingPatternAlert.classList.remove('is-hidden');
-    }
   });
 }
 
@@ -60,15 +64,40 @@ function selectPattern(type) {
   setup();
 }
 
+function addPatternListListeners() {
+  document.querySelectorAll('.js-pattern-list-item')
+    .forEach(patternElem => {
+      const loadButton = patternElem.querySelector('.js-load-pattern');
+      loadButton.addEventListener('click', () => {
+        const idx = patternElem.dataset.patternIdx;
+        selectedPattern = savedPatterns[idx];
+        // TODO: add styling and keep track of selected pattern to be updated on Submit
+        // ask user if they want to update an existing pattern or save a new copy?
+        populatePatternFields();
+      });
+    });
+  
+  // TODO: make deletion persistent like Submit
+  addDeleteListeners(loadPatternList, savedPatterns, renderPatternList);
+}
+
 function populatePatternFields() {
-  console.log(`loaded stored pattern ${selectedPattern.title}`);
-  // TODO: implement fields loaded from pattern
   patternTitleInputElement.value = selectedPattern.title;
   patternAuthorInputElement.value = selectedPattern.author;
   patternDescInputElement.value = selectedPattern.desc;
+  patternSelectElement.value = selectedPattern.type;
   switch (selectedPattern.type) {
     case PatternTypes.USCrochet:
       populateCrochetPatternFields();
       break;
   }
+}
+
+function generatePatternListItem(pattern, index) {
+  return `<div class="pattern-list-item js-pattern-list-item" data-pattern-idx="${index}">
+  <div class="pattern-title">${pattern.title}</div>
+  <div class="pattern-author">${pattern.author}</div>
+  <button class="load-pattern js-load-pattern">Load</button>
+  <button class="js-delete-button">-</button>
+  </div>`
 }

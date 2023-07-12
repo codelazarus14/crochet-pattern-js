@@ -1,3 +1,7 @@
+:root {
+  --hover-color: rgba(0, 0, 0, 0.5);
+}
+
 header {
   padding: 1.25rem;
   background-color: wheat;
@@ -13,20 +17,36 @@ header nav {
   background-color: antiquewhite;
   border-radius: 1em;
   display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.vertical-sep {
+  border-right: 0.2em solid var(--shadow-color);
+}
+
+header nav * {
+  padding: 0.5em;
+}
+
+header nav a {
+  font-size: 1.25em;
+  padding: 0.15em 0.5em;
+  margin: 0.35em 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+header nav a:hover {
+  color: var(--hover-color);
 }
 
 header nav img {
-  width: 2em;
-  margin: 0.35em;
-  padding: 0.35em;
+  padding: 0.2em;
   background-color: white;
   vertical-align: middle;
 }
 
 .github-repo img {
   border-radius: 100%;
-}
-
-.test-page-link img {
-  border-radius: 25%;
 }

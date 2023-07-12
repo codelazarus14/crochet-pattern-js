@@ -13,8 +13,6 @@ const USHookSizes = {
 
 const yarnUnits = [Units.meters, Units.yards, Units.skeins];
 
-// TODO: load existing pattern from storage
-
 const hookInputElement = document.querySelector('.js-hook-types');
 // const hookListElement = document.querySelector('.js-hook-list');
 
@@ -152,12 +150,11 @@ function setupCrochet() {
   });
 
   submitElement.addEventListener('click', () => {
-    const submittedPattern = JSON.stringify(selectedPattern);
-    localStorage.setItem(PATTERN_KEY, submittedPattern);
+    savedPatterns.push(selectedPattern);
+    localStorage.setItem(PATTERN_KEY, JSON.stringify(savedPatterns));
   });
 
   resetElement.addEventListener('click', () => {
-    localStorage.removeItem(PATTERN_KEY);
     location.reload();
   });
 }
@@ -172,7 +169,7 @@ function populateCrochetPatternFields() {
 
 function addHookButtonListeners() {
   document.querySelectorAll('.js-hook-size-button')
-    .forEach((button) => {
+    .forEach(button => {
       button.addEventListener('click', () => {
         if (button.classList.contains('selected')) {
           selectedPattern.hooks[button.value] = false;
