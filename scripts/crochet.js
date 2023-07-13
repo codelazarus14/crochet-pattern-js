@@ -1,18 +1,3 @@
-const USHookSizes = {
-  B: 2.25,
-  C: 2.75,
-  D: 3.25,
-  E: 3.50,
-  F: 3.75,
-  G: 4.00,
-  H: 5.00,
-  I: 5.50,
-  J: 6.00,
-  K: 6.50
-}
-
-const yarnUnits = [Units.meters, Units.yards, Units.skeins];
-
 const hookInputElement = document.querySelector('.js-hook-types');
 // const hookListElement = document.querySelector('.js-hook-list');
 
@@ -64,7 +49,7 @@ const renderSectionSteps = (section, idx) => {
   checkStepIndexes(idx);
   // only set value if step input is ready, so avoid 
   // nullref and wait for addStepInputListeners() to do it
-  if (rowInput) 
+  if (rowInput)
     setRowInputValue(rowInput, idx);
   renderListElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
   addDeleteListeners(stepListElement, selectedPattern.steps[idx], renderSectionSteps, [section, idx]);
@@ -220,10 +205,10 @@ function setRowInputValue(rowInputElem, idx) {
   const sectionSteps = selectedPattern.steps[idx];
 
   // if section already exists, use final start/end idx
-  const currStep =  sectionSteps.length > 0 ? 
-    sectionSteps[sectionSteps.length - 1][1] || 
-    sectionSteps[sectionSteps.length - 1][0] 
-  : 0;
+  const currStep = sectionSteps.length > 0 ?
+    sectionSteps[sectionSteps.length - 1][1] ||
+    sectionSteps[sectionSteps.length - 1][0]
+    : 0;
   rowInputElem.dataset.currStep = currStep;
   rowInputElem.value = currStep + 1;
 }
@@ -257,7 +242,7 @@ function checkStepIndexes(sectionIdx) {
 
   for (let i = 0; i < sectionSteps.length; i++) {
     const prevStepEnd = sectionSteps[i][1] || sectionSteps[i][0];
-    const nextStepStart = sectionSteps[i+1] && sectionSteps[i+1][0];
+    const nextStepStart = sectionSteps[i + 1] && sectionSteps[i + 1][0];
 
     // mark every step affected (after error)
     sectionSteps[i][3] = foundError;
@@ -329,7 +314,7 @@ function generateStepInputHTML() {
 }
 
 function generateStepHTML(step, index) {
-  const rowString = 
+  const rowString =
     step[1] ? `Rows ${step[0]} - ${step[1]}` : `Row ${step[0]}`;
   const imageUpload = generateImageUploadHTML();
   const rowIndexError = step[3] ? 'step-index-error' : '';

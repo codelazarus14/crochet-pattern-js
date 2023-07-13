@@ -5,13 +5,14 @@
     <link rel="stylesheet" href="styles/general.css">
     <link rel="stylesheet" href="styles/header.css">  
     <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/pattern-preview.css">
   </head>
   <body>
     <header>
       <h1 class="heading">Crochet Pattern Generator</h1>
       <nav>
-        <a class="homepage vertical-sep" href="index.html">Home</a>
-        <a class="github-repo" href="https://github.com/codelazarus14/crochet-pattern-js" target="_blank">
+        <a class="homepage" href="index.html">Home</a>
+        <a class="github-repo final-nav-item" href="https://github.com/codelazarus14/crochet-pattern-js" target="_blank">
           <!-- https://wcag.com/resource/what-is-wcag/ -->
           <img src="images/github.svg" alt="Github logo">
         </a>
@@ -25,12 +26,26 @@
         <a href="#">Test 4</a>
       </div>
       <main>
-        <div class="preview-display js-preview-display">
-          <!-- TODO: create pattern preview -->
+        <div class="preview-display heading">
+          <h1>Pattern Preview</h1>
+          <div class="basic-info js-basic-info"></div>
+          <div class="materials-preview">
+            <h2>Hooks</h2>
+            <div class="hook-preview js-hook-preview"></div>
+            <h2>Yarns</h2>
+            <div class="yarn-preview js-yarn-preview"></div>
+          </div>
+          <h2>Glossary</h2>
+          <div class="glossary-preview js-glossary-preview"></div>
+          <h2>Notes</h2>
+          <div class="notes-preview js-notes-preview"></div>
+          <h2>Steps</h2>
+          <div class="steps-preview js-steps-preview"></div>
         </div>
       </main>
     </div>
     <script src="scripts/sticky.js"></script>
+    <script src="scripts/output.js"></script>
     <script src="scripts/pattern-types.js"></script>
     <script src="scripts/pattern-preview.js"></script>
   </body>

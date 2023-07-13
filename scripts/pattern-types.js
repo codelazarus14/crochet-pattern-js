@@ -35,3 +35,20 @@ const Units = {
   meters: "meters",
   skeins: "skeins"
 }
+
+// Crochet
+
+const USHookSizes = {
+  B: 2.25,
+  C: 2.75,
+  D: 3.25,
+  E: 3.50,
+  F: 3.75,
+  G: 4.00,
+  H: 5.00,
+  I: 5.50,
+  J: 6.00,
+  K: 6.50
+}
+
+const yarnUnits = [Units.meters, Units.yards, Units.skeins];

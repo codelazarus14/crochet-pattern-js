@@ -13,6 +13,10 @@ const patternSelectElement = document.querySelector('.js-pattern-types');
 const loadPatternList = document.querySelector('.js-load-pattern-list');
 const missingPatternAlert = document.querySelector('.js-load-pattern-alert');
 
+onunload = () => {
+  localStorage.setItem(PATTERN_KEY, JSON.stringify(savedPatterns));
+}
+
 const renderPatternList = () => {
   if (savedPatterns.length < 1) {
     missingPatternAlert.classList.remove('is-hidden');
@@ -76,8 +80,7 @@ function addPatternListListeners() {
         populatePatternFields();
       });
     });
-  
-  // TODO: make deletion persistent like Submit
+
   addDeleteListeners(loadPatternList, savedPatterns, renderPatternList);
 }
 

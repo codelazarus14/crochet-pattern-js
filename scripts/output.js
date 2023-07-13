@@ -1,5 +1,4 @@
 function renderListElement(listElement, elementData, htmlGenerator) {
-  console.log(selectedPattern);
   let html = '';
 
   elementData.forEach((item, index) => {
