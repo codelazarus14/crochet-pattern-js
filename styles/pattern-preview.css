@@ -1,3 +1,67 @@
-.materials-preview {
+main {
   display: flex;
+}
+
+.preview-display {
+  font-size: 1.25em;
+}
+
+.preview-heading {
+  margin-left: 1em;
+}
+
+.inner {
+  padding: 2em;
+  align-items: start;
+}
+
+[class$="preview-item"] {
+  margin: 1em 0;
+}
+
+[class$="image"] {
+  background-color: wheat;
+  padding: 1.5em;
+}
+
+.basic-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.pattern-title {
+  font-size: 2em;
+  text-decoration: underline;
+}
+
+.pattern-author .author {
+  font-style: italic;
+}
+
+.materials-preview {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+.yarn-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 5em;
+}
+
+.yarn-preview-item,
+.glossary-preview-item {
+  display: flex;
+  align-items: center;
+  column-gap: 1em;
+}
+
+.glossary-term,
+.step-rows {
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+
+.step-image {
+  margin-bottom: 2em;
 }

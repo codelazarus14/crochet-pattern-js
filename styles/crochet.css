@@ -1,12 +1,3 @@
-h1,
-h2 {
-  font-weight: normal;
-}
-
-h1 {
-  margin: 0.5em 0;
-}
-
 .pattern-body,
 .section-heading {
   background-color: wheat;

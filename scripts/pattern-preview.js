@@ -64,16 +64,16 @@ if (savedPatterns) {
   renderPatternPreview();
 }
 
-function generateImagePreview() {
-  return 'Image Here';
+function generateImagePreview(image) {
+  return 'Image';
 }
 
 function generateTitlePreview(title) {
-  return `<h2>${title}</h2>`
+  return `<span class="pattern-title">${title}</span>`
 }
 
 function generateAuthorPreview(author) {
-  return `<h3>${author}</h3>`
+  return `<div class="pattern-author">by <span class="author">${author}</span></div>`
 }
 
 function generateDescriptionPreview(desc) {
@@ -92,7 +92,7 @@ function generateHookPreview(hook, index) {
 
 function generateYarnPreview(yarn, index) {
   const units = yarnUnits[yarn[2]];
-  return `<div class="yarn-preview-item>
+  return `<div class="yarn-preview-item">
   <div class="yarn-image">${generateImagePreview()}</div>
   <div class="yarn">
     <span class="yarn-name">${yarn[0]}</span> -
@@ -103,8 +103,8 @@ function generateYarnPreview(yarn, index) {
 
 function generateGlossaryEntryPreview(entry, index) {
   return `<div class="glossary-preview-item">
-  <div class="yarn-image">${generateImagePreview()}</div>
-  <span class="glossary-term">${entry[0]}</span>:
+  <div class="glossary-image">${generateImagePreview()}</div>
+  <span class="glossary-term">${entry[0]}</span>
   <span class="glossary-desc">${entry[1]}</span></div>`;
 }
 
@@ -123,7 +123,7 @@ function generateStepPreview(step, index) {
     step[1] ? `R${step[0]} - ${step[1]}` : `R${step[0]}`;
 
   return `<div class="step-preview-item">
-  <div class="step-image">${generateImagePreview()}</div>
   <span class="step-rows">${rowString}</span>
-  <span class="step-instrs">${step[2]}</span></div>`;
+  <span class="step-instrs">${step[2]}</span>
+  <div class="step-image">${generateImagePreview()}</div></div>`;
 }

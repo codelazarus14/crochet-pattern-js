@@ -26,6 +26,15 @@ main {
   box-shadow: 0.4rem 0.4rem var(--blue-color);
 }
 
+h1,
+h2 {
+  font-weight: normal;
+}
+
+h1 {
+  margin: 0.5em 0;
+}
+
 .heading {
   padding: 1em;
   margin: 1em;

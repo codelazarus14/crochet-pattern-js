@@ -9,7 +9,7 @@
   </head>
   <body>
     <header>
-      <h1 class="heading">Crochet Pattern Generator</h1>
+      <h1>Crochet Pattern Generator</h1>
       <nav>
         <a class="homepage" href="index.html">Home</a>
         <a class="github-repo final-nav-item" href="https://github.com/codelazarus14/crochet-pattern-js" target="_blank">
@@ -26,21 +26,32 @@
         <a href="#">Test 4</a>
       </div>
       <main>
-        <div class="preview-display heading">
-          <h1>Pattern Preview</h1>
-          <div class="basic-info js-basic-info"></div>
-          <div class="materials-preview">
-            <h2>Hooks</h2>
-            <div class="hook-preview js-hook-preview"></div>
-            <h2>Yarns</h2>
-            <div class="yarn-preview js-yarn-preview"></div>
+        <div class="preview-display">
+          <h1 class="preview-heading">Pattern Preview</h1>
+          <div class="inner">
+            <div class="basic-info js-basic-info"></div>
+            <div class="materials-preview">
+              <div class="hook-preview-container">
+                <h2>Hooks</h2>
+                <div class="hook-preview js-hook-preview"></div>
+              </div>
+              <div class="yarn-preview-container">
+                <h2>Yarns</h2>
+                <div class="yarn-preview js-yarn-preview"></div>
+              </div>
+            </div>
+            <h2>Glossary</h2>
+            <div class="glossary-preview js-glossary-preview"></div>
+            <h2>Notes</h2>
+            <div class="notes-preview js-notes-preview"></div>
+            <h2>Steps</h2>
+            <div class="steps-preview js-steps-preview"></div>
           </div>
-          <h2>Glossary</h2>
-          <div class="glossary-preview js-glossary-preview"></div>
-          <h2>Notes</h2>
-          <div class="notes-preview js-notes-preview"></div>
-          <h2>Steps</h2>
-          <div class="steps-preview js-steps-preview"></div>
+        </div>
+        <div class="preview-options">
+          <h1>Options</h1>
+          <div class="export-pattern inner"></div>
+          <div class="use-pattern inner"></div>
         </div>
       </main>
     </div>
