@@ -10,7 +10,7 @@
   </head>
   <body>
     <header>
-      <h1 class="heading">Crochet Pattern Generator</h1>
+      <h1>Crochet Pattern Generator</h1>
       <nav>
         <a class="homepage" href="index.html">Home</a>
         <a class="github-repo final-nav-item" href="https://github.com/codelazarus14/crochet-pattern-js" target="_blank">
@@ -27,46 +27,44 @@
         <a href="#">Test 4</a>
       </div>
       <main>
-        <div class="pattern-options">Pattern Options
-          <div class="pattern-options-grid">
-            <form class="js-pattern-options-form">
-              <div class="options-input">
-                <label for="title">Title:</label>
-                <input class="js-pattern-title" name="title" placeholder="Enter title" required>
-              </div>
-              <div class="options-input">
-                <label for="author">Author:</label>
-                <input class="js-pattern-author" name="author" placeholder="Enter author" required>
-              </div>
-              <div class="options-input">
-                <label for="description">Description:</label>
-                <input class="js-pattern-desc" name="description" placeholder="Enter a description">
-              </div>
-              <!-- TODO: replace <select> with custom dropdown in js
-                https://www.w3schools.com/Css/css_dropdowns.asp -->
-              <div class="options-input">
-                <label for="pattern-types">Pattern type:</label>
-                <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
-              </div>
-            </form>
-            <div class="load-pattern-options">
-              <div class="load-pattern">Saved Patterns:
-                <div class="inner">
-                  <div class="load-pattern-list js-load-pattern-list"></div>
-                  <div class="load-pattern-alert js-load-pattern-alert is-hidden">No saved patterns found.</div>
-                </div>
+        <h1 class="pattern-options-heading">Pattern Options</h1>
+        <div class="pattern-options">
+          <form class="js-pattern-options-form">
+            <div class="options-input">
+              <label for="title">Title:</label>
+              <input class="js-pattern-title" name="title" placeholder="Enter title" required>
+            </div>
+            <div class="options-input">
+              <label for="author">Author:</label>
+              <input class="js-pattern-author" name="author" placeholder="Enter author" required>
+            </div>
+            <div class="options-input">
+              <label for="description">Description:</label>
+              <input class="js-pattern-desc" name="description" placeholder="Enter a description">
+            </div>
+            <!-- TODO: replace <select> with custom dropdown in js
+              https://www.w3schools.com/Css/css_dropdowns.asp -->
+            <div class="options-input">
+              <label for="pattern-types">Pattern type:</label>
+              <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
+            </div>
+          </form>
+          <div class="load-pattern-options">
+            <div class="load-pattern">Saved Patterns:
+              <div class="inner">
+                <div class="load-pattern-list js-load-pattern-list"></div>
+                <div class="load-pattern-alert js-load-pattern-alert is-hidden">No saved patterns found.</div>
               </div>
             </div>
           </div>
         </div>
         <div class="pattern-body js-pattern-body is-hidden">
-          <div class="materials heading">Materials
-            <p class="hooks">Hooks</p>
+          <div class="materials heading"><h1>Materials</h1>
+            <h2 class="hooks">Hooks</h2>
             <div class="inner">
-              <div class="hook-list js-hook-list"></div>
               <div class="hook-types-grid js-hook-types"></div>
             </div>
-            <p class="yarns">Yarns</p>
+            <h2 class="yarns">Yarns</h2>
             <div class="inner">
               <div class="yarn-container">
                 <div class="yarn-list js-yarn-list"></div>
@@ -93,7 +91,7 @@
               </div>
             </div>
           </div>
-          <div class="glossary heading">Glossary
+          <div class="glossary heading"><h1>Glossary</h1>
             <div class="inner">
               <div class="glossary-container">
                 <div class="glossary-list js-glossary-list"></div>
@@ -116,7 +114,7 @@
               </div>
             </div>
           </div>
-          <div class="notes heading">Notes
+          <div class="notes heading"><h1>Notes</h1>
             <div class="inner">
               <div class="notes-container">
                 <div class="notes-input-grid">
@@ -128,7 +126,7 @@
               </div>
             </div>
           </div>
-          <div class="steps heading">Steps
+          <div class="steps heading"><h1>Steps</h1>
             <div class="inner">
               <div class="steps-container">                
                 <div class="section-grid js-section-grid"></div>

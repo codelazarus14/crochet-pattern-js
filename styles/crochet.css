@@ -1,4 +1,12 @@
-.heading,
+h1,
+h2 {
+  font-weight: normal;
+}
+
+h1 {
+  margin: 0.5em 0;
+}
+
 .pattern-body,
 .section-heading {
   background-color: wheat;
@@ -7,31 +15,24 @@
 }
 
 .pattern-options {
-  font-size: 2rem;
-}
-
-.pattern-options-grid {
-  font-size: 0.7em;
+  font-size: 1.2em;
   margin: 1em;
   display: flex;
   justify-content: space-around;
 }
 
-.pattern-options,
+.pattern-options-heading,
 .pattern-body {
   padding: 1.25rem;
 }
 
 .pattern-body {
+  font-size: 1.2em;
+  background-color: antiquewhite;
   border-width: 0.5rem 0 0 0;
   border-radius: 0;
   display: flex;
   flex-direction: column;
-}
-
-.pattern-body,
-.inner {
-  background-color: antiquewhite;
 }
 
 input,
@@ -65,12 +66,7 @@ select:focus,
   box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
 
-.load-pattern-options .inner {
-  font-size: 1em;
-}
-
 .load-pattern-alert {
-  font-size: 0.8em;
   padding: 0.2em;
   color: var(--invalid-color);
   display: flex;
@@ -80,7 +76,6 @@ select:focus,
 [class*="confirm"],
 [class*="delete"],
 .image-attach {
-  font-size: 0.8em;
   font-weight: bold;
 }
 
@@ -113,26 +108,6 @@ input:invalid:focus {
 
 .options-input * {
   margin: 0.5em 1em;
-}
-
-.heading {
-  font-size: 2rem;
-  padding: 0.5em;
-  margin: 0.5em;
-}
-
-.hooks,
-.yarns {
-  font-size: 0.75em;
-}
-
-.inner {
-  font-size: 0.6em;
-  margin: 0.5em 0;
-  padding: 0.75em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 [class$="container"] {
@@ -227,8 +202,8 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
 }
 
 .add-section-button {
+  font-size: 1em;
   width: 100%;
-  font-size: 0.9em;
 }
 
 .submit-container * {
