@@ -65,3 +65,41 @@ main {
 .step-image {
   margin-bottom: 2em;
 }
+
+.preview-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 1em;
+}
+
+.export-pattern {
+  display: flex;
+  align-items: center;
+}
+
+.export-pattern button {
+  font-size: 1em;
+  margin: 0.5em;
+  padding: 0.8em;
+}
+
+.use-pattern-button {
+  padding: 1em;
+  font-weight: bold;
+  text-decoration: none;
+  background-color: var(--blue-color);
+  color: inherit;
+  border: none;
+  border-radius: 0.35em;
+  box-shadow: -0.2em -0.2em inset var(--shadow-color);
+  cursor: pointer;
+}
+
+.use-pattern-button:hover {
+  opacity: 0.8;
+}
+
+.use-pattern-button:active {
+  box-shadow: -0.1em -0.1em inset var(--shadow-color);
+}

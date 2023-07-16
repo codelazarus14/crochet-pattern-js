@@ -26,37 +26,6 @@
   flex-direction: column;
 }
 
-input,
-select,
-button,
-.submit-button {
-  font-size: 0.8em;
-  border-radius: 0.35em;
-}
-
-select,
-button,
-.submit-button {
-  padding: 0.5em;
-  border: none;
-  background-color: var(--blue-color);
-  box-shadow: -0.2em -0.2em inset var(--shadow-color);
-  cursor: pointer;
-}
-
-button:hover,
-select:hover,
-.submit-button:hover,
-.close-button:hover {
-  opacity: 0.8;
-}
-
-button:active,
-select:focus,
-.submit-button:active {
-  box-shadow: -0.1em -0.1em inset var(--shadow-color);
-}
-
 .load-pattern-alert {
   padding: 0.2em;
   color: var(--invalid-color);
@@ -75,19 +44,8 @@ select:focus,
   background-color: var(--purple-color);
 }
 
-input {
-  padding: 0.35em;
-  margin: 0.35em;
-  border: 2px solid transparent;
-}
-
-input[type="number"],
 .row-input {
   max-width: 4em;
-}
-
-input:invalid:focus {
-  border: 2px solid var(--invalid-color);
 }
 
 .options-input {
@@ -204,6 +162,20 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
 }
 
 .submit-button {
+  padding: 1em;
   text-decoration: none;
+  background-color: var(--blue-color);
   color: inherit;
+  border: none;
+  border-radius: 0.35em;
+  box-shadow: -0.2em -0.2em inset var(--shadow-color);
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  opacity: 0.8;
+}
+
+.submit-button:active {
+  box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
