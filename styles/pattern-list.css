@@ -1,0 +1,14 @@
+.load-pattern-list {
+  max-height: 16em;
+}
+
+.pattern-list-item {
+  grid-template-columns: 1fr 1fr 4em 2em;
+}
+
+.load-pattern-alert {
+  padding: 0.2em;
+  color: var(--invalid-color);
+  display: flex;
+  align-items: center;
+}

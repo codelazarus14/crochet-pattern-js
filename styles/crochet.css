@@ -12,6 +12,10 @@
   justify-content: space-around;
 }
 
+.pattern-options-form {
+  font-size: 1.2em;
+}
+
 .pattern-options-heading,
 .pattern-body {
   padding: 1.25rem;
@@ -24,19 +28,6 @@
   border-radius: 0;
   display: flex;
   flex-direction: column;
-}
-
-.load-pattern-alert {
-  padding: 0.2em;
-  color: var(--invalid-color);
-  display: flex;
-  align-items: center;
-}
-
-[class*="confirm"],
-[class*="delete"],
-.image-attach {
-  font-weight: bold;
 }
 
 .selected {
@@ -63,46 +54,11 @@
   max-width: 80%;
 }
 
-/* TODO: custom scrollbar with discrete 'resting points'?
-also see https://lea.verou.me/2012/04/background-attachment-local/ */
-[class$="list"] {
-  max-height: 23em;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.hook-types-grid,
-[class$="list-item"],
-[class$="input-grid"] {
+.hook-types-grid {
   display: grid;
   align-items: center;
   column-gap: 1em;
   padding: 1em;
-}
-
-[class$="list-item"] {
-  margin: 0.5em 0;
-  background-color: wheat;
-  border-radius: 1em;
-  box-shadow: -0.2em -0.2em inset var(--purple-color);
-}
-
-[class$="list-item"] * {
-  overflow: hidden;
-  overflow-wrap: break-word;
-}
-
-[class$="list-item"] button,
-[class$="list-item"] select {
-  background-color: var(--purple-color);
-}
-
-.pattern-list-item {
-  grid-template-columns: 1fr 1fr 4em 2em;
-}
-
-.hook-types-grid {
   grid-template-columns: repeat(10, 3.5em);
   column-gap: 0;
 }

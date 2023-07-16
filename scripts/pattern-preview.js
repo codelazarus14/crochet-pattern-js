@@ -38,7 +38,7 @@ const renderSteps = () => {
   sectionPreviews.forEach((section, index) => {
     if (sectionPreviews.length > 1) {
       section.querySelector('.js-section-heading')
-        .innerHTML = `Section ${index}`;
+        .innerHTML = `Section ${index + 1}`;
     }
     renderListElement(section.querySelector('.js-steps-list'), submittedPattern.steps[index], generateStepPreview);
   });

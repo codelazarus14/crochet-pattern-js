@@ -62,6 +62,14 @@ main {
   margin-right: 0.5em;
 }
 
+.section-heading {
+  font-weight: bold;
+}
+
+.step-list {
+  max-height: none;
+}
+
 .step-image {
   margin-bottom: 2em;
 }
