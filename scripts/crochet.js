@@ -21,7 +21,8 @@ const sectionGridElement = document.querySelector('.js-section-grid');
 const sectionAddElement = document.querySelector('.js-add-section-button');
 
 const submitElement = document.querySelector('.js-submit-button');
-const resetElement = document.querySelector('.js-reset-button');
+const submitAlertElement = document.querySelector('.js-submit-alert');
+const refreshElement = document.querySelector('.js-refresh-button');
 
 // unused - we seem to be using button visuals now
 //
@@ -45,7 +46,7 @@ const renderSectionHeading = (section, idx) => {
 }
 const renderSectionSteps = (section, idx) => {
   const stepListElement = section.querySelector('.js-steps-list');
-  const rowInput = section.querySelector('.js-row-input');
+  const rowInput = section.querySelector('.js-step-form .js-row-input');
   checkStepIndexes(idx);
   // only set value if step input is ready, so avoid 
   // nullref and wait for addStepInputListeners() to do it
@@ -53,6 +54,7 @@ const renderSectionSteps = (section, idx) => {
     setRowInputValue(rowInput, idx);
   renderListElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
   addDeleteListeners(stepListElement, selectedPattern.steps[idx], renderSectionSteps, [section, idx]);
+  addRowInputListeners(stepListElement, section, idx);
 }
 const renderSectionStepInput = (section, idx) => {
   section.querySelector('.js-step-form')
@@ -111,8 +113,8 @@ function setupCrochet() {
     renderGlossary();
   });
 
-  notesInputElement.addEventListener('keydown', event => {
-    if (event.key === 'Enter') {
+  notesInputElement.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
       selectedPattern.notes = notesInputElement.value.trim();
       console.log(selectedPattern);
     }
@@ -134,12 +136,19 @@ function setupCrochet() {
     });
   });
 
-  submitElement.addEventListener('click', () => {
-    savedPatterns.push(selectedPattern);
-    localStorage.setItem(PATTERN_KEY, JSON.stringify(savedPatterns));
+  submitElement.addEventListener('click', e => {
+    const result = validatePattern();
+    if (result && typeof result === 'string') {
+      e.preventDefault();
+      submitAlertElement.innerHTML = result;
+    } else {
+      submitAlertElement.innerHTML = '';
+      savedPatterns.push(selectedPattern);
+      localStorage.setItem(PATTERN_KEY, JSON.stringify(savedPatterns));
+    }
   });
 
-  resetElement.addEventListener('click', () => {
+  refreshElement.addEventListener('click', () => {
     location.reload();
   });
 }
@@ -170,15 +179,15 @@ function addHookButtonListeners() {
 
 function addStepInputListeners(section, idx) {
   const formElement = section.querySelector('.js-step-form');
-  const rowInput = section.querySelector('.js-row-input');
-  const instrInput = section.querySelector('.js-instr-input');
+  const rowInput = formElement.querySelector('.js-row-input');
+  const instrInput = formElement.querySelector('.js-instr-input');
 
   setRowInputValue(rowInput, idx);
 
   rowInput.addEventListener('input', () => {
     const input = rowInput.value.trim();
     const currStep = Number(rowInput.dataset.currStep);
-    const result = evaluateRowInput(input, currStep);
+    const result = parseRowInput(input, currStep);
     // turn errmsg into invalid form entry
     if (typeof result === 'string')
       rowInput.setCustomValidity(result);
@@ -190,15 +199,42 @@ function addStepInputListeners(section, idx) {
     e.preventDefault();
     const input = rowInput.value.trim();
     const currStep = Number(rowInput.dataset.currStep);
-    const [startIdx, endIdx] = evaluateRowInput(input, currStep);
+    const [startIdx, endIdx] = parseRowInput(input, currStep);
     const instr = instrInput.value.trim();
     if (selectedPattern.steps[idx])
       selectedPattern.steps[idx].push([startIdx, endIdx, instr, false]);
     else selectedPattern.steps[idx] = [[startIdx, endIdx, instr, false]];
-    // TODO: remove/merge ambiguity with "forall submit forms clear fields" above?
+    // clear instr field
     instrInput.value = instrInput.defaultValue;
     renderSectionSteps(section, idx);
   });
+}
+
+function addRowInputListeners(stepListElem, section, index) {
+  const stepList = selectedPattern.steps[index];
+
+  stepListElem.querySelectorAll('.js-row-input')
+    .forEach((rowInput, idx) => {
+      rowInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          updateStepRows(rowInput, idx);
+        }
+      });
+      rowInput.addEventListener('blur', () => {
+        updateStepRows(rowInput, idx);
+      });
+    });
+
+  function updateStepRows(rowInput, idx) {
+    const input = rowInput.value.trim();
+    const currStep = 
+      (stepList[idx - 1][1] || 
+      stepList[idx - 1][0]);
+    const [start, end] = parseRowInput(input, currStep, true);
+    stepList[idx][0] = start
+    stepList[idx][1] = end;
+    renderSectionSteps(section, index);
+  }
 }
 
 function setRowInputValue(rowInputElem, idx) {
@@ -213,7 +249,7 @@ function setRowInputValue(rowInputElem, idx) {
   rowInputElem.value = currStep + 1;
 }
 
-function evaluateRowInput(rowsInput, currStep) {
+function parseRowInput(rowsInput, currStep, skipIdxCheck) {
   let start, end;
 
   const separatorIdx = Math.max(rowsInput.indexOf(','), rowsInput.indexOf('-'));
@@ -224,11 +260,13 @@ function evaluateRowInput(rowsInput, currStep) {
     start = Number(rowsInput.slice(0, separatorIdx));
     end = Number(rowsInput.slice(separatorIdx + 1));
   }
-  if (start !== currStep + 1) {
-    return 'Please start on the next row.';
-  }
-  if (end && end < start) {
-    return 'Row starting index must be less than end.';
+  if (!skipIdxCheck) {
+    if (start !== currStep + 1) {
+      return 'Please start on the next row.';
+    }
+    if (end && end < start) {
+      return 'Row starting index must be less than end.';
+    }
   }
   if (start === end)
     end = undefined;
@@ -250,6 +288,12 @@ function checkStepIndexes(sectionIdx) {
       // detect gap between rows
       foundError = nextStepStart !== prevStepEnd + 1;
     }
+  }
+}
+
+function validatePattern() {
+  if (!selectedPattern.steps[0][0]) {
+    return 'Pattern must include at least one step.';
   }
 }
 
@@ -306,6 +350,7 @@ function generateSectionHeadingHTML(idx) {
 
 function generateStepInputHTML() {
   const regex = '\\s*[0-9]+((?![,-])|(\\s*,\\s*|(\\s*-\\s*))\\s*[0-9]+)\\s*';
+
   return `<div class="step-input-grid">
   <div class="js-step-image">${generateImageUploadHTML()}</div>
   <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" required>
@@ -314,15 +359,20 @@ function generateStepInputHTML() {
 }
 
 function generateStepHTML(step, index) {
-  const rowString =
-    step[1] ? `Rows ${step[0]} - ${step[1]}` : `Row ${step[0]}`;
+  const rowPrefix =
+    step[1] ? 'Rows' : 'Row';
+  const rowValue = 
+    step[1] ? `${step[0]} - ${step[1]}` : `${step[0]}`;
   const imageUpload = generateImageUploadHTML();
-  const rowIndexError = step[3] ? 'step-index-error' : '';
+  const rowIndexError = step[3] ? '' : 'is-hidden';
+  const regex = '\\s*[0-9]+((?![,-])|(\\s*,\\s*|(\\s*-\\s*))\\s*[0-9]+)\\s*';
 
   return `<div class="step-list-item">
   <div class="step-image">${imageUpload}</div>
   <div class="step-rows">
-    <span class="${rowIndexError}">${rowString}</span></div>
+    <div class="step-rows-input">${rowPrefix}
+      <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowValue}" required></div>
+    <span class="row-index-error ${rowIndexError}">Index error</span></div>
   <div class="step-instrs">${step[2]}</div>
   <button class="js-delete-button">-</button></div>`;
 }

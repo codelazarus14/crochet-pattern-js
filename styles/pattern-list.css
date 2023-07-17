@@ -1,12 +1,13 @@
-.load-pattern-list {
-  max-height: 16em;
+.pattern-list {
+  width: 100%;
+  max-height: 14em;
 }
 
 .pattern-list-item {
-  grid-template-columns: 1fr 1fr 4em 2em;
+  grid-template-columns: 1fr 1fr 3em 2em;
 }
 
-.load-pattern-alert {
+.pattern-alert {
   padding: 0.2em;
   color: var(--invalid-color);
   display: flex;

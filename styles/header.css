@@ -49,6 +49,10 @@ header nav img {
   vertical-align: middle;
 }
 
+header nav img:hover {
+  opacity: 0.5;
+}
+
 .github-repo img {
   border-radius: 100%;
 }

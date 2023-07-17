@@ -10,13 +10,9 @@ const patternAuthorInputElement = document.querySelector('.js-pattern-author');
 const patternDescInputElement = document.querySelector('.js-pattern-desc');
 const patternSelectElement = document.querySelector('.js-pattern-types');
 
-onunload = () => {
-  localStorage.setItem(PATTERN_KEY, JSON.stringify(savedPatterns));
-}
-
 const renderPatternOptions = () => {
   const saved = localStorage.getItem(PATTERN_KEY);
-  savedPatterns = saved ? JSON.parse(saved) : [];
+  savedPatterns = saved && saved !== 'undefined' ? JSON.parse(saved) : [];
   renderPatternList();
 
   renderListElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
@@ -55,22 +51,6 @@ function selectPattern(type) {
   setup();
 }
 
-function addPatternListListeners() {
-  document.querySelectorAll('.js-pattern-list-item')
-    .forEach(patternElem => {
-      const loadButton = patternElem.querySelector('.js-load-pattern');
-      loadButton.addEventListener('click', () => {
-        const idx = patternElem.dataset.patternIdx;
-        selectedPattern = savedPatterns[idx];
-        // TODO: add styling and keep track of selected pattern to be updated on Submit
-        // ask user if they want to update an existing pattern or save a new copy?
-        populatePatternFields();
-      });
-    });
-
-  addDeleteListeners(loadPatternList, savedPatterns, renderPatternList);
-}
-
 function populatePatternFields() {
   patternTitleInputElement.value = selectedPattern.title;
   patternAuthorInputElement.value = selectedPattern.author;
@@ -81,13 +61,4 @@ function populatePatternFields() {
       populateCrochetPatternFields();
       break;
   }
-}
-
-function generatePatternListItem(pattern, index) {
-  return `<div class="pattern-list-item js-pattern-list-item" data-pattern-idx="${index}">
-  <div class="pattern-title">${pattern.title}</div>
-  <div class="pattern-author">${pattern.author}</div>
-  <button class="load-pattern js-load-pattern">Load</button>
-  <button class="js-delete-button">-</button>
-  </div>`
 }

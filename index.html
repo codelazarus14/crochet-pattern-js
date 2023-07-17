@@ -50,12 +50,10 @@
               <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
             </div>
           </form>
-          <div class="load-pattern-options">
-            <div class="load-pattern">Saved Patterns:
-              <div class="inner">
-                <div class="load-pattern-list js-load-pattern-list"></div>
-                <div class="load-pattern-alert js-load-pattern-alert is-hidden">No saved patterns found.</div>
-              </div>
+          <div class="load-pattern-options">Saved Patterns:
+            <div class="inner">
+              <div class="pattern-list js-pattern-list"></div>
+              <div class="pattern-alert js-pattern-alert is-hidden">No saved patterns found.</div>
             </div>
           </div>
         </div>
@@ -139,9 +137,10 @@
           <div class="submit heading">
             <div class="inner">
               <div class="submit-container">
-                <a class="submit-button js-submit-button" href="pattern-preview.html">Submit</a>
-                <button class="reset-button js-reset-button">Reset Pattern</button>
+                <a class="submit-button js-submit-button" href="pattern-preview.html">Submit as New Pattern</a>
+                <button class="refresh-button js-refresh-button">Reset</button>
               </div>
+              <span class="submit-alert js-submit-alert"></span>
             </div>
           </div>
         </div>
