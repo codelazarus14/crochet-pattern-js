@@ -313,6 +313,7 @@ function generateHookSizeButtonsHTML(option, index) {
 
 // TODO: make output list items have editable text fields
 // TODO: add labels to all generated inputs
+// TODO: add tooltips for yarns and glossary entries
 
 function generateYarnListHTML(yarn, index) {
   let units = '';

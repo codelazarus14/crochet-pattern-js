@@ -1,3 +1,11 @@
+main {
+  padding: 0;
+}
+
+h1 {
+  margin-top: 0;
+}
+
 .pattern-body,
 .section-heading {
   background-color: wheat;
@@ -20,9 +28,8 @@
   width: 45%;
 }
 
-.pattern-options-heading,
-.pattern-body {
-  padding: 1.25rem;
+.pattern-options-heading {
+  margin: 1rem;
 }
 
 .pattern-body {

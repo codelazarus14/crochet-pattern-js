@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="styles/general.css">
     <link rel="stylesheet" href="styles/header.css">  
     <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/pattern-in-use.css">
   </head>
   <body>
     <header>
@@ -25,11 +26,46 @@
         <a href="#">Test 4</a>
       </div>
     <main>
-      
+      <div class="pattern-header">
+        <span class="pattern-title js-pattern-title"></span>
+        <span class="pattern-author js-pattern-author"></span>
+      </div>
+      <div class="pattern-body">
+        <div class="pattern-info">
+          <div class="pattern-description expand">Description
+            <div class="pattern-desc inner js-pattern-desc"></div>
+          </div>
+          <div class="pattern-materials js-pattern-materials expand">Materials
+            <div class="materials-list inner js-materials-list"></div>
+          </div>
+          <div class="pattern-glossary expand">Glossary
+            <div class="glossary-list inner js-glossary-list"></div>
+          </div>
+          <div class="pattern-notes  expand">Notes
+            <div class="js-pattern-notes inner"></div>
+          </div>
+        </div>
+        <div class="pattern-steps">
+          <div class="counters">
+            <div class="section-counter">Section
+              <span class="section js-section"></span>
+            </div>
+            <div class="row-counter">
+              <label for="counter">Row</label>
+              <input class="counter js-counter" id="counter" type="number" min="1">
+            </div>
+          </div>
+          <div class="inner">
+            <div class="step-list js-steps-list"></div>
+          </div>
+        </div>
+      </div>
     </main>
     <script src="scripts/sticky.js"></script>
     <script src="scripts/output.js"></script>
     <script src="scripts/pattern-types.js"></script>
+    <script src="scripts/pattern-general.js"></script>
     <script src="scripts/pattern-list.js"></script>
+    <script src="scripts/pattern-in-use.js"></script>
   </body>
 </html>

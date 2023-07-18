@@ -19,6 +19,7 @@ body * {
 }
 
 main {
+  padding: 0.5em;
   margin-left: 9.5em;
   background-color: wheat;
   border: 0.5rem solid var(--wheat-border);

@@ -20,6 +20,8 @@ class CrochetPattern extends Pattern {
     // each step consists of:
     // [startIdx, endIdx, instrs, errorFlag]
     this.steps = [[]];
+    this.sectionCounter = 0;
+    this.rowCounter = 0;
   }
 }
 

@@ -1,0 +1,117 @@
+/* testing image layout */
+.tiny,
+.bigger,
+.biggest {
+  background-color: var(--blue-color);
+  margin: 0.5em;
+  padding: 0.5em;
+  width: fit-content;
+}
+
+.bigger {
+  padding: 1.5em;
+}
+
+.biggest {
+  padding: 4em;
+}
+
+.pattern-header {
+  padding: 1em;
+}
+
+.pattern-title {
+  font-size: 2em;
+  text-decoration: underline;
+}
+
+.pattern-author {
+  font-style: italic;
+}
+
+.pattern-body {
+  font-size: 1.2em;
+  display: flex;
+}
+
+.pattern-info {
+  margin-left: 1em;
+}
+
+/* todo: make functional collapsible elements */ 
+[class$="expand"]:before{
+  margin-right: 0.5em;
+  content:'\2630';
+}
+
+.inner {
+  margin: 0.5em;
+  align-items: inherit;
+}
+
+.materials-list {
+  flex-direction: row;
+  column-gap: 3em;
+}
+
+.hooks-mini,
+.yarns-mini,
+.glossary-list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: 1fr 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+}
+
+.yarn-mini-item {
+  padding: 0 0.5em;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  align-items: center;
+}
+
+.yarn-mini-item * {
+  margin-right: 0.5em;
+}
+
+.glossary-list {
+  grid-template-rows: 1fr 1fr;
+  justify-content: start;
+}
+
+.glossary-mini-item {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+}
+
+.glossary-mini-item * {
+  margin-right: 1em;
+}
+
+.pattern-steps {
+  margin-left: 1em;
+  display: flex;
+}
+
+.counters {
+  margin-top: 1.35em;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* todo: check/fix text wrap on instrs? */ 
+.step-list {
+  font-size: 1.2em;
+  min-width: 20em;
+}
+
+.step-in-use-item {
+  display: grid;
+  padding: 0.5em;
+}
+
+.step-in-use-item .step-rows {
+  font-weight: bold;
+}
