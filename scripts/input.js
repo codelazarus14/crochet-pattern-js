@@ -1,9 +1,7 @@
 function filterNumInput(key) {
   // allow numbers, inc/dec w arrows and delete
   return (isFinite(key) && key !== ' ') ||
-    key === 'ArrowDown' || key === 'ArrowUp' ||
-    key === "Backspace" || key === "Delete" || 
-    key === 'Tab';
+    ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Backspace', 'Delete', 'Tab', 'Enter'].includes(key);
 }
 
 // TODO: sanitize inputs or escape generated HTML

@@ -3,24 +3,26 @@ const glossaryListElem = document.querySelector('.js-glossary-list');
 const stepsListElem = document.querySelector('.js-steps-list');
 const counterElem = document.querySelector('.js-counter');
 const sectionElem = document.querySelector('.js-section');
-const patternInUse = loadPattern(0);
 
 const renderBasicInfoMini = () => {
   document.querySelector('.js-pattern-title').innerHTML =
     patternInUse.title;
-  document.querySelector('.js-pattern-author').innerHTML = 
+  document.querySelector('.js-pattern-author').innerHTML =
     patternInUse.author;
   document.querySelector('.js-pattern-desc').innerHTML =
     patternInUse.desc;
 }
 
-const renderCounter = () => {
-  let {sectionCounter, rowCounter} = patternInUse;
-  if (!sectionCounter) patternInUse.sectionCounter = 0;
-  if (!rowCounter) patternInUse.rowCounter = 0;
+const renderCounters = () => {
+  let { sectionCount, rowCount } = patternProgress;
+  if (!rowCount) patternProgress.rowCount = 1;
+  if (!sectionCount) patternProgress.sectionCount = 1;
 
-  counterElem.value = patternInUse.rowCounter + 1;
-  sectionElem.innerHTML = patternInUse.sectionCounter + 1;
+  counterElem.value = patternProgress.rowCount;
+  if (patternInUse.steps.length === 1)
+    sectionElem.classList.add('is-hidden');
+  else
+    sectionElem.innerHTML = patternProgress.sectionCount;
 }
 
 const renderHooksMini = () => {
@@ -53,14 +55,13 @@ const renderNotesMini = () => {
 }
 
 const renderSteps = () => {
-  const section = patternInUse.sectionCounter;
+  const section = patternProgress.sectionCount - 1;
   renderListElement(stepsListElem, patternInUse.steps[section], generateStepInUse);
 }
 
 const renderPatternInUse = () => {
-  console.log(patternInUse);
   renderBasicInfoMini();
-  renderCounter();
+  renderCounters();
   switch (patternInUse.type) {
     case PatternTypes.USCrochet:
       renderHooksMini();
@@ -73,28 +74,84 @@ const renderPatternInUse = () => {
 }
 
 onunload = () => {
-  /* save progress automatically */
-  // TODO: add counter functionality
-
+  saveProgress();
 }
+
+const [patternProgress, patternInUse] = loadPattern(0);
 
 renderPatternInUse();
+addNumInputListener(counterElem, updateCounters, []);
 
 function loadPattern(idx) {
-  const saved =  localStorage.getItem(PATTERN_KEY);
-  if (!saved || saved === 'undefined') 
+  const savedPatterns = localStorage.getItem(PATTERN_KEY);
+  if (!savedPatterns || savedPatterns === 'undefined')
     console.error('No saved patterns found!');
-  const patterns = JSON.parse(saved);
-  return patterns[idx];
+  const patterns = JSON.parse(savedPatterns);
+  const savedProgress = localStorage.getItem(PROGRESS_KEY);
+  const progress = !savedProgress ?
+    {
+      patternIdx: idx,
+      sectionCount: 1,
+      rowCount: 1
+    }
+    : JSON.parse(savedProgress);
+
+  return [progress, patterns[idx]];
 }
 
-function saveProgress(idx) {
-  const saved = localStorage.getItem(PATTERN_KEY);
-  if (!saved || saved === 'undefined') 
-    console.error('No saved patterns found!');
-  const patterns = JSON.parse(saved);
-  patterns[patterns.length - 1] = patternInUse;
-  localStorage.setItem(PATTERN_KEY, patterns);
+function saveProgress() {
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(patternProgress));
+}
+
+function updateCounters() {
+  // TODO: make section counter editable too
+  // TODO: replace some of these checks with regex on input?
+  const newRowCount = Number(counterElem.value);
+  const { sectionCount, rowCount } = patternProgress;
+  const currSection = patternInUse.steps[sectionCount - 1];
+  // TODO: remove check for empty sections
+  const currMaxRow = currSection.length ?
+    currSection[currSection.length - 1][1] ||
+    currSection[currSection.length - 1][0]
+    : 0;
+
+  // flag first step in pattern
+  const patternStart = sectionCount === 1 && rowCount === 1;
+  // flag last step in pattern
+  const patternEnd =
+    sectionCount === patternInUse.steps.length &&
+    rowCount === currMaxRow;
+
+  console.log(patternStart, patternEnd);
+
+  if (newRowCount > currMaxRow && !patternEnd) {
+    if (newRowCount - currMaxRow > 1) {
+      // clamp OOB increase to current section
+      patternProgress.rowCount = currMaxRow;
+    } else {
+      // ++ to next section
+      patternProgress.sectionCount++;
+      patternProgress.rowCount = 1;
+    }
+  } else if (newRowCount < 1 && !patternStart) {
+    if (sectionCount === 1 || 1 - newRowCount > 1) {
+      // clamp OOB decrease to current section
+      patternProgress.rowCount = 1;
+    } else {
+      // -- to prev section
+      const prevSection = patternInUse.steps[sectionCount - 2];
+      const prevMaxRow =
+        prevSection[prevSection.length - 1][1] ||
+        prevSection[prevSection.length - 1][0];
+      patternProgress.sectionCount--;
+      patternProgress.rowCount = prevMaxRow;
+    }
+  } else {
+    patternProgress.rowCount = Math.min(newRowCount, currMaxRow);
+  }
+  console.log(patternProgress.sectionCount, patternProgress.rowCount, counterElem.value);
+  renderCounters();
+  renderSteps();
 }
 
 function generateYarnImage() {
@@ -137,7 +194,7 @@ function generateGlossaryMini(entry, index) {
 
 function generateStepInUse(step, index) {
   const rowString =
-    step[1] ? `${step[0]} - ${step[1]}`: `${step[0]}`;
+    step[1] ? `${step[0]} - ${step[1]}` : `${step[0]}`;
 
   return `<div class="step-in-use-item">
   <div class="step-text">

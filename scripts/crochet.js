@@ -227,9 +227,9 @@ function addRowInputListeners(stepListElem, section, index) {
 
   function updateStepRows(rowInput, idx) {
     const input = rowInput.value.trim();
-    const currStep = 
-      (stepList[idx - 1][1] || 
-      stepList[idx - 1][0]);
+    const currStep =
+      (stepList[idx - 1][1] ||
+        stepList[idx - 1][0]);
     const [start, end] = parseRowInput(input, currStep, true);
     stepList[idx][0] = start
     stepList[idx][1] = end;
@@ -292,6 +292,7 @@ function checkStepIndexes(sectionIdx) {
 }
 
 function validatePattern() {
+  // TODO: validate to prevent empty sections (add delete buttons?)
   if (!selectedPattern.steps[0][0]) {
     return 'Pattern must include at least one step.';
   }
@@ -362,7 +363,7 @@ function generateStepInputHTML() {
 function generateStepHTML(step, index) {
   const rowPrefix =
     step[1] ? 'Rows' : 'Row';
-  const rowValue = 
+  const rowValue =
     step[1] ? `${step[0]} - ${step[1]}` : `${step[0]}`;
   const imageUpload = generateImageUploadHTML();
   const rowIndexError = step[3] ? '' : 'is-hidden';

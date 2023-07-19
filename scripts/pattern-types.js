@@ -1,4 +1,5 @@
-const PATTERN_KEY = 'submittedPattern';
+const PATTERN_KEY = 'savedPatterns';
+const PROGRESS_KEY = 'patternInProgress';
 
 class Pattern {
   constructor(title, author, desc, type) {
@@ -17,11 +18,9 @@ class CrochetPattern extends Pattern {
     this.glossary = [];
     this.notes = '';
     // 2d array of steps ordered by sections,
-    // each step consists of:
+    // each step consists of steps idx 1..n:
     // [startIdx, endIdx, instrs, errorFlag]
     this.steps = [[]];
-    this.sectionCounter = 0;
-    this.rowCounter = 0;
   }
 }
 
