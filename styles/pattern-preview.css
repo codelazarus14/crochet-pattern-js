@@ -7,7 +7,8 @@ main {
 }
 
 .preview-heading {
-  margin-left: 1em;
+  margin: 0.25em;
+  font-size: 2rem;
 }
 
 .inner {
