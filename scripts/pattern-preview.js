@@ -4,7 +4,7 @@ const yarnPreviewElement = document.querySelector('.js-yarn-preview');
 const glossaryPreviewElement = document.querySelector('.js-glossary-preview');
 const notesPreviewElement = document.querySelector('.js-notes-preview');
 const stepsPreviewElement = document.querySelector('.js-steps-preview');
-const savedPatterns = JSON.parse(localStorage.getItem(PATTERN_KEY));
+const usePatternElement = document.querySelector('.js-use-pattern');
 
 let submittedPattern;
 
@@ -59,14 +59,21 @@ const renderPatternPreview = () => {
   }
 }
 
-if (savedPatterns) {
+savedPatterns = loadAllPatterns();
+if (savedPatterns.length) {
   submittedPattern = savedPatterns[savedPatterns.length - 1];
   renderPatternPreview();
 }
 
-function generateImagePreview(image) {
-  return 'Image';
-}
+usePatternElement.addEventListener('click', () => {
+  const patternKey = savedPatterns.length - 1;
+  const newProgress = {
+    patternKey,
+    sectionCount: 1,
+    rowCount: 1
+  };
+  saveProgress(newProgress);
+});
 
 function generateTitlePreview(title) {
   return `<span class="pattern-title">${title}</span>`

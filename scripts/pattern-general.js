@@ -1,6 +1,4 @@
 let previousPattern;
-let selectedPattern;
-let savedPatterns;
 
 // common pattern header code
 
@@ -11,8 +9,7 @@ const patternDescInputElement = document.querySelector('.js-pattern-desc');
 const patternSelectElement = document.querySelector('.js-pattern-types');
 
 const renderPatternOptions = () => {
-  const saved = localStorage.getItem(PATTERN_KEY);
-  savedPatterns = saved && saved !== 'undefined' ? JSON.parse(saved) : [];
+  savedPatterns = loadAllPatterns();
   renderPatternList();
 
   renderListElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);

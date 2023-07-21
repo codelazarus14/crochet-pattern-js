@@ -1,9 +1,9 @@
+const patternListClearElement = document.querySelector('.js-clear-pattern-list');
 const patternListElement = document.querySelector('.js-pattern-list');
 const missingPatternAlert = document.querySelector('.js-pattern-alert');
 
 const renderPatternList = (updateSaved) => {
-  if (updateSaved) 
-    localStorage.setItem(PATTERN_KEY, JSON.stringify(savedPatterns));
+  if (updateSaved) saveAllPatterns();
 
   if (savedPatterns.length < 1) {
     missingPatternAlert.classList.remove('is-hidden');
@@ -15,6 +15,11 @@ const renderPatternList = (updateSaved) => {
 }
 
 function addPatternListListeners() {
+  patternListClearElement.addEventListener('click', () => {
+    savedPatterns = [];
+    renderPatternList(true);
+  });
+
   document.querySelectorAll('.js-pattern-list-item')
     .forEach(patternElem => {
       const loadButton = patternElem.querySelector('.js-load-pattern');

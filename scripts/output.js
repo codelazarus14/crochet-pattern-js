@@ -22,6 +22,24 @@ function generateDefaultSelectOption(chooseMsg) {
   selected disabled hidden>${chooseMsg}</option>`;
 }
 
+// TODO: add image functionality
+
 function generateImageUploadHTML(option, index) {
   return `<button class="image-attach">Upload Image?!?</button>`;
+}
+
+function generateImagePreview(image) {
+  return 'Image';
+}
+
+function generateYarnImage() {
+  return 'tiny';
+}
+
+function generateGlossaryImage() {
+  return 'bigger';
+}
+
+function generateStepImage() {
+  return 'click to open';
 }

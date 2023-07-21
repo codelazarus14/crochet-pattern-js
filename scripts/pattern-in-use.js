@@ -3,6 +3,8 @@ const glossaryListElem = document.querySelector('.js-glossary-list');
 const stepsListElem = document.querySelector('.js-steps-list');
 const counterElem = document.querySelector('.js-counter');
 const sectionElem = document.querySelector('.js-section');
+const patternProgress = loadProgress();
+const patternInUse = loadPattern(patternProgress.patternKey);
 
 const renderBasicInfoMini = () => {
   document.querySelector('.js-pattern-title').innerHTML =
@@ -22,7 +24,7 @@ const renderCounters = () => {
   if (patternInUse.steps.length === 1)
     sectionElem.classList.add('is-hidden');
   else
-    sectionElem.innerHTML = patternProgress.sectionCount;
+    sectionElem.innerHTML = `Section ${patternProgress.sectionCount}`;
 }
 
 const renderHooksMini = () => {
@@ -74,34 +76,12 @@ const renderPatternInUse = () => {
 }
 
 onunload = () => {
-  saveProgress();
+  saveProgress(patternProgress);
 }
 
-const [patternProgress, patternInUse] = loadPattern(0);
-
+// TODO: add pattern list to see currently selected/switch between
 renderPatternInUse();
 addNumInputListener(counterElem, updateCounters, []);
-
-function loadPattern(idx) {
-  const savedPatterns = localStorage.getItem(PATTERN_KEY);
-  if (!savedPatterns || savedPatterns === 'undefined')
-    console.error('No saved patterns found!');
-  const patterns = JSON.parse(savedPatterns);
-  const savedProgress = localStorage.getItem(PROGRESS_KEY);
-  const progress = !savedProgress ?
-    {
-      patternIdx: idx,
-      sectionCount: 1,
-      rowCount: 1
-    }
-    : JSON.parse(savedProgress);
-
-  return [progress, patterns[idx]];
-}
-
-function saveProgress() {
-  localStorage.setItem(PROGRESS_KEY, JSON.stringify(patternProgress));
-}
 
 function updateCounters() {
   // TODO: make section counter editable too
@@ -152,18 +132,6 @@ function updateCounters() {
   console.log(patternProgress.sectionCount, patternProgress.rowCount, counterElem.value);
   renderCounters();
   renderSteps();
-}
-
-function generateYarnImage() {
-  return 'tiny';
-}
-
-function generateGlossaryImage() {
-  return 'bigger';
-}
-
-function generateStepImage() {
-  return 'click to open';
 }
 
 function generateHookMini(hook, index) {

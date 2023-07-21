@@ -1,5 +1,4 @@
-const PATTERN_KEY = 'savedPatterns';
-const PROGRESS_KEY = 'patternInProgress';
+let selectedPattern;
 
 class Pattern {
   constructor(title, author, desc, type) {

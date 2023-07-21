@@ -143,8 +143,7 @@ function setupCrochet() {
       submitAlertElement.innerHTML = result;
     } else {
       submitAlertElement.innerHTML = '';
-      savedPatterns.push(selectedPattern);
-      localStorage.setItem(PATTERN_KEY, JSON.stringify(savedPatterns));
+      savePattern(selectedPattern);
     }
   });
 

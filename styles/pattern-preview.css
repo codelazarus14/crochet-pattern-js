@@ -93,7 +93,7 @@ main {
   padding: 0.8em;
 }
 
-.use-pattern-button {
+.use-pattern {
   padding: 1em;
   font-weight: bold;
   text-decoration: none;
@@ -105,10 +105,10 @@ main {
   cursor: pointer;
 }
 
-.use-pattern-button:hover {
+.use-pattern:hover {
   opacity: 0.8;
 }
 
-.use-pattern-button:active {
+.use-pattern:active {
   box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
