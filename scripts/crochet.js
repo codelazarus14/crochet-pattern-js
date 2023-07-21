@@ -164,13 +164,8 @@ function addHookButtonListeners() {
   document.querySelectorAll('.js-hook-size-button')
     .forEach(button => {
       button.addEventListener('click', () => {
-        if (button.classList.contains('selected')) {
-          selectedPattern.hooks[button.value] = false;
-          button.classList.remove('selected');
-        } else {
-          selectedPattern.hooks[button.value] = true;
-          button.classList.add('selected');
-        }
+        selectedPattern.hooks[button.value] = 
+          button.classList.toggle('selected');
         // renderHookList();
       });
     });

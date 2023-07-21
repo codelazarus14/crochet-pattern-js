@@ -82,6 +82,20 @@ onunload = () => {
 // TODO: add pattern list to see currently selected/switch between
 renderPatternInUse();
 addNumInputListener(counterElem, updateCounters, []);
+addCollapseListeners();
+
+function addCollapseListeners() {
+  document.querySelectorAll('.js-collapse')
+    .forEach(collapse => {
+      const content = collapse.nextElementSibling;
+      content.classList.add('is-hidden');
+      
+      collapse.addEventListener('click', () => {
+        collapse.classList.toggle('active');
+        content.classList.toggle('is-hidden');
+      });
+    });
+}
 
 function updateCounters() {
   // TODO: make section counter editable too

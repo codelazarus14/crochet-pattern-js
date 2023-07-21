@@ -16,6 +16,11 @@
   padding: 4em;
 }
 
+.inner {
+  margin: 0.5em;
+  align-items: inherit;
+}
+
 .pattern-header {
   margin: 0.5em;
 }
@@ -26,27 +31,50 @@
 }
 
 .pattern-author {
+  margin-left: 1em;
   font-style: italic;
 }
 
 .pattern-body {
   font-size: 1.2em;
   display: flex;
+  justify-content: space-between;
 }
 
 .pattern-info {
-  margin-left: 1em;
+  margin: 0 1em;
+  padding-right: 1.5em;
+  padding-bottom: 1.5em;
+  height: fit-content;
+  border-right: 0.5em solid var(--wheat-border);
 }
 
-/* todo: make functional collapsible elements */ 
-[class$="expand"]:before{
+.pattern-info .inner {
+  padding-top: 1em;
+  margin-top: -0.5em;
+}
+
+.collapse:before{
   margin-right: 0.5em;
   content:'\2630';
 }
 
-.inner {
-  margin: 0.5em;
-  align-items: inherit;
+.collapse {
+  position: relative;
+  padding: 0.5em 1em 0.5em 0.5em;
+  margin-top: 0.5em;
+  background-color: var(--blue-color);
+  box-shadow: -0.2em -0.2em inset var(--shadow-color);
+  border-radius: 0.5em;
+  cursor: pointer;
+}
+
+.collapse:hover {
+  opacity: 0.8;
+}
+
+.collapse.active {
+  background-color: var(--purple-color);
 }
 
 .materials-list {
@@ -64,6 +92,10 @@
   justify-content: center;
 }
 
+.hook-mini-item {
+  width: max-content;
+}
+
 .yarn-mini-item {
   padding: 0 0.5em;
   display: grid;
@@ -76,7 +108,6 @@
 }
 
 .glossary-list {
-  grid-template-rows: 1fr 1fr;
   justify-content: start;
 }
 
@@ -91,20 +122,23 @@
 }
 
 .pattern-steps {
-  margin-left: 1em;
+  width: 100%;
   display: flex;
 }
 
+.pattern-steps .inner {
+  width: 100%;
+  height: fit-content;
+}
+
 .counters {
-  margin-top: 1.35em;
+  min-width: fit-content;
   font-size: 1.2em;
   font-weight: bold;
 }
 
-/* todo: check/fix text wrap on instrs? */ 
 .step-list {
   font-size: 1.2em;
-  min-width: 20em;
 }
 
 .step-in-use-item {
