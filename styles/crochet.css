@@ -63,7 +63,7 @@ main {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content:space-between;
+  justify-content: space-between;
 }
 
 .options-input * {
@@ -125,6 +125,13 @@ main {
 .section-heading {
   font-weight: bold;
   padding: 0.5em;
+  display: grid;
+  grid-template-columns: 1fr 2em;
+  align-items: center;
+}
+
+.section-heading button {
+  background-color: var(--purple-color);
 }
 
 .add-section-button {

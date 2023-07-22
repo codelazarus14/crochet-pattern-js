@@ -103,11 +103,9 @@ function updateCounters() {
   const newRowCount = Number(counterElem.value);
   const { sectionCount, rowCount } = patternProgress;
   const currSection = patternInUse.steps[sectionCount - 1];
-  // TODO: remove check for empty sections
-  const currMaxRow = currSection.length ?
+  const currMaxRow = 
     currSection[currSection.length - 1][1] ||
-    currSection[currSection.length - 1][0]
-    : 0;
+    currSection[currSection.length - 1][0];
 
   // flag first step in pattern
   const patternStart = sectionCount === 1 && rowCount === 1;

@@ -41,8 +41,9 @@ const renderGlossary = () => {
 }
 
 const renderSectionHeading = (section, idx) => {
-  section.querySelector('.js-section-heading')
-    .innerHTML = generateSectionHeadingHTML(idx);
+  const sectionHeading = section.querySelector('.js-section-heading');
+  sectionHeading.innerHTML = generateSectionHeadingHTML(idx);
+  addSectionDeleteListener(sectionHeading, idx);
 }
 const renderSectionSteps = (section, idx) => {
   const stepListElement = section.querySelector('.js-steps-list');
@@ -83,7 +84,8 @@ function resetPage() {
   // TODO: select not working on safari?
   renderPatternOptions();
   // clear all inputs
-  document.querySelectorAll('input, textarea, .js-pattern-types').forEach(elem => elem.value = elem.defaultValue);
+  document.querySelectorAll('input, textarea, .js-pattern-types')
+    .forEach(elem => elem.value = elem.defaultValue);
 }
 
 function setupCrochet() {
@@ -164,7 +166,7 @@ function addHookButtonListeners() {
   document.querySelectorAll('.js-hook-size-button')
     .forEach(button => {
       button.addEventListener('click', () => {
-        selectedPattern.hooks[button.value] = 
+        selectedPattern.hooks[button.value] =
           button.classList.toggle('selected');
         // renderHookList();
       });
@@ -231,6 +233,14 @@ function addRowInputListeners(stepListElem, section, index) {
   }
 }
 
+function addSectionDeleteListener(section, index) {
+  section.querySelector('.js-delete-button')
+    .addEventListener('click', () => {
+      selectedPattern.steps.splice(index, 1);
+      renderSectionGrid();
+    });
+}
+
 function setRowInputValue(rowInputElem, idx) {
   const sectionSteps = selectedPattern.steps[idx];
 
@@ -286,10 +296,22 @@ function checkStepIndexes(sectionIdx) {
 }
 
 function validatePattern() {
-  // TODO: validate to prevent empty sections (add delete buttons?)
-  if (!selectedPattern.steps[0][0]) {
-    return 'Pattern must include at least one step.';
+  const emptySections = [];
+  let result;
+
+  selectedPattern.steps.forEach((section, index) => {
+    if (section[0] === undefined)
+      emptySections.push(index + 1);
+  });
+
+  if (emptySections.length) {
+    if (emptySections.length === selectedPattern.steps.length) {
+      result = 'Pattern must include at least one step.';
+    } else {
+      result = (emptySections.length > 1 ? 'Sections' : 'Section') + ` ${emptySections} must include at least one step.`;
+    }
   }
+  return result;
 }
 
 function generateHookSizeButtonsHTML(option, index) {
@@ -341,7 +363,8 @@ function generateSectionHTML(section, idx) {
 }
 
 function generateSectionHeadingHTML(idx) {
-  return `Section ${idx + 1}`;
+  return `<div>Section ${idx + 1}</div>
+  <button class="js-delete-button">-</button>`;
 }
 
 function generateStepInputHTML() {

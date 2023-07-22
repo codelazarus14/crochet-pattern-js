@@ -48,13 +48,13 @@ function addNumInputListener(element, updateFunc, funcArgs) {
   }
 }
 
-function addDeleteListeners(listElem, itemList, renderFunc, renderParams) {
+function addDeleteListeners(listElem, itemList, renderFunc, renderArgs) {
   console.log(listElem);
   listElem.querySelectorAll(`.js-delete-button`)
     .forEach((deleteButton, index) => {
       deleteButton.addEventListener('click', () => {
         itemList.splice(index, 1);
-        renderFunc.apply(null, renderParams);
+        renderFunc.apply(null, renderArgs);
       });
     });
 }
