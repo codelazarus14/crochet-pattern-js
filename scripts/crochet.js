@@ -20,6 +20,7 @@ const notesInputElement = document.querySelector('.js-notes-input');
 const sectionGridElement = document.querySelector('.js-section-grid');
 const sectionAddElement = document.querySelector('.js-add-section-button');
 
+const saveElement = document.querySelector('.js-save-button');
 const submitElement = document.querySelector('.js-submit-button');
 const submitAlertElement = document.querySelector('.js-submit-alert');
 const refreshElement = document.querySelector('.js-refresh-button');
@@ -76,6 +77,8 @@ const renderSectionGrid = () => {
   });
 }
 
+let bodyRevealed;
+
 onload = () => {
   resetPage();
 }
@@ -90,6 +93,7 @@ function resetPage() {
 
 function setupCrochet() {
   document.querySelector('.js-pattern-body').classList.remove('is-hidden');
+  bodyRevealed = true;
 
   // render input stuff once
   renderListElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
@@ -138,6 +142,19 @@ function setupCrochet() {
     });
   });
 
+  // TODO: save changes to things in pattern options form
+  // (title, desc etc.)
+  saveElement.addEventListener('click', e => {
+    const result = validatePattern();
+    if (result && typeof result === 'string') {
+      e.preventDefault();
+      submitAlertElement.innerHTML = result;
+    } else {
+      submitAlertElement.innerHTML = '';
+      savePattern(selectedPattern, getLoadedPattern());
+    }
+  });
+
   submitElement.addEventListener('click', e => {
     const result = validatePattern();
     if (result && typeof result === 'string') {
@@ -155,7 +172,9 @@ function setupCrochet() {
 }
 
 function populateCrochetPatternFields() {
-  setupCrochet();
+  if (!bodyRevealed)
+    setupCrochet();
+  
   renderYarnList();
   renderGlossary();
   notesInputElement.value = selectedPattern.notes;

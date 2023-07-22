@@ -26,10 +26,10 @@ openRequest.addEventListener('success', () => {
 */
 
 function loadPattern(key) {
-  const savedPatterns = localStorage.getItem(PATTERNS_KEY);
-  if (!savedPatterns || savedPatterns === 'undefined')
+  const saved = localStorage.getItem(PATTERNS_KEY);
+  if (!saved || saved === 'undefined')
     console.error('No saved patterns found!');
-  const patterns = JSON.parse(savedPatterns);
+  const patterns = JSON.parse(saved);
   return patterns[key];
   // look up key in pattern table
   // if found, return getItem(key)
@@ -42,11 +42,15 @@ function loadAllPatterns() {
   return patterns;
 }
 
-function savePattern(pattern) {
-  const toUpdate = savedPatterns ? savedPatterns : [];
-  toUpdate.push(pattern);
+function savePattern(pattern, idx) {
+  const saved = savedPatterns ? savedPatterns : [];
+  if (idx) {
+    saved[idx] = pattern;
+  } else {
+    saved.push(pattern);
+  }
   localStorage.setItem(PATTERNS_KEY, 
-    JSON.stringify(toUpdate));
+    JSON.stringify(saved));
   // save pattern key to table
   // save pattern data with key
   return `key`;

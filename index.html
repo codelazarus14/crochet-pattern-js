@@ -56,7 +56,7 @@
               <div class="clear-list">
                 <button class="clear-pattern-list js-clear-pattern-list">Clear Saved Patterns</button>
               </div>
-              <div class="pattern-list js-pattern-list"></div>
+              <div class="pattern-list js-pattern-list" data-loaded-pattern=""></div>
               <div class="pattern-alert js-pattern-alert is-hidden">No saved patterns found.</div>
             </div>
           </div>
@@ -140,6 +140,9 @@
           <div class="submit heading">
             <div class="inner">
               <div class="submit-container">
+                <a class="save-button js-save-button" href="index.html">Save Pattern
+                  <span class="pattern-name"></span>
+                </a>
                 <a class="submit-button js-submit-button" href="pattern-preview.html">Submit as New Pattern</a>
                 <button class="refresh-button js-refresh-button">Reset</button>
               </div>

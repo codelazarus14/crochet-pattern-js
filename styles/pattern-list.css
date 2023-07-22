@@ -11,6 +11,16 @@
   grid-template-columns: 1fr 1fr 3em 2em;
 }
 
+.pattern-list-item .pattern-title,
+.pattern-list-item .pattern-author {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.pattern-list-item.loaded {
+  background-color: var(--light-purple-color);
+}
+
 .pattern-alert {
   font-size: 0.8em;
   padding-top: 0.5em;

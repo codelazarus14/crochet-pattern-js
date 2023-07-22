@@ -24,15 +24,28 @@ function addPatternListListeners() {
     .forEach(patternElem => {
       const loadButton = patternElem.querySelector('.js-load-pattern');
       loadButton.addEventListener('click', () => {
+        // TODO: fix 'loaded' patterns not saving if list is
+        // modified by deletion 
+        // (update class selectors/loaded pattern idx)
         const idx = patternElem.dataset.patternIdx;
-        selectedPattern = savedPatterns[idx];
-        // TODO: add styling and keep track of selected pattern to be updated on Submit
-        // ask user if they want to update an existing pattern or save a new copy?
+        // clear previously loaded pattern
+        const previousLoaded = patternListElement.querySelector('.loaded');
+        if (previousLoaded)
+          previousLoaded.classList.remove('loaded');
+        // set new one
+        patternElem.classList.add('loaded');
+        patternListElement.dataset.loadedPattern = idx;
+        // clone saved data so we dont reference it directly
+        selectedPattern = structuredClone(savedPatterns[idx]);
         populatePatternFields();
       });
     });
 
   addDeleteListeners(patternListElement, savedPatterns, renderPatternList, [true]);
+}
+
+function getLoadedPattern() {
+  return patternListElement.dataset.loadedPattern;
 }
 
 function generatePatternListItem(pattern, index) {

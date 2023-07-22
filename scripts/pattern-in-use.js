@@ -114,8 +114,6 @@ function updateCounters() {
     sectionCount === patternInUse.steps.length &&
     rowCount === currMaxRow;
 
-  console.log(patternStart, patternEnd);
-
   if (newRowCount > currMaxRow && !patternEnd) {
     if (newRowCount - currMaxRow > 1) {
       // clamp OOB increase to current section
@@ -141,7 +139,6 @@ function updateCounters() {
   } else {
     patternProgress.rowCount = Math.min(newRowCount, currMaxRow);
   }
-  console.log(patternProgress.sectionCount, patternProgress.rowCount, counterElem.value);
   renderCounters();
   renderSteps();
 }

@@ -1,5 +1,6 @@
 :root {
   --blue-color: rgb(140, 215, 235);
+  --light-purple-color: rgb(210, 215, 240);
   --purple-color: rgb(160, 185, 235);
   --wheat-border: rgb(235, 200, 135);
   --shadow-color: rgba(0, 0, 0, 0.15);
@@ -106,14 +107,14 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
   flex-direction: column;
 }
 
-[class$="list-item"] {
+[class*="list-item"] {
   margin: 0.5em 0;
   background-color: wheat;
   border-radius: 1em;
   box-shadow: -0.2em -0.2em inset var(--purple-color);
 }
 
-[class$="list-item"],
+[class*="list-item"],
 [class$="input-grid"] {
   display: grid;
   align-items: center;
@@ -121,12 +122,12 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
   padding: 1em;
 }
 
-[class$="list-item"] * {
+[class*="list-item"] * {
   overflow: hidden;
   overflow-wrap: break-word;
 }
 
-[class$="list-item"] button,
-[class$="list-item"] select {
+[class*="list-item"] button,
+[class*="list-item"] select {
   background-color: var(--purple-color);
 }
