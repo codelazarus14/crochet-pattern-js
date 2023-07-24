@@ -53,6 +53,7 @@ function generatePatternListItem(pattern, index) {
   <div class="pattern-title">${pattern.title}</div>
   <div class="pattern-author">${pattern.author}</div>
   <button class="load-pattern js-load-pattern">Load</button>
-  <button class="js-delete-button">-</button>
+  <div class="delete-pattern">
+    <a class="js-delete-button">${removeChar}</a></div>
   </div>`
 }

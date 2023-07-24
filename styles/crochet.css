@@ -83,9 +83,13 @@ main {
   column-gap: 0;
 }
 
+.pattern-body [class*="delete-button"] {
+  font-size: 1.2em;
+}
+
 .yarn-input-grid,
 .yarn-list-item {
-  grid-template-columns: 5em 1fr 1fr 1fr 2em;
+  grid-template-columns: 5em 1fr 1fr 1fr auto;
 }
 
 .yarn-input-grid select,
@@ -95,7 +99,7 @@ main {
 
 .glossary-input-grid,
 .glossary-list-item {
-  grid-template-columns: 5em 1fr 1fr 2em;
+  grid-template-columns: 5em 1fr 1fr auto;
 }
 
 .glossary-term,
@@ -109,7 +113,7 @@ main {
 
 .step-input-grid,
 .step-list-item {
-  grid-template-columns: 5em 1fr 1fr 2em;
+  grid-template-columns: 5em 1fr 1fr auto;
 }
 
 .row-index-error {
@@ -126,7 +130,7 @@ main {
   font-weight: bold;
   padding: 0.5em;
   display: grid;
-  grid-template-columns: 1fr 2em;
+  grid-template-columns: 1fr auto;
   align-items: center;
 }
 
@@ -143,6 +147,11 @@ main {
   font-size: 1em;
   padding: 1em;
   margin: 1em;
+}
+
+.save-button .pattern-name {
+  margin: 0;
+  padding: 0;
 }
 
 .submit-button {

@@ -14,6 +14,7 @@ class CrochetPattern extends Pattern {
     super(title, author, desc, PatternTypes.USCrochet);
     this.hooks = [];
     this.yarns = [];
+    // TODO: gauge?
     this.glossary = [];
     this.notes = '';
     // 2d array of steps ordered by sections,

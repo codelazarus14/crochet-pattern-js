@@ -78,6 +78,7 @@ select:focus {
   box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
 
+/* todo: auto-expanding input fields? */
 input {
   padding: 0.35em;
   margin: 0.35em;
@@ -92,8 +93,17 @@ input:invalid:focus {
   border: 2px solid var(--invalid-color);
 }
 
-[class*="confirm"],
-[class*="delete"],
+[class*="confirm-button"],
+[class*="delete-button"] {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+[class*="delete-button"] {
+  cursor: pointer;
+  color: var(--invalid-color);
+}
+
 .image-attach {
   font-weight: bold;
 }

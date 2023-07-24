@@ -1,3 +1,6 @@
+const addChar = '&#xff0b';
+const removeChar = '&#x1d5b7';
+
 function renderListElement(listElement, elementData, htmlGenerator) {
   let html = '';
 

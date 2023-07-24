@@ -1,17 +1,14 @@
 const hookInputElement = document.querySelector('.js-hook-types');
-// const hookListElement = document.querySelector('.js-hook-list');
 
 const yarnFormElement = document.querySelector('.js-yarn-form');
 const yarnNameInputElement = document.querySelector('.js-yarn-name');
 const yarnUnitsInputElement = document.querySelector('.js-yarn-units');
 const yarnAmtInputElement = document.querySelector('.js-yarn-amt');
-const yarnConfirmInputElement = document.querySelector('.js-yarn-confirm');
 const yarnListElement = document.querySelector('.js-yarn-list');
 
 const glossaryFormElement = document.querySelector('.js-glossary-form');
 const glossaryTermInputElement = document.querySelector('.js-term');
 const glossaryDescInputElement = document.querySelector('.js-desc');
-const glossaryConfirmInputElement = document.querySelector('.js-glossary-confirm');
 const glossaryListElement = document.querySelector('.js-glossary-list');
 
 const notesInputElement = document.querySelector('.js-notes-input');
@@ -25,11 +22,6 @@ const submitElement = document.querySelector('.js-submit-button');
 const submitAlertElement = document.querySelector('.js-submit-alert');
 const refreshElement = document.querySelector('.js-refresh-button');
 
-// unused - we seem to be using button visuals now
-//
-// const renderHookList = () => {
-//   renderElement(hookListElement, selectedPattern.hooks, generateHookListHTML);
-// }
 const renderYarnList = () => {
   renderListElement(yarnListElement, selectedPattern.yarns, generateYarnListHTML);
   addDeleteListeners(yarnListElement, selectedPattern.yarns, renderYarnList);
@@ -143,7 +135,7 @@ function setupCrochet() {
   });
 
   // TODO: save changes to things in pattern options form
-  // (title, desc etc.)
+  // (title, desc etc.) and display title on save button
   saveElement.addEventListener('click', e => {
     const result = validatePattern();
     if (result && typeof result === 'string') {
@@ -152,6 +144,7 @@ function setupCrochet() {
     } else {
       submitAlertElement.innerHTML = '';
       savePattern(selectedPattern, getLoadedPattern());
+      location.reload();
     }
   });
 
@@ -242,9 +235,10 @@ function addRowInputListeners(stepListElem, section, index) {
 
   function updateStepRows(rowInput, idx) {
     const input = rowInput.value.trim();
-    const currStep =
+    const currStep = stepList[idx - 1] ?
       (stepList[idx - 1][1] ||
-        stepList[idx - 1][0]);
+        stepList[idx - 1][0])
+      : 0;
     const [start, end] = parseRowInput(input, currStep, true);
     stepList[idx][0] = start
     stepList[idx][1] = end;
@@ -363,7 +357,7 @@ function generateYarnListHTML(yarn, index) {
   <div>${yarn[0]}</div>
   <input class="js-update-yarn-amt" type="number" value="${yarn[1]}" min="1">
   <select class="js-update-yarn-units">${units}</select>
-  <button class="js-delete-button">-</button></div>`;
+  <a class="js-delete-button">${removeChar}</a></div>`;
 }
 
 function generateGlossaryEntryHTML(entry, index) {
@@ -371,7 +365,7 @@ function generateGlossaryEntryHTML(entry, index) {
   <div class="js-update-term-image">${generateImageUploadHTML()}</div>
   <div><span class="glossary-term">${entry[0]}</span></div>
   <div>${entry[1]}</div>
-  <button class="js-delete-button">-</button></div>`;
+  <a class="js-delete-button">${removeChar}</a></div>`;
 }
 
 function generateSectionHTML(section, idx) {
@@ -382,8 +376,10 @@ function generateSectionHTML(section, idx) {
 }
 
 function generateSectionHeadingHTML(idx) {
+  // TODO: add 'are you sure?' prompt to avoid accidentally
+  // deleting sections
   return `<div>Section ${idx + 1}</div>
-  <button class="js-delete-button">-</button>`;
+  <a class="js-delete-button">${removeChar}</a>`;
 }
 
 function generateStepInputHTML() {
@@ -393,7 +389,7 @@ function generateStepInputHTML() {
   <div class="js-step-image">${generateImageUploadHTML()}</div>
   <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" required>
   <input class="js-instr-input" placeholder="Instructions for the first row" required>
-  <button type="submit" class="js-step-confirm">+</button></div>`;
+  <button type="submit" class="step-confirm-button">${addChar}</button></div>`;
 }
 
 function generateStepHTML(step, index) {
@@ -412,5 +408,5 @@ function generateStepHTML(step, index) {
       <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowValue}" required></div>
     <span class="row-index-error ${rowIndexError}">Index error</span></div>
   <div class="step-instrs">${step[2]}</div>
-  <button class="js-delete-button">-</button></div>`;
+  <a class="js-delete-button">${removeChar}</a></div>`;
 }
