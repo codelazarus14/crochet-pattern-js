@@ -81,10 +81,17 @@ function resetPage() {
   // clear all inputs
   document.querySelectorAll('input, textarea, .js-pattern-types')
     .forEach(elem => elem.value = elem.defaultValue);
+  document.querySelectorAll('textarea')
+    .forEach(input => {
+      resizeInput(input);
+      addInputResizeListener(input);
+    });
 }
 
 function setupCrochet() {
   document.querySelector('.js-pattern-body').classList.remove('is-hidden');
+  document.querySelectorAll('textarea')
+    .forEach(input => resizeInput(input));
   bodyRevealed = true;
 
   // render input stuff once
@@ -172,6 +179,9 @@ function populateCrochetPatternFields() {
   renderGlossary();
   notesInputElement.value = selectedPattern.notes;
   renderSectionGrid();
+  // TODO: refactor these three separate 'reset text area size' calls?
+  document.querySelectorAll('textarea')
+    .forEach(input => resizeInput(input));
 }
 
 function addHookButtonListeners() {
@@ -388,7 +398,7 @@ function generateStepInputHTML() {
   return `<div class="step-input-grid">
   <div class="js-step-image">${generateImageUploadHTML()}</div>
   <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" required>
-  <input class="js-instr-input" placeholder="Instructions for the first row" required>
+  <input class="js-instr-input" placeholder="Enter instructions" required>
   <button type="submit" class="step-confirm-button">${addChar}</button></div>`;
 }
 

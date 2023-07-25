@@ -88,12 +88,13 @@ main {
 }
 
 .export-pattern button {
-  font-size: 1em;
+  font-size: 1.2em;
   margin: 0.5em;
   padding: 0.8em;
 }
 
 .use-pattern {
+  font-size: 1.2em;
   padding: 1em;
   font-weight: bold;
   text-decoration: none;

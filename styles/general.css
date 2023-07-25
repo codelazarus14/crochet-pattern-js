@@ -52,11 +52,18 @@ h2 {
   align-items: center;
 }
 
-input,
+button,
 select,
-button {
+input,
+textarea {
   font-size: 0.8em;
   border-radius: 0.35em;
+}
+
+select,
+input,
+textarea {
+  margin: 0.5em;
 }
 
 button,
@@ -64,8 +71,15 @@ select {
   padding: 0.5em;
   border: none;
   background-color: var(--blue-color);
-  box-shadow: -0.2em -0.2em inset var(--shadow-color);
   cursor: pointer;
+}
+
+button {
+  box-shadow: -0.2em -0.2em inset var(--shadow-color);
+}
+
+select {
+  border-bottom: 0.2em solid var(--shadow-color);
 }
 
 button:hover,
@@ -73,24 +87,33 @@ select:hover {
   opacity: 0.8;
 }
 
-button:active,
-select:focus {
+button:active {
   box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
 
-/* todo: auto-expanding input fields? */
+input,
+textarea {
+  border: none;
+  border-bottom: 0.2em solid var(--wheat-border);
+}
+
+input:invalid:focus,
+textarea:invalid:focus {
+  border-bottom: 0.2em solid var(--invalid-color);
+}
+
+textarea {
+  padding: 0.5em 0.5em 0 0.5em;
+  resize: none;
+  overflow-y: hidden;
+}
+
 input {
   padding: 0.35em;
-  margin: 0.35em;
-  border: 2px solid transparent;
 }
 
 input[type="number"] {
   max-width: 4em;
-}
-
-input:invalid:focus {
-  border: 2px solid var(--invalid-color);
 }
 
 [class*="confirm-button"],
@@ -130,6 +153,11 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
   align-items: center;
   column-gap: 1em;
   padding: 1em;
+}
+
+[class$="input-grid"] * {
+  display: flex;
+  align-items: center;
 }
 
 [class*="list-item"] * {

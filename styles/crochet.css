@@ -32,6 +32,10 @@ main {
   font-size: 1.2em;
 }
 
+.pattern-options .pattern-desc {
+  min-height: 3em;
+}
+
 .load-pattern-options {
   font-size: 1.25em;
   width: 45%;
@@ -48,6 +52,17 @@ main {
   border-radius: 0;
   display: flex;
   flex-direction: column;
+}
+
+.pattern-body button,
+.pattern-body select,
+.pattern-body input,
+.pattern-body textarea {
+  font-size: 1rem;
+}
+
+.pattern-body [class*="delete-button"] {
+  font-size: 1.2em;
 }
 
 .selected {
@@ -83,27 +98,27 @@ main {
   column-gap: 0;
 }
 
-.pattern-body [class*="delete-button"] {
-  font-size: 1.2em;
+.yarn-name-input input,
+.glossary-desc-input input {
+  width: 100%;
 }
 
 .yarn-input-grid,
 .yarn-list-item {
-  grid-template-columns: 5em 1fr 1fr 1fr auto;
+  grid-template-columns: 5em 2fr 1fr 1fr auto;
 }
 
 .yarn-input-grid select,
 .yarn-list select {
-  max-width: 7em;
+  max-width: 6em;
 }
 
 .glossary-input-grid,
 .glossary-list-item {
-  grid-template-columns: 5em 1fr 1fr auto;
+  grid-template-columns: 5em 1fr 2fr auto;
 }
 
-.glossary-term,
-.pattern-title {
+.glossary-term {
   font-weight: bold;
 }
 
@@ -111,9 +126,15 @@ main {
   grid-template-columns: 5em 1fr;
 }
 
+textarea.notes-input {
+  font-size: 1.2em;
+  min-height: 5em;
+}
+
 .step-input-grid,
 .step-list-item {
-  grid-template-columns: 5em 1fr 1fr auto;
+  min-width: 20em;
+  grid-template-columns: 5em 1fr 2fr auto;
 }
 
 .row-index-error {
@@ -138,12 +159,13 @@ main {
   background-color: var(--purple-color);
 }
 
-.add-section-button {
+.steps .add-section-button {
   font-size: 1em;
   width: 100%;
 }
 
-.submit-container * {
+.submit-container button,
+.submit-container a {
   font-size: 1em;
   padding: 1em;
   margin: 1em;

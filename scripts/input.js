@@ -58,3 +58,15 @@ function addDeleteListeners(listElem, itemList, renderFunc, renderArgs) {
       });
     });
 }
+
+// input resizing
+
+function addInputResizeListener(inputElem) {
+  inputElem.addEventListener('input', () => 
+    resizeInput(inputElem));
+}
+
+function resizeInput(inputElem) {
+  inputElem.style.height = 0;
+  inputElem.style.height = `${(inputElem.scrollHeight)}px`;
+}
