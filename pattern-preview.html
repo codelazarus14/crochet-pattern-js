@@ -42,23 +42,34 @@
                 <div class="yarn-preview js-yarn-preview"></div>
               </div>
             </div>
-            <h2>Glossary</h2>
-            <div class="glossary-preview js-glossary-preview"></div>
-            <h2>Notes</h2>
-            <div class="notes-preview js-notes-preview"></div>
-            <h2>Steps</h2>
-            <div class="steps-preview js-steps-preview"></div>
+            <div class="glossary-preview-container">
+              <h2>Glossary</h2>
+              <div class="glossary-preview js-glossary-preview"></div>
+            </div>
+            <div class="notes-preview-container">            
+              <h2>Notes</h2>
+              <div class="notes-preview js-notes-preview"></div>
+            </div>
+            <div class="steps-preview-container">
+              <h2>Steps</h2>
+              <div class="steps-preview js-steps-preview"></div>
+            </div>
           </div>
         </div>
         <div class="preview-options">
           <h1>Options</h1>
-          <div class="export-pattern">
-            <h2>Export:</h2>
-            <!-- todo: implement export -->
-            <button class="export-pdf">PDF</button>
-            <button class="export-json">JSON</button>
+          <div class="preview-export-use">
+            <div class="export-pattern">
+              <h2>Export Options</h2>
+              <div class="export-options">
+                <button class="export-pdf js-export-pdf">Print/Save PDF</button>
+                <button class="export-json js-export-json">Save JSON</button>
+              </div>
+            </div>
+            <div class="use-pattern">   
+              <a class="use-pattern-button js-use-pattern" href="pattern-in-use.html">Use Pattern</a>
+            </div>
           </div>
-          <a class="use-pattern js-use-pattern" href="pattern-in-use.html">Use Pattern</a>
         </div>
       </main>
     </div>

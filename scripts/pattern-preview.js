@@ -4,6 +4,9 @@ const yarnPreviewElement = document.querySelector('.js-yarn-preview');
 const glossaryPreviewElement = document.querySelector('.js-glossary-preview');
 const notesPreviewElement = document.querySelector('.js-notes-preview');
 const stepsPreviewElement = document.querySelector('.js-steps-preview');
+
+const exportPDFElement = document.querySelector('.js-export-pdf');
+const exportJSONElement = document.querySelector('.js-export-json');
 const usePatternElement = document.querySelector('.js-use-pattern');
 
 let submittedPattern;
@@ -64,6 +67,14 @@ if (savedPatterns.length) {
   submittedPattern = savedPatterns[savedPatterns.length - 1];
   renderPatternPreview();
 }
+
+exportPDFElement.addEventListener('click', () => {
+  print();
+})
+
+exportJSONElement.addEventListener('click', () => {
+  // TODO: implement JSON export
+})
 
 usePatternElement.addEventListener('click', () => {
   const patternKey = savedPatterns.length - 1;
