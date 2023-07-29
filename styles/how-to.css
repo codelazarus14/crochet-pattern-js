@@ -1,0 +1,38 @@
+.how-to-header {
+  margin: 0.25em;
+}
+
+.how-to-content {
+  font-size: 1.2em;
+  margin: 1em;
+}
+
+.how-to-content p {
+  margin: 1.5em 0;
+}
+
+.how-to-content a {
+  color: var(--link-color);
+}
+
+.how-to-content a:hover {
+  opacity: 0.6;
+}
+
+/* Todo: make images clickable to get full size */
+.how-to-content .expand-image-note {
+  margin: 0;
+  font-style: italic;
+}
+
+.image-container {
+  max-width: 50%;
+  background-color: antiquewhite;
+  padding: 1em;
+  border-radius: 1em;
+  box-shadow: 0.4rem 0.4rem var(--wheat-border);
+}
+
+.image-container img {
+  width: 100%;
+}

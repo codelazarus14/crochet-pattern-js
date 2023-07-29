@@ -6,6 +6,7 @@
   --wheat-border: rgb(235, 200, 135);
   --shadow-color: rgba(0, 0, 0, 0.15);
   --invalid-color: rgb(220, 0, 0);
+  --link-color: rgb(80, 80, 200);
 }
 
 body {

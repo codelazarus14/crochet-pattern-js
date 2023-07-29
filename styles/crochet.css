@@ -182,7 +182,7 @@ textarea.notes-input {
 }
 
 .dragging {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .drag-over {
@@ -191,7 +191,7 @@ textarea.notes-input {
 
 .step-list-item.drag-over {
   padding: 1.5em 1em;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .step-input-grid {
@@ -206,7 +206,7 @@ textarea.notes-input {
 }
 
 .submit-container button,
-.submit-container a {
+.submit-container .submit-button {
   font-size: 1em;
   padding: 1em;
   margin: 1em;
