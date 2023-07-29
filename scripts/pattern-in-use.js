@@ -22,7 +22,7 @@ const renderCounters = () => {
 
   counterElem.value = patternProgress.rowCount;
   if (patternInUse.steps.length === 1)
-    sectionElem.classList.add('is-hidden');
+    sectionElem.classList.add('hidden');
   else
     sectionElem.innerHTML = `Section ${patternProgress.sectionCount}`;
 }
@@ -88,11 +88,11 @@ function addCollapseListeners() {
   document.querySelectorAll('.js-collapse')
     .forEach(collapse => {
       const content = collapse.nextElementSibling;
-      content.classList.add('is-hidden');
-      
+      content.classList.add('hidden');
+
       collapse.addEventListener('click', () => {
         collapse.classList.toggle('active');
-        content.classList.toggle('is-hidden');
+        content.classList.toggle('hidden');
       });
     });
 }
@@ -103,7 +103,7 @@ function updateCounters() {
   const newRowCount = Number(counterElem.value);
   const { sectionCount, rowCount } = patternProgress;
   const currSection = patternInUse.steps[sectionCount - 1];
-  const currMaxRow = 
+  const currMaxRow =
     currSection[currSection.length - 1][1] ||
     currSection[currSection.length - 1][0];
 

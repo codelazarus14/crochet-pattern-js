@@ -13,7 +13,6 @@ const glossaryListElement = document.querySelector('.js-glossary-list');
 
 const notesInputElement = document.querySelector('.js-notes-input');
 
-// TODO: step inputs added as modular pieces supporting drag-and-drop/rearrange
 const sectionGridElement = document.querySelector('.js-section-grid');
 const sectionAddElement = document.querySelector('.js-add-section-button');
 
@@ -35,8 +34,10 @@ const renderGlossary = () => {
 
 const renderSectionHeading = (section, idx) => {
   const sectionHeading = section.querySelector('.js-section-heading');
+  const startDropZone = section.querySelector('.js-step-dropzone');
   sectionHeading.innerHTML = generateSectionHeadingHTML(idx);
   addSectionDeleteListener(sectionHeading, idx);
+  addStepDropListener(startDropZone, selectedPattern.steps[idx], idx);
 }
 const renderSectionSteps = (section, idx) => {
   const stepListElement = section.querySelector('.js-steps-list');
@@ -49,6 +50,7 @@ const renderSectionSteps = (section, idx) => {
   renderListElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
   addDeleteListeners(stepListElement, selectedPattern.steps[idx], renderSectionSteps, [section, idx]);
   addRowInputListeners(stepListElement, section, idx);
+  addDragNDropListeners(stepListElement, section, idx);
 }
 const renderSectionStepInput = (section, idx) => {
   section.querySelector('.js-step-form')
@@ -89,7 +91,7 @@ function resetPage() {
 }
 
 function setupCrochet() {
-  document.querySelector('.js-pattern-body').classList.remove('is-hidden');
+  document.querySelector('.js-pattern-body').classList.remove('hidden');
   document.querySelectorAll('textarea')
     .forEach(input => resizeInput(input));
   bodyRevealed = true;
@@ -174,7 +176,7 @@ function setupCrochet() {
 function populateCrochetPatternFields() {
   if (!bodyRevealed)
     setupCrochet();
-  
+
   renderYarnList();
   renderGlossary();
   notesInputElement.value = selectedPattern.notes;
@@ -262,6 +264,133 @@ function addSectionDeleteListener(section, index) {
       selectedPattern.steps.splice(index, 1);
       renderSectionGrid();
     });
+}
+
+function addDragNDropListeners(listElem, section, idx) {
+  const sectionSteps = selectedPattern.steps[idx];
+  listElem.querySelectorAll('.js-drag-icon')
+    .forEach((dragger, index) => {
+      addStepDragListener(dragger, index, sectionSteps, idx);
+    });
+  listElem.querySelectorAll('.js-step-dropzone')
+    .forEach(dropZone => {
+      addStepDropListener(dropZone);
+    });
+}
+
+function addStepDragListener(dragger, idx, sectionSteps, secIdx) {
+  const step = dragger.parentElement;
+  // make whole step drag instead of child icon
+  dragger.addEventListener('mousedown', () => {
+    step.setAttribute('draggable', 'true');
+  });
+  dragger.addEventListener('mouseout', () => {
+    step.setAttribute('draggable', 'false');
+  });
+  // mark dragged step
+  step.addEventListener('dragstart', e => {
+    const stepData = JSON.stringify([[secIdx, idx], sectionSteps[idx]]);
+    e.dataTransfer.setData('text/plain', stepData);
+    setTimeout(() => {
+      e.target.classList.add('dragging');
+    }, 0);
+  });
+  step.addEventListener('dragend', e => {
+    e.target.classList.remove('dragging');
+  });
+}
+
+function addStepDropListener(dropZone) {
+  // style dragged-over dropzones
+  dropZone.addEventListener('dragenter', e => {
+    if (checkDropZone(dropZone)) {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    }
+  });
+  dropZone.addEventListener('dragover', e => {
+    if (checkDropZone(dropZone)) {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    }
+  });
+  // clear style after dragging elsewhere
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('drag-over');
+  });
+  dropZone.addEventListener('drop', e => {
+    dropZone.classList.remove('drag-over');
+    handleDrop(e);
+  });
+
+  function checkDropZone(dropZone) {
+    const draggingStep = sectionGridElement.querySelector('.dragging');
+    // prevent dropping onto itself (parent wrapper) 
+    // or "start" of list if dragging first step
+    // or "between" dropzone of previous
+    // aka anything that wouldn't alter the list
+    const betweenZone = dropZone.classList.contains('step-between');
+    const startZone = dropZone.classList.contains('step-start');
+    const sameSection =
+      dropZone.closest('.js-section').dataset.sectionIdx ===
+      draggingStep.closest('.js-section').dataset.sectionIdx;
+    const firstStep = !(Number(draggingStep.parentElement.dataset.stepIdx));
+    const prevStep =
+      Number(dropZone.parentElement.dataset.stepIdx) + 1 ===
+      Number(draggingStep.parentElement.dataset.stepIdx);
+
+    return dropZone.parentElement !== draggingStep.parentElement &&
+      !(betweenZone && sameSection && prevStep) &&
+      !(startZone && sameSection && firstStep);
+  }
+
+  function handleDrop(e) {
+    // get step to insert
+    const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
+    const draggedSection = Number(dragData[0][0]);
+    const draggedIdx = Number(dragData[0][1]);
+    const draggedStep = dragData[1];
+    // get target step
+    const targetStart = e.target.classList.contains('step-start');
+    const targetSection =
+      Number(e.target.closest('.js-section').dataset.sectionIdx);
+    const targetIdx = !targetStart ?
+      Number(e.target.closest('.js-step-wrapper').dataset.stepIdx)
+      : 0;
+
+    console.log(e.target.classList);
+
+    if (e.target.classList.contains('step-start') ||
+      e.target.classList.contains('step-between')) {
+      // move dragged step to beginning or after targeted step 
+      const insIdx = targetStart ? 0 : targetIdx + 1;
+      const delIdx =
+        // increment if step is lower in the same section
+        targetSection === draggedSection && draggedIdx > targetIdx ?
+          draggedIdx + 1 : draggedIdx;
+
+      selectedPattern.steps[targetSection].splice(insIdx, 0, draggedStep);
+      console.log(structuredClone(selectedPattern.steps[targetSection]));
+      selectedPattern.steps[draggedSection].splice(delIdx, 1);
+    } else if (e.target.closest('.js-step-list-item')) {
+      // swap targeted step and dragged
+      const targetStep = selectedPattern.steps[targetSection][targetIdx];
+      const temp = structuredClone(targetStep);
+
+      selectedPattern.steps[targetSection][targetIdx] = draggedStep;
+      selectedPattern.steps[draggedSection][draggedIdx] = temp;
+    } else {
+      console.error('Drop zone behavior not specified!');
+    }
+
+    // render updated steps
+    if (targetSection === draggedSection) {
+      renderSectionSteps(e.target.closest('.js-section'),
+        targetSection);
+    } else {
+      renderSectionGrid();
+    }
+  }
 }
 
 function setRowInputValue(rowInputElem, idx) {
@@ -379,10 +508,11 @@ function generateGlossaryEntryHTML(entry, index) {
 }
 
 function generateSectionHTML(section, idx) {
-  return `<div class="section js-section" data-section-number="${idx}">
+  return `<div class="section js-section" data-section-idx="${idx}">
   <div class="section-heading js-section-heading"></div>
+  <div class="step-start js-step-dropzone"></div>
   <div class="step-list js-steps-list"></div>
-  <form class="js-step-form"></form></div>`;
+  <form class="step-form js-step-form"></form></div>`;
 }
 
 function generateSectionHeadingHTML(idx) {
@@ -408,15 +538,18 @@ function generateStepHTML(step, index) {
   const rowValue =
     step[1] ? `${step[0]} - ${step[1]}` : `${step[0]}`;
   const imageUpload = generateImageUploadHTML();
-  const rowIndexError = step[3] ? '' : 'is-hidden';
+  const rowIndexError = step[3] ? '' : 'hidden';
   const regex = '\\s*[0-9]+((?![,-])|(\\s*,\\s*|(\\s*-\\s*))\\s*[0-9]+)\\s*';
 
-  return `<div class="step-list-item">
-  <div class="step-image">${imageUpload}</div>
-  <div class="step-rows">
-    <div class="step-rows-input">${rowPrefix}
-      <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowValue}" required></div>
-    <span class="row-index-error ${rowIndexError}">Index error</span></div>
-  <div class="step-instrs">${step[2]}</div>
-  <a class="js-delete-button">${removeChar}</a></div>`;
+  return `<div class="step-wrapper js-step-wrapper" data-step-idx="${index}">
+  <div class="js-step-list-item step-list-item js-step-dropzone">
+    <div class="drag-icon js-drag-icon no-highlight">&vellip;&vellip;</div>
+    <div class="step-image">${imageUpload}</div>
+    <div class="step-rows">
+      <div class="step-rows-input">${rowPrefix}
+        <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowValue}" required></div>
+      <span class="row-index-error ${rowIndexError}">Index error</span></div>
+    <div class="step-instrs">${step[2]}</div>
+    <a class="js-delete-button">${removeChar}</a></div>
+  <div class="step-between js-step-dropzone"></div></div>`;
 }

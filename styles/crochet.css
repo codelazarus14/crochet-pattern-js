@@ -76,8 +76,6 @@ main {
 
 .options-input {
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: space-between;
 }
 
@@ -157,6 +155,49 @@ textarea.notes-input {
 
 .section-heading button {
   background-color: var(--purple-color);
+}
+
+.step-start,
+.step-between {
+  padding: 0.5em 0;
+}
+
+.step-list-item {
+  grid-template-columns: auto 5em 1fr 2fr auto;
+  margin: 0;
+}
+
+.step-rows-input {
+  white-space: nowrap;
+}
+
+.drag-icon {
+  padding: 0.5em;
+  margin: -0.5em;
+  font-size: 1.2em;
+}
+
+.drag-icon:hover {
+  cursor: grab;
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+.drag-over {
+  padding: 2em 1em;
+}
+
+.step-list-item.drag-over {
+  padding: 1.5em 1em;
+  opacity: 0.5;
+}
+
+.step-input-grid {
+  margin-bottom: 1em;
+  border: 0.2em solid var(--wheat-border);
+  border-radius: 1em;
 }
 
 .steps .add-section-button {

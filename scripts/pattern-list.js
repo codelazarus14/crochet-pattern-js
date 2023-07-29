@@ -6,9 +6,9 @@ const renderPatternList = (updateSaved) => {
   if (updateSaved) saveAllPatterns();
 
   if (savedPatterns.length < 1) {
-    missingPatternAlert.classList.remove('is-hidden');
+    missingPatternAlert.classList.remove('hidden');
   } else {
-    missingPatternAlert.classList.add('is-hidden');
+    missingPatternAlert.classList.add('hidden');
   }
   renderListElement(patternListElement, savedPatterns, generatePatternListItem);
   addPatternListListeners();
