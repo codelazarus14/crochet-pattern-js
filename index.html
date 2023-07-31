@@ -34,23 +34,19 @@
         <h1 class="pattern-options-heading">Pattern Options</h1>
         <div class="pattern-options">
           <form class="pattern-options-form js-pattern-options-form">
-            <div class="options-input">
-              <label for="title">Title:</label>
+            <label class="options-input">Title:
               <textarea class="pattern-title js-pattern-title" name="title" placeholder="Enter title" required></textarea>
-            </div>
-            <div class="options-input">
-              <label for="author">Author:</label>
+            </label>
+            <label class="options-input">Author:
               <textarea class="pattern-author js-pattern-author" name="author" placeholder="Enter author" required></textarea>
-            </div>
-            <div class="options-input">
-              <label for="description">Description:</label>
+            </label>
+            <label class="options-input">Description:
               <textarea class="pattern-desc js-pattern-desc" name="description" placeholder="Enter a description"></textarea>
-            </div>
+            </label>
             <!-- custom dropdowns: https://css-tricks.com/striking-a-balance-between-native-and-custom-select-elements/ -->
-            <div class="options-input">
-              <label for="pattern-types">Pattern type:</label>
-              <select class="js-pattern-types" name="pattern-types" id="pattern-types"></select>
-            </div>
+            <label class="options-input">Pattern type:
+              <select class="js-pattern-types" name="pattern-types"></select>
+            </label>
           </form>
           <div class="load-pattern-options">Saved Patterns:
             <div class="inner">
@@ -66,6 +62,7 @@
           <div class="materials heading"><h1>Materials</h1>
             <h2 class="hooks">Hooks</h2>
             <div class="inner">
+              <span class="hook-sizes">Hook Sizes (US)</span>
               <div class="hook-types-grid js-hook-types"></div>
             </div>
             <h2 class="yarns">Yarns</h2>
@@ -77,18 +74,15 @@
                     <div class="js-yarn-image">
                       <button class="image-attach">Upload Image?!?</button>
                     </div>
-                    <div class="yarn-name-input js-yarn-name-input">
-                      <label for="yarn-name">Name:</label>
+                    <label class="yarn-name-input">Name:
                       <input class="js-yarn-name" name="yarn-name" placeholder="Enter yarn name" required>
-                    </div>
-                    <div class="yarn-amt-input js-yarn-amt-input">
-                      <label for="yarn-amt">Amount:</label>
+                    </label>
+                    <label class="yarn-amt-input">Amount:
                       <input class="js-yarn-amt" name="yarn-amt" type="number" value="1" min="1">
-                    </div>
-                    <div class="yarn-units-input js-yarn-units-input">
-                      <label for="yarn-units">Units:</label>
+                    </label>
+                    <label class="yarn-units-input">Units:
                       <select class="js-yarn-units" name="yarn-units" type="yarn-units"></select>
-                    </div>
+                    </label>
                     <button type="submit" class="yarn-confirm-button">&#xff0b</button>
                   </div>
                 </form>
@@ -104,14 +98,12 @@
                     <div class="js-term-image">
                       <button class="image-attach">Upload Image?!?</button>
                     </div>
-                    <div class="glossary-term-input">
-                      <label for="term">Term:</label>
+                    <label class="glossary-term-input">Term:
                       <input class="js-term" name="term" placeholder="Enter term" required>
-                    </div>
-                    <div class="glossary-desc-input">
-                      <label for="description">Description:</label>
+                    </label>
+                    <label class="glossary-desc-input">Description:
                       <input class="js-desc" name="description" placeholder="Enter description" required>
-                    </div>
+                    </label>
                     <button type="submit" class="glossary-confirm-button">&#xff0b</button>
                   </div>
                 </form>
@@ -125,7 +117,9 @@
                   <div class="js-notes-image">
                     <button class="image-attach">Upload Image?!?</button>
                   </div>
-                  <textarea cols="50" class="notes-input js-notes-input" placeholder="Enter some notes"></textarea>
+                  <label class="notes-input">Notes:
+                    <textarea cols="50" class="js-notes-input" placeholder="Enter some notes"></textarea>
+                  </label>
                 </div>
               </div>
             </div>

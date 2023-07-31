@@ -16,11 +16,6 @@ const notesInputElement = document.querySelector('.js-notes-input');
 const sectionGridElement = document.querySelector('.js-section-grid');
 const sectionAddElement = document.querySelector('.js-add-section-button');
 
-const saveElement = document.querySelector('.js-save-button');
-const submitElement = document.querySelector('.js-submit-button');
-const submitAlertElement = document.querySelector('.js-submit-alert');
-const refreshElement = document.querySelector('.js-refresh-button');
-
 const renderYarnList = () => {
   renderListElement(yarnListElement, selectedPattern.yarns, generateYarnListHTML);
   addDeleteListeners(yarnListElement, selectedPattern.yarns, renderYarnList);
@@ -80,9 +75,13 @@ onload = () => {
 function resetPage() {
   // TODO: select not working on safari?
   renderPatternOptions();
+  addPatternSubmitListeners();
   // clear all inputs
   document.querySelectorAll('input, textarea, .js-pattern-types')
     .forEach(elem => elem.value = elem.defaultValue);
+  // reset size of pattern options text boxes
+  // TODO: refactor the three separate 'reset textarea 
+  // size' calls for each section ?
   document.querySelectorAll('textarea')
     .forEach(input => {
       resizeInput(input);
@@ -92,6 +91,7 @@ function resetPage() {
 
 function setupCrochet() {
   document.querySelector('.js-pattern-body').classList.remove('hidden');
+  // reset size of pattern body text boxes (notes)
   document.querySelectorAll('textarea')
     .forEach(input => resizeInput(input));
   bodyRevealed = true;
@@ -120,11 +120,9 @@ function setupCrochet() {
     renderGlossary();
   });
 
-  notesInputElement.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      selectedPattern.notes = notesInputElement.value.trim();
-      console.log(selectedPattern);
-    }
+  notesInputElement.addEventListener('blur', e => {
+    selectedPattern.notes = notesInputElement.value.trim();
+    console.log(selectedPattern);
   });
 
   sectionAddElement.addEventListener('click', () => {
@@ -142,35 +140,6 @@ function setupCrochet() {
         });
     });
   });
-
-  // TODO: save changes to things in pattern options form
-  // (title, desc etc.) and display title on save button
-  saveElement.addEventListener('click', e => {
-    const result = validatePattern();
-    if (result && typeof result === 'string') {
-      e.preventDefault();
-      submitAlertElement.innerHTML = result;
-    } else {
-      submitAlertElement.innerHTML = '';
-      savePattern(selectedPattern, getLoadedPattern());
-      location.reload();
-    }
-  });
-
-  submitElement.addEventListener('click', e => {
-    const result = validatePattern();
-    if (result && typeof result === 'string') {
-      e.preventDefault();
-      submitAlertElement.innerHTML = result;
-    } else {
-      submitAlertElement.innerHTML = '';
-      savePattern(selectedPattern);
-    }
-  });
-
-  refreshElement.addEventListener('click', () => {
-    location.reload();
-  });
 }
 
 function populateCrochetPatternFields() {
@@ -181,7 +150,8 @@ function populateCrochetPatternFields() {
   renderGlossary();
   notesInputElement.value = selectedPattern.notes;
   renderSectionGrid();
-  // TODO: refactor these three separate 'reset text area size' calls?
+  // since we skipped setup, have to resize text boxes
+  // (notes box) to fit their content
   document.querySelectorAll('textarea')
     .forEach(input => resizeInput(input));
 }
@@ -481,7 +451,6 @@ function generateHookSizeButtonsHTML(option, index) {
 // }
 
 // TODO: make output list items have editable text fields
-// TODO: add labels to all generated inputs
 // TODO: add tooltips for yarns and glossary entries
 
 function generateYarnListHTML(yarn, index) {
@@ -493,18 +462,23 @@ function generateYarnListHTML(yarn, index) {
 
   return `<div class="yarn-list-item">
   <div class="js-update-yarn-image">${imageUpload}</div>
-  <div>${yarn[0]}</div>
-  <input class="js-update-yarn-amt" type="number" value="${yarn[1]}" min="1">
-  <select class="js-update-yarn-units">${units}</select>
-  <a class="js-delete-button">${removeChar}</a></div>`;
+  <label class="yarn-name">Name:
+    <span>${yarn[0]}</span></label>
+  <label class="yarn-amt">Amount:
+    <input class="update-yarn-amt js-update-yarn-amt" type="number" value="${yarn[1]}" min="1"></label>
+  <label class="yarn-units">Units:
+    <select class="update-yarn-units js-update-yarn-units">${units}</select></label>
+  <button class="js-delete-button">${removeChar}</button></div>`;
 }
 
 function generateGlossaryEntryHTML(entry, index) {
   return `<div class="glossary-list-item">
   <div class="js-update-term-image">${generateImageUploadHTML()}</div>
-  <div><span class="glossary-term">${entry[0]}</span></div>
-  <div>${entry[1]}</div>
-  <a class="js-delete-button">${removeChar}</a></div>`;
+  <label>Term:
+    <span class="glossary-term">${entry[0]}</span></label>
+  <label>Description:
+    <span class="glossary-desc">${entry[1]}</span></label>
+  <button class="js-delete-button">${removeChar}</button></div>`;
 }
 
 function generateSectionHTML(section, idx) {
@@ -519,7 +493,7 @@ function generateSectionHeadingHTML(idx) {
   // TODO: add 'are you sure?' prompt to avoid accidentally
   // deleting sections
   return `<div>Section ${idx + 1}</div>
-  <a class="js-delete-button">${removeChar}</a>`;
+  <button class="js-delete-button">${removeChar}</button>`;
 }
 
 function generateStepInputHTML() {
@@ -527,8 +501,10 @@ function generateStepInputHTML() {
 
   return `<div class="step-input-grid">
   <div class="js-step-image">${generateImageUploadHTML()}</div>
-  <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" required>
-  <input class="js-instr-input" placeholder="Enter instructions" required>
+  <label class="step-rows-input">Rows:
+    <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" required></label>
+  <label class"step-instr-input">Instructions:
+    <input class="js-instr-input" placeholder="Enter instructions" required></label>
   <button type="submit" class="step-confirm-button">${addChar}</button></div>`;
 }
 
@@ -543,13 +519,13 @@ function generateStepHTML(step, index) {
 
   return `<div class="step-wrapper js-step-wrapper" data-step-idx="${index}">
   <div class="js-step-list-item step-list-item js-step-dropzone">
-    <div class="drag-icon js-drag-icon no-highlight">&vellip;&vellip;</div>
+    <div aria-hidden="true" class="drag-icon js-drag-icon no-highlight">&vellip;&vellip;</div>
     <div class="step-image">${imageUpload}</div>
     <div class="step-rows">
-      <div class="step-rows-input">${rowPrefix}
-        <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowValue}" required></div>
+      <label class="step-rows-input">${rowPrefix}
+        <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowValue}" required></label>
       <span class="row-index-error ${rowIndexError}">Index error</span></div>
     <div class="step-instrs">${step[2]}</div>
-    <a class="js-delete-button">${removeChar}</a></div>
+    <button class="js-delete-button">${removeChar}</button></div>
   <div class="step-between js-step-dropzone"></div></div>`;
 }

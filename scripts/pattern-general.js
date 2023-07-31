@@ -1,12 +1,17 @@
 let previousPattern;
 
-// common pattern header code
+// common pattern generator code
 
 const patternOptionsFormElement = document.querySelector('.js-pattern-options-form');
 const patternTitleInputElement = document.querySelector('.js-pattern-title');
 const patternAuthorInputElement = document.querySelector('.js-pattern-author');
 const patternDescInputElement = document.querySelector('.js-pattern-desc');
 const patternSelectElement = document.querySelector('.js-pattern-types');
+
+const saveElement = document.querySelector('.js-save-button');
+const submitElement = document.querySelector('.js-submit-button');
+const submitAlertElement = document.querySelector('.js-submit-alert');
+const refreshElement = document.querySelector('.js-refresh-button');
 
 const renderPatternOptions = () => {
   savedPatterns = loadAllPatterns();
@@ -25,6 +30,49 @@ const renderPatternOptions = () => {
     e.preventDefault();
     const type = patternSelectElement.value;
     selectPattern(type);
+  });
+}
+
+function addPatternSubmitListeners() {
+  saveElement.addEventListener('click', e => {
+    const title = patternTitleInputElement.value.trim();
+    const author = patternAuthorInputElement.value.trim();
+    const desc = patternDescInputElement.value.trim();
+    const result = validatePattern();
+
+    if (result && typeof result === 'string') {
+      e.preventDefault();
+      submitAlertElement.innerHTML = result;
+    } else {
+      selectedPattern.title = title;
+      selectedPattern.author = author;
+      selectedPattern.desc = desc;
+      submitAlertElement.innerHTML = '';
+      savePattern(selectedPattern, getLoadedPattern());
+      location.reload();
+    }
+  });
+
+  submitElement.addEventListener('click', e => {
+    const title = patternTitleInputElement.value.trim();
+    const author = patternAuthorInputElement.value.trim();
+    const desc = patternDescInputElement.value.trim();
+    const result = validatePattern();
+
+    if (result && typeof result === 'string') {
+      e.preventDefault();
+      submitAlertElement.innerHTML = result;
+    } else {
+      selectedPattern.title = title;
+      selectedPattern.author = author;
+      selectedPattern.desc = desc;
+      submitAlertElement.innerHTML = '';
+      savePattern(selectedPattern);
+    }
+  });
+
+  refreshElement.addEventListener('click', () => {
+    location.reload();
   });
 }
 

@@ -54,15 +54,15 @@ main {
   flex-direction: column;
 }
 
-.pattern-body button,
+.pattern-body .hook-size-button,
 .pattern-body select,
 .pattern-body input,
 .pattern-body textarea {
   font-size: 1rem;
 }
 
-.pattern-body [class*="delete-button"] {
-  font-size: 1.2em;
+.pattern-body input {
+  flex-grow: 1;
 }
 
 .selected {
@@ -77,10 +77,13 @@ main {
 .options-input {
   display: flex;
   justify-content: space-between;
+  margin: 0.5em 1em;
 }
 
-.options-input * {
-  margin: 0.5em 1em;
+.options-input textarea,
+.options-input select {
+  margin-top: -0.2em;
+  margin-left: 2em;
 }
 
 [class$="container"] {
@@ -96,14 +99,9 @@ main {
   column-gap: 0;
 }
 
-.yarn-name-input input,
-.glossary-desc-input input {
-  width: 100%;
-}
-
 .yarn-input-grid,
 .yarn-list-item {
-  grid-template-columns: 5em 2fr 1fr 1fr auto;
+  grid-template-columns: 5em 2fr auto auto auto;
 }
 
 .yarn-input-grid select,
@@ -124,7 +122,11 @@ main {
   grid-template-columns: 5em 1fr;
 }
 
-textarea.notes-input {
+.notes-input {
+  flex-direction: column;
+}
+
+.notes-input textarea {
   font-size: 1.2em;
   min-height: 5em;
 }
@@ -132,7 +134,12 @@ textarea.notes-input {
 .step-input-grid,
 .step-list-item {
   min-width: 20em;
-  grid-template-columns: 5em 1fr 2fr auto;
+  grid-template-columns: 5em auto 1fr auto;
+}
+
+.step-list-item {
+  grid-template-columns: auto 5em auto 1fr auto;
+  margin: 0;
 }
 
 .row-index-error {
@@ -160,11 +167,6 @@ textarea.notes-input {
 .step-start,
 .step-between {
   padding: 0.5em 0;
-}
-
-.step-list-item {
-  grid-template-columns: auto 5em 1fr 2fr auto;
-  margin: 0;
 }
 
 .step-rows-input {

@@ -50,10 +50,8 @@ function getLoadedPattern() {
 
 function generatePatternListItem(pattern, index) {
   return `<div class="pattern-list-item js-pattern-list-item" data-pattern-idx="${index}">
-  <div class="pattern-title">${pattern.title}</div>
-  <div class="pattern-author">${pattern.author}</div>
+  <span class="pattern-title">${pattern.title}</span>
+  <span class="pattern-author">${pattern.author}</span>
   <button class="load-pattern js-load-pattern">Load</button>
-  <div class="delete-pattern">
-    <a class="js-delete-button">${removeChar}</a></div>
-  </div>`
+  <button class="js-delete-button">${removeChar}</button></div>`
 }
