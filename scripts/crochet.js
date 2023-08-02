@@ -519,7 +519,7 @@ function generateStepHTML(step, index) {
 
   return `<div class="step-wrapper js-step-wrapper" data-step-idx="${index}">
   <div class="js-step-list-item step-list-item js-step-dropzone">
-    <div aria-hidden="true" class="drag-icon js-drag-icon no-highlight">&vellip;&vellip;</div>
+    <div aria-hidden="true" class="drag-icon js-drag-icon no-highlight">${dragIcon}</div>
     <div class="step-image">${imageUpload}</div>
     <div class="step-rows">
       <label class="step-rows-input">${rowPrefix}

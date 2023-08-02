@@ -1,5 +1,7 @@
 const addChar = '&#xff0b';
 const removeChar = '&#x1d5b7';
+const dragIcon = '&vellip;&vellip;';
+const clipboardIcon = '&#x1F4CB;';
 
 function renderListElement(listElement, elementData, htmlGenerator) {
   let html = '';
