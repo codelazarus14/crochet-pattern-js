@@ -27,10 +27,6 @@ body * {
   -moz-user-select: none;
 }
 
-.page-content {
-  margin-top: 1em;
-}
-
 main {
   padding: 0.5em;
   margin-left: 9.5em;

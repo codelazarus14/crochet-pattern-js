@@ -8,26 +8,9 @@
     <link rel="stylesheet" href="styles/how-to.css">
   </head>
   <body>
-    <header>
-      <h1>Crochet Pattern Generator</h1>
-      <nav class="navbar">
-        <ul>
-          <li><a class="homepage" href="index.html">Home</a></li>
-          <li><a class="how-to" href="how-to.html">How To Use</a></li>
-          <li class="last"><a class="github-repo" href="https://github.com/codelazarus14/crochet-pattern-js" target="_blank">
-              <!-- https://wcag.com/resource/what-is-wcag/ -->
-              <img src="images/github.svg" alt="Github logo">
-            </a></li>
-        </ul>
-      </nav>
-    </header>
+    <template-header></template-header>
+    <template-sidebar></template-sidebar>
     <div class="page-content">
-      <div class="sidebar">
-        <a href="#">Test 1</a>
-        <a href="#">Test 2</a>
-        <a href="#">Test 3</a>
-        <a href="#">Test 4</a>
-      </div>
       <main>
         <div class="how-to">
           <div class="how-to-header">
@@ -78,5 +61,7 @@
         <div class="faq"></div>
       </main>
     </div>
+    <script src="scripts/html-templates.js"></script>
+    <script src="scripts/sticky.js"></script>
   </body>
 </html>

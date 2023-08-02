@@ -8,65 +8,50 @@
     <link rel="stylesheet" href="styles/pattern-in-use.css">
   </head>
   <body>
-    <header>
-      <h1>Crochet Pattern Generator</h1>
-      <nav class="navbar">
-        <ul>
-          <li><a class="homepage" href="index.html">Home</a></li>
-          <li><a class="how-to" href="how-to.html">How To Use</a></li>
-          <li class="last"><a class="github-repo" href="https://github.com/codelazarus14/crochet-pattern-js" target="_blank">
-              <!-- https://wcag.com/resource/what-is-wcag/ -->
-              <img src="images/github.svg" alt="Github logo">
-            </a></li>
-        </ul>
-      </nav>
-    </header>
+    <template-header></template-header>
+    <template-sidebar></template-sidebar>
     <div class="page-content">
-      <div class="sidebar">
-        <a href="#">Test 1</a>
-        <a href="#">Test 2</a>
-        <a href="#">Test 3</a>
-        <a href="#">Test 4</a>
-      </div>
-    <main>
-      <div class="pattern-header">
-        <span class="pattern-title js-pattern-title"></span>
-        <span class="pattern-author js-pattern-author"></span>
-      </div>
-      <div class="pattern-body">
-        <div class="pattern-info">
-          <div class="pattern-description">
-            <div class="collapse js-collapse">Description</div>
-            <div class="pattern-desc inner js-pattern-desc"></div>
-          </div>
-          <div class="pattern-materials">
-            <div class="collapse js-collapse">Materials</div>
-            <div class="materials-list inner js-materials-list"></div>
-          </div>
-          <div class="pattern-glossary">
-            <div class="collapse js-collapse">Glossary</div>
-            <div class="glossary-list inner js-glossary-list"></div>
-          </div>
-          <div class="pattern-notes">
-            <div class="collapse js-collapse">Notes</div>
-            <div class="js-pattern-notes inner"></div>
-          </div>
+      <main>
+        <div class="pattern-header">
+          <span class="pattern-title js-pattern-title"></span>
+          <span class="pattern-author js-pattern-author"></span>
         </div>
-        <div class="pattern-steps">
-          <div class="counters">
-            <div class="section-counter">
-              <span class="section js-section"></span>
+        <div class="pattern-body">
+          <div class="pattern-info">
+            <div class="pattern-description">
+              <div class="collapse js-collapse">Description</div>
+              <div class="pattern-desc inner js-pattern-desc"></div>
             </div>
-            <label class="row-counter">Row
-              <input class="counter js-counter" id="counter" type="number">
-            </label>
+            <div class="pattern-materials">
+              <div class="collapse js-collapse">Materials</div>
+              <div class="materials-list inner js-materials-list"></div>
+            </div>
+            <div class="pattern-glossary">
+              <div class="collapse js-collapse">Glossary</div>
+              <div class="glossary-list inner js-glossary-list"></div>
+            </div>
+            <div class="pattern-notes">
+              <div class="collapse js-collapse">Notes</div>
+              <div class="js-pattern-notes inner"></div>
+            </div>
           </div>
-          <div class="inner">
-            <div class="step-list js-steps-list"></div>
+          <div class="pattern-steps">
+            <div class="counters">
+              <div class="section-counter">
+                <span class="section js-section"></span>
+              </div>
+              <label class="row-counter">Row
+                <input class="counter js-counter" id="counter" type="number">
+              </label>
+            </div>
+            <div class="inner">
+              <div class="step-list js-steps-list"></div>
+            </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
+    <script src="scripts/html-templates.js"></script>
     <script src="scripts/sticky.js"></script>
     <script src="scripts/input.js"></script>
     <script src="scripts/output.js"></script>

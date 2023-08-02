@@ -1,4 +1,5 @@
 header {
+  margin-bottom: 1em;
   padding: 1.25rem;
   background-color: wheat;
   border: 0.5rem solid var(--wheat-border);
