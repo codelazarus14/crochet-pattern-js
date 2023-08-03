@@ -109,7 +109,7 @@ function generateHookPreview(hook, index) {
 }
 
 function generateYarnPreview(yarn, index) {
-  const units = yarnUnits[yarn[2]];
+  const units = yarnUnitNames[yarn[2]];
   return `<div class="yarn-preview-item">
   <div class="yarn-image">${generateImagePreview()}</div>
   <div class="yarn">

@@ -100,7 +100,7 @@ function setupCrochet() {
   renderListElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
   addHookButtonListeners();
 
-  renderListElement(yarnUnitsInputElement, yarnUnits, generateOptionHTML);
+  renderListElement(yarnUnitsInputElement, yarnUnitNames, generateOptionHTML);
   addNumInputListener(yarnAmtInputElement);
 
   renderSectionGrid();
@@ -455,7 +455,7 @@ function generateHookSizeButtonsHTML(option, index) {
 
 function generateYarnListHTML(yarn, index) {
   let units = '';
-  yarnUnits.forEach((unit, idx) => {
+  yarnUnitNames.forEach((unit, idx) => {
     units += generateOptionHTML(unit, 1, idx === yarn[2]);
   });
   const imageUpload = generateImageUploadHTML();

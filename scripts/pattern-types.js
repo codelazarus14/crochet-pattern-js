@@ -28,13 +28,15 @@ const PatternTypes = {
   USCrochet: 'US Crochet'
 };
 
+// unit: [displayname, # of mms]
+// skeins obv an exception
 const Units = {
-  mm: "mm",
-  in: "in",
-  feet: "feet",
-  yards: "yards",
-  meters: "meters",
-  skeins: "skeins"
+  mm: ["mm", 1],
+  in: ["in", 25.4],
+  feet: ["feet", 3048],
+  yards: ["yards", 9144],
+  meters: ["meters", 10000],
+  skeins: ["skeins"]
 }
 
 // Crochet
@@ -52,4 +54,5 @@ const USHookSizes = {
   K: 6.50
 }
 
-const yarnUnits = [Units.meters, Units.yards, Units.skeins];
+const yarnUnits = [Units.yards, Units.meters, Units.skeins];
+const yarnUnitNames = yarnUnits.map((x) => x[0]);
