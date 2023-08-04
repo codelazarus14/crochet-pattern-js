@@ -38,6 +38,7 @@ const Units = {
   meters: ["meters", 10000],
   skeins: ["skeins"]
 }
+const unitNames = Object.values(Units).map((x) => x[0]);
 
 // Crochet
 

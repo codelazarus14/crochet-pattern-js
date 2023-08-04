@@ -340,7 +340,6 @@ function addStepDropListener(dropZone) {
           draggedIdx + 1 : draggedIdx;
 
       selectedPattern.steps[targetSection].splice(insIdx, 0, draggedStep);
-      console.log(structuredClone(selectedPattern.steps[targetSection]));
       selectedPattern.steps[draggedSection].splice(delIdx, 1);
     } else if (e.target.closest('.js-step-list-item')) {
       // swap targeted step and dragged

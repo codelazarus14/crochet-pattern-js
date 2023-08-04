@@ -36,8 +36,9 @@
 
 [class$="popup"] {
   position: fixed;
-  top: 5em;
-  left: 10em;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 101;
   background-color: wheat;
   border: 0.5rem solid var(--wheat-border);
@@ -76,22 +77,35 @@
   opacity: 0.2;
 }
 
-.convert-units-form {
+.convert-units-form{
+  padding: 0 1em;
+}
+
+.convert-units {
+  padding-bottom: 0.5em;
+}
+
+.convert-skeins {
+  font-size: 0.8em;
+}
+
+.convert {
+  padding-top: 0.5em;
+  border-top: 0.2em solid var(--wheat-border);
   display: flex;
 }
 
 .convert-from,
 .convert-to {
-  padding: 0 1em;
-  display: grid;
+  margin-right: 1em;
 }
 
-.convert-from input,
-.convert-to input {
-  margin-left: 0;
+.convert input {
+  max-width: 6em;
 }
 
 .convert-units-popup .clipboard-icon {
+  border: 0.2em solid var(--wheat-border);
   background-color: transparent;
   box-shadow: none;
   padding: 0.2em;

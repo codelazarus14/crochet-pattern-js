@@ -27,7 +27,7 @@ class Sidebar extends HTMLElement {
   connectedCallback() {
     this.innerHTML =
       `<div class="sidebar">
-        <div class="screen-dimmer"></div>
+        <div class="screen-dimmer" aria-hidden="true"></div>
         <button class="convert-units-button js-convert-units-button">Convert Units</button>
         ${this.convertUnitsPopup()}
       </div>`;
@@ -40,23 +40,41 @@ class Sidebar extends HTMLElement {
         <button class="close-button js-close-button">${removeChar}</button>
       </div>
       <form class="convert-units-form js-convert-units-form">
-        <label class="convert-from">Convert from:       
-          <div class="convert-from-inputs"> 
-            <input class="js-convert-from-amt" type="number" min="0">
-            <select class="js-convert-from-units"></select>
-            <button class="clipboard-icon">${clipboardIcon}</button>
+        <div class="convert-units">
+          <div class="convert-units-input">
+            <label class="convert-from-units">Convert from:
+              <select class="js-convert-from-units"></select>
+            </label>
+            <label class="convert-to-units">to:
+              <select class="js-convert-to-units"></select>
+            </label>
           </div>
-        </label>
-        <label class="convert-to">to:
-          <div class="convert-to-inputs">
-            <input class="js-convert-to-amt" type="number" min="0">
-            <select class="js-convert-to-units"></select>             
-            <button class="clipboard-icon">${clipboardIcon}</button>
+          <div class="convert-skeins-input">
+            <label class="convert-skeins js-convert-skeins hidden">A skein is:
+              <input class="js-convert-skeins-amt" type="number" min="0" step="any">
+              <select class="js-convert-skeins-units"></select>
+            </label>
           </div>
-        </label>
+        </div>
+        <div class="convert">
+          <div class="convert-from">
+            <label class="convert-from-amt">
+              <input class="js-convert-from-amt" type="number" min="0" step="any">
+              <span class="js-from-units-display"></span>
+              <button class="js-copy-from-amt clipboard-icon">${clipboardIcon}</button>
+            </label>
+          </div>
+          <div class="convert-to">
+            <label class="convert-to-amt">
+              <input class="js-convert-to-amt" type="number" min="0" step="any">
+              <span class="js-to-units-display"></span>
+              <button class="js-copy-to-amt clipboard-icon">${clipboardIcon}</button>
+            </label>
+          </div>
+        </div>
       </form>
       <!-- used to keep tab navigation from leaving popup -->
-      <button class="after-form js-after-form"></button>
+      <button class="after-form js-after-form" aria-hidden="true"></button>
     </div>`;
   }
 }
