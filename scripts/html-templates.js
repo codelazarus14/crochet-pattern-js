@@ -27,14 +27,14 @@ class Sidebar extends HTMLElement {
   connectedCallback() {
     this.innerHTML =
       `<div class="sidebar">
-        <div class="screen-dimmer" aria-hidden="true"></div>
-        <button class="convert-units-button js-convert-units-button">Convert Units</button>
+        <div class="screen-dimmer js-screen-dimmer" aria-hidden="true"></div>
+        <button class="convert-units-button">Convert Units</button>
         ${this.convertUnitsPopup()}
       </div>`;
   }
 
   convertUnitsPopup() {
-    return `<div class="convert-units-popup js-convert-units-popup hidden">
+    return `<div class="convert-units-popup hidden">
       <div class="popup-header">  
         <h2>Convert Units</h2>
         <button class="close-button js-close-button">${removeChar}</button>

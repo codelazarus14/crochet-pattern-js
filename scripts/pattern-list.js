@@ -2,46 +2,55 @@ const patternListClearElement = document.querySelector('.js-clear-pattern-list')
 const patternListElement = document.querySelector('.js-pattern-list');
 const missingPatternAlert = document.querySelector('.js-pattern-alert');
 
-const renderPatternList = (updateSaved) => {
-  if (updateSaved) saveAllPatterns();
-
+const renderPatternList = (loadAction) => {
   if (savedPatterns.length < 1) {
     missingPatternAlert.classList.remove('hidden');
   } else {
     missingPatternAlert.classList.add('hidden');
   }
   renderListElement(patternListElement, savedPatterns, generatePatternListItem);
-  addPatternListListeners();
+  addPatternListListeners(loadAction);
 }
 
-function addPatternListListeners() {
+function addPatternListListeners(loadAction) {
   patternListClearElement.addEventListener('click', () => {
+    // TODO: add 'are you sure?' prompt
+    // to avoid accidentally clearing patterns
     savedPatterns = [];
-    renderPatternList(true);
+    saveAllPatterns();
+    renderPatternList(loadAction);
   });
 
   document.querySelectorAll('.js-pattern-list-item')
-    .forEach(patternElem => {
-      const loadButton = patternElem.querySelector('.js-load-pattern');
+    .forEach((pattern, idx) => {
+      const loadButton = pattern.querySelector('.js-load-pattern');
       loadButton.addEventListener('click', () => {
-        // TODO: fix 'loaded' patterns not saving if list is
-        // modified by deletion 
-        // (update class selectors/loaded pattern idx)
-        const idx = patternElem.dataset.patternIdx;
-        // clear previously loaded pattern
-        const previousLoaded = patternListElement.querySelector('.loaded');
-        if (previousLoaded)
-          previousLoaded.classList.remove('loaded');
-        // set new one
-        patternElem.classList.add('loaded');
-        patternListElement.dataset.loadedPattern = idx;
-        // clone saved data so we dont reference it directly
-        selectedPattern = structuredClone(savedPatterns[idx]);
-        populatePatternFields();
+        setLoadedPattern(idx, loadAction);
+        renderPatternList(loadAction);
       });
     });
 
-  addDeleteListeners(patternListElement, savedPatterns, renderPatternList, [true]);
+  addDeleteListeners(patternListElement, savedPatterns, 
+    (delIdx) => {
+      const loaded = getLoadedPattern() && Number(getLoadedPattern());
+      
+      if (delIdx === loaded) {
+        delete patternListElement.dataset.loadedPattern;
+        location.reload();
+      }
+      else if (delIdx < loaded)
+        patternListElement.dataset.loadedPattern--;
+      
+      saveAllPatterns();
+      renderPatternList(loadAction);
+    });
+}
+
+function setLoadedPattern(idx, loadAction) {
+  patternListElement.dataset.loadedPattern = idx;
+  // clone saved data so we dont reference it directly
+  selectedPattern = structuredClone(savedPatterns[idx]);
+  if (loadAction) loadAction(idx);
 }
 
 function getLoadedPattern() {
@@ -49,7 +58,11 @@ function getLoadedPattern() {
 }
 
 function generatePatternListItem(pattern, index) {
-  return `<div class="pattern-list-item js-pattern-list-item" data-pattern-idx="${index}">
+  const loaded = getLoadedPattern() && Number(getLoadedPattern());
+  const isLoaded = loaded === index ? 'loaded' : '';
+  const first = index === 0 ? 'first' : '';
+  
+  return `<div class="pattern-list-item js-pattern-list-item ${isLoaded} ${first}" data-pattern-idx="${index}">
   <span class="pattern-title">${pattern.title}</span>
   <span class="pattern-author">${pattern.author}</span>
   <button class="load-pattern js-load-pattern">Load</button>

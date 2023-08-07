@@ -16,15 +16,20 @@ const notesInputElement = document.querySelector('.js-notes-input');
 const sectionGridElement = document.querySelector('.js-section-grid');
 const sectionAddElement = document.querySelector('.js-add-section-button');
 
+const renderHookSizeButtons = () => {
+  renderListElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
+  addHookButtonListeners();
+}
+
 const renderYarnList = () => {
   renderListElement(yarnListElement, selectedPattern.yarns, generateYarnListHTML);
-  addDeleteListeners(yarnListElement, selectedPattern.yarns, renderYarnList);
+  addDeleteListeners(yarnListElement, selectedPattern.yarns, (delIdx) => renderYarnList());
   addNumInputListeners('.js-update-yarn-amt', selectedPattern.yarns, 1);
   addSelectListeners('.js-update-yarn-units', selectedPattern.yarns, 2);
 }
 const renderGlossary = () => {
   renderListElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
-  addDeleteListeners(glossaryListElement, selectedPattern.glossary, renderGlossary);
+  addDeleteListeners(glossaryListElement, selectedPattern.glossary, (delIdx) => renderGlossary);
 }
 
 const renderSectionHeading = (section, idx) => {
@@ -43,7 +48,7 @@ const renderSectionSteps = (section, idx) => {
   if (rowInput)
     setRowInputValue(rowInput, idx);
   renderListElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
-  addDeleteListeners(stepListElement, selectedPattern.steps[idx], renderSectionSteps, [section, idx]);
+  addDeleteListeners(stepListElement, selectedPattern.steps[idx], (delIdx) => renderSectionSteps(section, idx));
   addRowInputListeners(stepListElement, section, idx);
   addDragNDropListeners(stepListElement, section, idx);
 }
@@ -97,9 +102,7 @@ function setupCrochet() {
   bodyRevealed = true;
 
   // render input stuff once
-  renderListElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
-  addHookButtonListeners();
-
+  renderHookSizeButtons();
   renderListElement(yarnUnitsInputElement, yarnUnitNames, generateOptionHTML);
   addNumInputListener(yarnAmtInputElement);
 
@@ -122,7 +125,6 @@ function setupCrochet() {
 
   notesInputElement.addEventListener('blur', e => {
     selectedPattern.notes = notesInputElement.value.trim();
-    console.log(selectedPattern);
   });
 
   sectionAddElement.addEventListener('click', () => {
@@ -146,6 +148,7 @@ function populateCrochetPatternFields() {
   if (!bodyRevealed)
     setupCrochet();
 
+  renderHookSizeButtons();
   renderYarnList();
   renderGlossary();
   notesInputElement.value = selectedPattern.notes;
@@ -161,8 +164,8 @@ function addHookButtonListeners() {
     .forEach(button => {
       button.addEventListener('click', () => {
         selectedPattern.hooks[button.value] =
-          button.classList.toggle('selected');
-        // renderHookList();
+          !selectedPattern.hooks[button.value];
+        renderHookSizeButtons();
       });
     });
 }
@@ -523,7 +526,7 @@ function generateStepHTML(step, index) {
     <div class="step-rows">
       <label class="step-rows-input">${rowPrefix}
         <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowValue}" required></label>
-      <span class="row-index-error ${rowIndexError}">Index error</span></div>
+      <div class="row-index-error ${rowIndexError}">Index error</div></div>
     <div class="step-instrs">${step[2]}</div>
     <button class="js-delete-button">${removeChar}</button></div>
   <div class="step-between js-step-dropzone"></div></div>`;

@@ -1,30 +1,34 @@
+let patternKey = loadPatternInProgress();
+let patternProgress;
+
+const patternListPopup = document.querySelector('.js-select-pattern-popup');
+const patternListPopupButton = patternListPopup.previousElementSibling;
+const closePatternListButton = patternListPopup.querySelector('.js-close-button');
+const afterListElem = patternListPopup.querySelector('.js-after-form');
+
 const materialsListElem = document.querySelector('.js-materials-list');
 const glossaryListElem = document.querySelector('.js-glossary-list');
 const stepsListElem = document.querySelector('.js-steps-list');
 const counterElem = document.querySelector('.js-counter');
 const sectionElem = document.querySelector('.js-section');
-const patternProgress = loadProgress();
-const patternInUse = loadPattern(patternProgress.patternKey);
 
 const renderBasicInfoMini = () => {
   document.querySelector('.js-pattern-title').innerHTML =
-    patternInUse.title;
+    selectedPattern.title;
   document.querySelector('.js-pattern-author').innerHTML =
-    patternInUse.author;
+    selectedPattern.author;
   document.querySelector('.js-pattern-desc').innerHTML =
-    patternInUse.desc;
+    selectedPattern.desc;
 }
 
 const renderCounters = () => {
-  let { sectionCount, rowCount } = patternProgress;
-  if (!rowCount) patternProgress.rowCount = 1;
-  if (!sectionCount) patternProgress.sectionCount = 1;
-
   counterElem.value = patternProgress.rowCount;
-  if (patternInUse.steps.length === 1)
+  if (selectedPattern.steps.length === 1)
     sectionElem.classList.add('hidden');
-  else
+  else {
+    sectionElem.classList.remove('hidden');
     sectionElem.innerHTML = `Section ${patternProgress.sectionCount}`;
+  }
 }
 
 const renderHooksMini = () => {
@@ -34,7 +38,7 @@ const renderHooksMini = () => {
     hookListElem.setAttribute('class', 'hooks-mini js-hooks-mini');
     materialsListElem.appendChild(hookListElem);
   }
-  renderListElement(hookListElem, patternInUse.hooks, generateHookMini);
+  renderListElement(hookListElem, selectedPattern.hooks, generateHookMini);
 }
 
 const renderYarnsMini = () => {
@@ -44,27 +48,27 @@ const renderYarnsMini = () => {
     yarnListElem.setAttribute('class', 'yarns-mini js-yarns-mini');
     materialsListElem.appendChild(yarnListElem);
   }
-  renderListElement(yarnListElem, patternInUse.yarns, generateYarnMini);
+  renderListElement(yarnListElem, selectedPattern.yarns, generateYarnMini);
 }
 
 const renderGlossaryMini = () => {
-  renderListElement(glossaryListElem, patternInUse.glossary, generateGlossaryMini);
+  renderListElement(glossaryListElem, selectedPattern.glossary, generateGlossaryMini);
 }
 
 const renderNotesMini = () => {
   document.querySelector('.js-pattern-notes').innerHTML =
-    patternInUse.notes;
+    selectedPattern.notes;
 }
 
 const renderSteps = () => {
   const section = patternProgress.sectionCount - 1;
-  renderListElement(stepsListElem, patternInUse.steps[section], generateStepInUse);
+  renderListElement(stepsListElem, selectedPattern.steps[section], generateStepInUse);
 }
 
-const renderPatternInUse = () => {
+const renderPatternInProgress = () => {
   renderBasicInfoMini();
   renderCounters();
-  switch (patternInUse.type) {
+  switch (selectedPattern.type) {
     case PatternTypes.USCrochet:
       renderHooksMini();
       renderYarnsMini();
@@ -76,13 +80,31 @@ const renderPatternInUse = () => {
 }
 
 onunload = () => {
-  saveProgress(patternProgress);
+  savePatternInProgress(patternKey);
+  // save progress for all patterns
+  saveAllPatterns();
 }
 
-// TODO: add pattern list to see currently selected/switch between
-renderPatternInUse();
+setPatternInProgress(patternKey);
 addNumInputListener(counterElem, updateCounters, []);
 addCollapseListeners();
+
+// popup listeners 
+// todo: merge with sidebar's?
+
+patternListPopupButton.addEventListener('click', () => {
+  showPopup(patternListPopupButton.nextElementSibling);
+  renderPatternList(setPatternInProgress);
+});
+
+closePatternListButton.addEventListener('click', () => {
+  hidePopup();
+});
+
+afterListElem.addEventListener('focus', () => {
+  // loop tab navigation back to top
+  closePatternListButton.focus();
+});
 
 function addCollapseListeners() {
   document.querySelectorAll('.js-collapse')
@@ -97,12 +119,28 @@ function addCollapseListeners() {
     });
 }
 
+function setPatternInProgress(idx) {
+  patternKey = idx;
+  selectedPattern = savedPatterns[patternKey];
+  if (!selectedPattern.progress) {
+    selectedPattern.progress = {
+      sectionCount: 1,
+      rowCount: 1
+    };
+  }
+  patternProgress = selectedPattern.progress;
+
+  console.log(selectedPattern, patternProgress);
+  setLoadedPattern(patternKey);
+  renderPatternInProgress();
+}
+
 function updateCounters() {
   // TODO: make section counter editable too
   // TODO: replace some of these checks with regex on input?
   const newRowCount = Number(counterElem.value);
   const { sectionCount, rowCount } = patternProgress;
-  const currSection = patternInUse.steps[sectionCount - 1];
+  const currSection = selectedPattern.steps[sectionCount - 1];
   const currMaxRow =
     currSection[currSection.length - 1][1] ||
     currSection[currSection.length - 1][0];
@@ -111,7 +149,7 @@ function updateCounters() {
   const patternStart = sectionCount === 1 && rowCount === 1;
   // flag last step in pattern
   const patternEnd =
-    sectionCount === patternInUse.steps.length &&
+    sectionCount === selectedPattern.steps.length &&
     rowCount === currMaxRow;
 
   if (newRowCount > currMaxRow && !patternEnd) {
@@ -124,12 +162,12 @@ function updateCounters() {
       patternProgress.rowCount = 1;
     }
   } else if (newRowCount < 1 && !patternStart) {
-    if (sectionCount === 1 || 1 - newRowCount > 1) {
+    if (newRowCount < 0) {
       // clamp OOB decrease to current section
       patternProgress.rowCount = 1;
     } else {
       // -- to prev section
-      const prevSection = patternInUse.steps[sectionCount - 2];
+      const prevSection = selectedPattern.steps[sectionCount - 2];
       const prevMaxRow =
         prevSection[prevSection.length - 1][1] ||
         prevSection[prevSection.length - 1][0];
@@ -137,7 +175,9 @@ function updateCounters() {
       patternProgress.rowCount = prevMaxRow;
     }
   } else {
-    patternProgress.rowCount = Math.min(newRowCount, currMaxRow);
+    // clamp 1..maxRow
+    patternProgress.rowCount = 
+      Math.min(Math.max(newRowCount, 1), currMaxRow);
   }
   renderCounters();
   renderSteps();

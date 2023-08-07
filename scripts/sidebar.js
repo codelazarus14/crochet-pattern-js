@@ -1,8 +1,6 @@
 const sidebar = document.querySelector(".sidebar");
 // Get the offset position of the sidebar
 const sticky = sidebar.offsetTop - 12;
-const screenDimmer = sidebar.querySelector('.screen-dimmer');
-let visiblePopup;
 
 sidebar.querySelectorAll('.sidebar > button')
   .forEach(popupButton => {
@@ -18,32 +16,16 @@ sidebar.querySelectorAll('.js-close-button')
     });
   });
 
-screenDimmer.addEventListener('click', () => {
-  hidePopup();
-});
-
 sidebar.querySelectorAll('.js-after-form').forEach(after => {
   after.addEventListener('focus', () => {
+    // loop tab navigation back to top
     const closeButton = after.parentElement.querySelector('.js-close-button');
     closeButton.focus();
   });
 });
 
-function showPopup(popup) {
-  screenDimmer.classList.add('cover-page');
-  visiblePopup = popup;
-  visiblePopup.classList.remove('hidden');
-}
-
-function hidePopup() {
-  screenDimmer.classList.remove('cover-page');
-  visiblePopup.classList.add('hidden');
-}
-
 // Convert Units popup
 
-const convertUnitsButton = sidebar.querySelector('.js-convert-units-button');
-const convertUnitsPopup = sidebar.querySelector('.js-convert-units-popup');
 const convertUnitsForm = sidebar.querySelector('.js-convert-units-form');
 const convertFromUnitsElem = sidebar.querySelector('.js-convert-from-units');
 const convertToUnitsElem = sidebar.querySelector('.js-convert-to-units');
@@ -150,7 +132,6 @@ function convertUnits () {
 }
 
 function copyToClipboard(input) {
-  console.log(input);
   input.select();
   // mobile compat? breaks this code so nvm
   // input.setSelectionRange(0, input.value.length);

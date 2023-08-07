@@ -15,7 +15,7 @@ const refreshElement = document.querySelector('.js-refresh-button');
 
 const renderPatternOptions = () => {
   savedPatterns = loadAllPatterns();
-  renderPatternList();
+  renderPatternList(populatePatternFields);
 
   renderListElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
   patternSelectElement.innerHTML = generateDefaultSelectOption('Choose here') + patternSelectElement.innerHTML;
@@ -34,6 +34,7 @@ const renderPatternOptions = () => {
 }
 
 function addPatternSubmitListeners() {
+  // todo: add 'ctrl+s' saving?
   saveElement.addEventListener('click', e => {
     const title = patternTitleInputElement.value.trim();
     const author = patternAuthorInputElement.value.trim();
@@ -96,7 +97,10 @@ function selectPattern(type) {
   setup();
 }
 
-function populatePatternFields() {
+function populatePatternFields(idx) {
+  // don't copy any saved progress, in case we submit later
+  delete selectedPattern.progress;
+
   patternTitleInputElement.value = selectedPattern.title;
   patternAuthorInputElement.value = selectedPattern.author;
   patternDescInputElement.value = selectedPattern.desc;

@@ -2,7 +2,7 @@
 // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Client-side_storage#storing_complex_data_%E2%80%94_indexeddb
 
 const PATTERNS_KEY = 'savedPatterns';
-const PROGRESS_KEY = 'patternInProgress';
+const INPROGRESS_KEY = 'inProgress';
 
 let savedPatterns;
 
@@ -53,7 +53,6 @@ function savePattern(pattern, idx) {
     JSON.stringify(saved));
   // save pattern key to table
   // save pattern data with key
-  return `key`;
 }
 
 function saveAllPatterns() {
@@ -62,14 +61,21 @@ function saveAllPatterns() {
   }
 }
 
-function loadProgress() {
-  const savedProgress = localStorage.getItem(PROGRESS_KEY);
-  if (!savedProgress || savedProgress === 'undefined')
-    console.error('No saved progress!');
-  const progress = JSON.parse(savedProgress);
-  return progress;
+function loadPatternInProgress() {
+  savedPatterns = loadAllPatterns();
+
+  const inProgress = localStorage.getItem(INPROGRESS_KEY);
+  let patternKey = inProgress ? JSON.parse(inProgress) : 0;
+
+  if (!savedPatterns.length) {
+    console.error('No saved patterns!');
+    return;
+  }
+  if (!savedPatterns[patternKey]) patternKey = 0;
+
+  return patternKey;
 }
 
-function saveProgress(patternProgress) {
-  localStorage.setItem(PROGRESS_KEY, JSON.stringify(patternProgress));
+function savePatternInProgress(key) {
+  localStorage.setItem(INPROGRESS_KEY, key);
 }

@@ -1,5 +1,6 @@
 .clear-list {
   width: 100%;
+  padding-bottom: 0.5em;
 }
 
 .pattern-list {
@@ -10,6 +11,10 @@
 .pattern-list-item {
   padding: 0.5em 1em;
   grid-template-columns: 1fr 1fr 3em auto;
+}
+
+.pattern-list-item.first {
+  margin-top: 0;
 }
 
 .pattern-list-item .pattern-title {

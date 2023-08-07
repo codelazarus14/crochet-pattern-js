@@ -22,7 +22,13 @@
 }
 
 .pattern-header {
-  margin: 0.5em;
+  display: flex;
+  margin: 1em;
+}
+
+.pattern-title-author {
+  padding-right: 1em;
+  border-right: 0.2em solid var(--wheat-border);
 }
 
 .pattern-title {
@@ -33,6 +39,27 @@
 .pattern-author {
   margin-left: 1em;
   font-style: italic;
+}
+
+/* pattern select popup */
+
+.select-pattern-button {
+  margin-left: 1em;
+  font-size: 1.2em;
+}
+
+.select-pattern-popup {
+  font-size: 1.5em;
+}
+
+.select-pattern {
+  margin-bottom: -0.6em;
+}
+
+.select-pattern .pattern-title,
+.select-pattern .pattern-author {
+  text-decoration: none;
+  font-style: normal;
 }
 
 .pattern-body {

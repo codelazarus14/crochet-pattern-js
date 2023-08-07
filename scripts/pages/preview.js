@@ -49,7 +49,6 @@ const renderSteps = () => {
 
 const renderPatternPreview = () => {
   renderBasicInfo();
-  console.log(submittedPattern);
 
   switch (submittedPattern.type) {
     case PatternTypes.USCrochet:
@@ -78,12 +77,7 @@ exportJSONElement.addEventListener('click', () => {
 
 usePatternElement.addEventListener('click', () => {
   const patternKey = savedPatterns.length - 1;
-  const newProgress = {
-    patternKey,
-    sectionCount: 1,
-    rowCount: 1
-  };
-  saveProgress(newProgress);
+  savePatternInProgress(patternKey);
 });
 
 function generateTitlePreview(title) {

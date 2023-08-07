@@ -162,7 +162,7 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
 }
 
 [class*="list-item"] {
-  margin: 0.5em 0;
+  margin-top: 0.5em;
   background-color: wheat;
   border-radius: 1em;
   box-shadow: -0.2em -0.2em inset var(--purple-color);
