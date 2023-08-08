@@ -1,3 +1,8 @@
+const addChar = '&#xff0b';
+const removeChar = '&#x1d5b7';
+const dragIcon = '&vellip;&vellip;';
+const clipboardIcon = '&#x1F4CB;';
+
 function filterNumInput(key) {
   // allow numbers, inc/dec w arrows and delete
   return (isFinite(key) && key !== ' ') ||
@@ -48,20 +53,38 @@ function addNumInputListener(element, updateFunc, funcArgs) {
   }
 }
 
-function addDeleteListeners(listElem, itemList, updateFunc) {
+function addDeleteListeners(listElem, itemList, updateFunc, requireConfirm) {
   listElem.querySelectorAll(`.js-delete-button`)
     .forEach((deleteButton, index) => {
-      deleteButton.addEventListener('click', () => {
-        itemList.splice(index, 1);
-        updateFunc(index);
-      });
+      addDeleteListener(deleteButton, index, itemList, updateFunc, requireConfirm);
     });
+}
+
+function addDeleteListener(deleteButton, index, itemList, updateFunc, requireConfirm) {
+  deleteButton.innerHTML = `<span class="delete-confirm js-delete-confirm hidden">Confirm</span>${removeChar}`;
+
+  let confirming;
+  const confirm = deleteButton.querySelector('.js-delete-confirm');
+
+  deleteButton.addEventListener('click', () => {
+    if (requireConfirm && !confirming) {
+      confirm.classList.remove('hidden');
+      confirming = true;
+    } else {
+      itemList.splice(index, 1);
+      updateFunc(index);
+    }
+  });
+  deleteButton.addEventListener('blur', () => {
+    confirm.classList.add('hidden');
+    confirming = false;
+  });
 }
 
 // input resizing
 
 function addInputResizeListener(inputElem) {
-  inputElem.addEventListener('input', () => 
+  inputElem.addEventListener('input', () =>
     resizeInput(inputElem));
 }
 

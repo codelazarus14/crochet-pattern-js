@@ -14,8 +14,6 @@ const renderPatternList = (loadAction) => {
 
 function addPatternListListeners(loadAction) {
   patternListClearElement.addEventListener('click', () => {
-    // TODO: add 'are you sure?' prompt
-    // to avoid accidentally clearing patterns
     savedPatterns = [];
     saveAllPatterns();
     renderPatternList(loadAction);
@@ -30,20 +28,20 @@ function addPatternListListeners(loadAction) {
       });
     });
 
-  addDeleteListeners(patternListElement, savedPatterns, 
+  addDeleteListeners(patternListElement, savedPatterns,
     (delIdx) => {
       const loaded = getLoadedPattern() && Number(getLoadedPattern());
-      
+
       if (delIdx === loaded) {
         delete patternListElement.dataset.loadedPattern;
         location.reload();
       }
       else if (delIdx < loaded)
         patternListElement.dataset.loadedPattern--;
-      
+
       saveAllPatterns();
       renderPatternList(loadAction);
-    });
+    }, true);
 }
 
 function setLoadedPattern(idx, loadAction) {
@@ -61,10 +59,10 @@ function generatePatternListItem(pattern, index) {
   const loaded = getLoadedPattern() && Number(getLoadedPattern());
   const isLoaded = loaded === index ? 'loaded' : '';
   const first = index === 0 ? 'first' : '';
-  
+
   return `<div class="pattern-list-item js-pattern-list-item ${isLoaded} ${first}" data-pattern-idx="${index}">
   <span class="pattern-title">${pattern.title}</span>
   <span class="pattern-author">${pattern.author}</span>
   <button class="load-pattern js-load-pattern">Load</button>
-  <button class="js-delete-button">${removeChar}</button></div>`
+  <button class="js-delete-button"></button></div>`
 }

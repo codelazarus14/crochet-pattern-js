@@ -177,7 +177,7 @@ function updateCounters() {
     }
   } else {
     // clamp 1..maxRow
-    patternProgress.rowCount = 
+    patternProgress.rowCount =
       Math.min(Math.max(newRowCount, 1), currMaxRow);
   }
   renderCounters();

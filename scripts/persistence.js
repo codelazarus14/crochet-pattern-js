@@ -49,7 +49,7 @@ function savePattern(pattern, idx) {
   } else {
     saved.push(pattern);
   }
-  localStorage.setItem(PATTERNS_KEY, 
+  localStorage.setItem(PATTERNS_KEY,
     JSON.stringify(saved));
   // save pattern key to table
   // save pattern data with key

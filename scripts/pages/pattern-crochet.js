@@ -29,7 +29,7 @@ const renderYarnList = () => {
 }
 const renderGlossary = () => {
   renderListElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
-  addDeleteListeners(glossaryListElement, selectedPattern.glossary, (delIdx) => renderGlossary);
+  addDeleteListeners(glossaryListElement, selectedPattern.glossary, (delIdx) => renderGlossary());
 }
 
 const renderSectionHeading = (section, idx) => {
@@ -232,11 +232,9 @@ function addRowInputListeners(stepListElem, section, index) {
 }
 
 function addSectionDeleteListener(section, index) {
-  section.querySelector('.js-delete-button')
-    .addEventListener('click', () => {
-      selectedPattern.steps.splice(index, 1);
-      renderSectionGrid();
-    });
+  const deleteButton = section.querySelector('.js-delete-button');
+
+  addDeleteListener(deleteButton, index, selectedPattern.steps, () => renderSectionGrid(), true);
 }
 
 function addDragNDropListeners(listElem, section, idx) {
@@ -470,7 +468,7 @@ function generateYarnListHTML(yarn, index) {
     <input class="update-yarn-amt js-update-yarn-amt" type="number" value="${yarn[1]}" min="1"></label>
   <label class="yarn-units">Units:
     <select class="update-yarn-units js-update-yarn-units">${units}</select></label>
-  <button class="js-delete-button">${removeChar}</button></div>`;
+  <button class="js-delete-button"></button></div>`;
 }
 
 function generateGlossaryEntryHTML(entry, index) {
@@ -480,7 +478,7 @@ function generateGlossaryEntryHTML(entry, index) {
     <span class="glossary-term">${entry[0]}</span></label>
   <label>Description:
     <span class="glossary-desc">${entry[1]}</span></label>
-  <button class="js-delete-button">${removeChar}</button></div>`;
+  <button class="js-delete-button"></button></div>`;
 }
 
 function generateSectionHTML(section, idx) {
@@ -492,10 +490,8 @@ function generateSectionHTML(section, idx) {
 }
 
 function generateSectionHeadingHTML(idx) {
-  // TODO: add 'are you sure?' prompt to avoid accidentally
-  // deleting sections
   return `<div>Section ${idx + 1}</div>
-  <button class="js-delete-button">${removeChar}</button>`;
+  <button class="js-delete-button"></button>`;
 }
 
 function generateStepInputHTML() {
@@ -528,6 +524,6 @@ function generateStepHTML(step, index) {
         <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowValue}" required></label>
       <div class="row-index-error ${rowIndexError}">Index error</div></div>
     <div class="step-instrs">${step[2]}</div>
-    <button class="js-delete-button">${removeChar}</button></div>
+    <button class="js-delete-button"></button></div>
   <div class="step-between js-step-dropzone"></div></div>`;
 }

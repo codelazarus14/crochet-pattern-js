@@ -93,6 +93,12 @@ main h1 {
   margin-left: 0;
 }
 
+.export-pattern {
+  margin-right: 0.75em;
+  padding-bottom: 1em;
+  border-bottom: 0.35em solid var(--wheat-border);
+}
+
 .export-pattern h2 {
   margin: 0;
 }
@@ -103,14 +109,25 @@ main h1 {
   padding: 0.8em;
 }
 
-.use-pattern {
-  margin: 2em 0;
+.other-options {
+  display: flex;
+  padding-top: 1em;
 }
 
-.use-pattern-button {
+.use-pattern {
+  font-weight: bold;
+}
+
+.use-pattern,
+.return-to-generator {
+  margin: 0.5em;
+}
+
+.use-pattern-button,
+.return-to-generator-button {
+  display: inline-block;
   font-size: 1.2em;
   padding: 1em;
-  font-weight: bold;
   text-decoration: none;
   background-color: var(--blue-color);
   color: inherit;
@@ -120,11 +137,13 @@ main h1 {
   cursor: pointer;
 }
 
-.use-pattern:hover {
+.use-pattern:hover,
+.return-to-generator:hover {
   opacity: 0.8;
 }
 
-.use-pattern:active {
+.use-pattern-button:active,
+.return-to-generator-button:active {
   box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
 

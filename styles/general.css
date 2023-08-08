@@ -131,8 +131,8 @@ input[type="number"] {
 }
 
 [class*="delete-button"] {
-  font-size: 1.2em;
-  padding: 0.35em;
+  font-size: 1.6rem;
+  padding: 0.35rem;
   background-color: transparent !important;
   color: var(--invalid-color);
   box-shadow: none;
@@ -146,6 +146,12 @@ input[type="number"] {
 [class*="delete-button"]:active {
   opacity: 0.2;
   box-shadow: none;
+}
+
+.delete-confirm {
+  font-weight: normal;
+  margin-right: 0.5em;
+  font-size: 0.8em;
 }
 
 .image-attach {
