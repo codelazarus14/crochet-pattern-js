@@ -122,6 +122,7 @@ function addCollapseListeners() {
 function setPatternInProgress(idx) {
   patternKey = idx;
   selectedPattern = savedPatterns[patternKey];
+  setTitle(document.title + `: ${selectedPattern.title}`);
   if (!selectedPattern.progress) {
     selectedPattern.progress = {
       sectionCount: 1,

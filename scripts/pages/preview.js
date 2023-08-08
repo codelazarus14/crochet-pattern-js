@@ -64,6 +64,7 @@ const renderPatternPreview = () => {
 savedPatterns = loadAllPatterns();
 if (savedPatterns.length) {
   submittedPattern = savedPatterns[savedPatterns.length - 1];
+  setTitle(document.title + `: ${submittedPattern.title}`);
   renderPatternPreview();
 }
 

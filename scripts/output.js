@@ -13,6 +13,10 @@ function renderListElement(listElement, elementData, htmlGenerator) {
   listElement.innerHTML = html;
 }
 
+function setTitle(string) {
+  document.title = string;
+}
+
 function generateOptionHTML(option, index, selected, disabled) {
   return `<option value="${option}"
   ${selected ? 'selected' : ''} 
