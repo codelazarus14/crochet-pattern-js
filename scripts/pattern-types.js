@@ -1,5 +1,7 @@
 let selectedPattern;
 
+// todo: refactor patterns to use nested objects
+// instead of arrays ie: yarns as objects
 class Pattern {
   constructor(title, author, desc, type) {
     this.title = title;

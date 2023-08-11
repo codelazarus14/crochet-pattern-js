@@ -61,12 +61,25 @@ const renderPatternPreview = () => {
   }
 }
 
-savedPatterns = loadAllPatterns();
-if (savedPatterns.length) {
-  submittedPattern = savedPatterns[savedPatterns.length - 1];
-  setTitle(document.title + `: ${submittedPattern.title}`);
-  renderPatternPreview();
+const renderError = (e) => {
+  document.querySelector('.preview-options').classList.add('hidden');
+  const innerElem = document.querySelector('.inner');
+  innerElem.innerHTML = e;
+  innerElem.style.color = invalidColor;
 }
+
+(async () => {
+  try {
+    await setupDB();
+    savedPatterns = await loadAllPatterns();
+    // assume last pattern on the list was the new one
+    submittedPattern = savedPatterns[savedPatterns.length - 1];
+    setTitle(document.title + `: ${submittedPattern.title}`);
+    renderPatternPreview();
+  } catch (e) {
+    renderError(e);
+  }
+})();
 
 exportPDFElement.addEventListener('click', () => {
   print();
@@ -78,7 +91,7 @@ exportJSONElement.addEventListener('click', () => {
 
 usePatternElement.addEventListener('click', () => {
   const patternKey = savedPatterns.length - 1;
-  savePatternInProgress(patternKey);
+  saveInProgressKey(patternKey);
 });
 
 function generateTitlePreview(title) {

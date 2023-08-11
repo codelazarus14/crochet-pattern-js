@@ -1,3 +1,5 @@
+const invalidColor = 'rgb(220, 0, 0)';
+
 function renderListElement(listElement, elementData, htmlGenerator) {
   let html = '';
 

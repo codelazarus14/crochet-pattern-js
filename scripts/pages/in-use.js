@@ -1,5 +1,4 @@
-let patternKey = loadPatternInProgress();
-let patternProgress;
+let patternKey, patternProgress;
 
 const patternListPopup = document.querySelector('.js-select-pattern-popup');
 const patternListPopupButton = patternListPopup.previousElementSibling;
@@ -11,6 +10,7 @@ const glossaryListElem = document.querySelector('.js-glossary-list');
 const stepsListElem = document.querySelector('.js-steps-list');
 const counterElem = document.querySelector('.js-counter');
 const sectionElem = document.querySelector('.js-section');
+const saveStatusElem = document.querySelector('.js-save-status');
 
 const renderBasicInfoMini = () => {
   document.querySelector('.js-pattern-title').innerHTML =
@@ -61,6 +61,7 @@ const renderNotesMini = () => {
 }
 
 const renderSteps = () => {
+  // todo: focus current step in section
   const section = patternProgress.sectionCount - 1;
   renderListElement(stepsListElem, selectedPattern.steps[section], generateStepInUse);
 }
@@ -79,15 +80,51 @@ const renderPatternInProgress = () => {
   }
 }
 
-onunload = () => {
-  savePatternInProgress(patternKey);
-  // save progress for all patterns
-  saveAllPatterns();
+const renderSaveStatus = (saved, hide) => {
+  if (hide)
+    saveStatusElem.innerHTML = '';
+  else
+    saveStatusElem.innerHTML =
+      saved ? `Saved ${checkmark}` : 'Saving...';
 }
 
-setPatternInProgress(patternKey);
-addNumInputListener(counterElem, updateCounters, []);
-addCollapseListeners();
+// todo: combine renderErrors in output.js?
+const renderError = (e) => {
+  const patternHeaderElem = document.querySelector('.pattern-header');
+  patternHeaderElem.classList.add('hidden');
+  counterElem.parentElement.classList.add('hidden');
+  stepsListElem.innerHTML = e;
+  stepsListElem.style.color = invalidColor;
+}
+
+const saveProgress = async () => {
+  await savePatternProgress(savedPatterns);
+  renderSaveStatus(true);
+}
+
+(async () => {
+  try {
+    await setupDB();
+    patternKey = await getInProgressKey();
+    setPatternInProgress(patternKey);
+  } catch (e) {
+    renderError(e);
+  }
+
+  addNumInputListener(counterElem, updateCounters, []);
+  addCollapseListeners();
+})();
+
+onpagehide = () => {
+  // quickly save to localStorage before leaving
+  saveInProgressKey(patternKey);
+}
+
+counterElem.addEventListener('input', () => {
+  // wait for user to stop typing and save
+  renderSaveStatus(false);
+  watchInput(saveProgress);
+});
 
 // popup listeners 
 // todo: merge with sidebar's?
@@ -131,9 +168,10 @@ function setPatternInProgress(idx) {
   }
   patternProgress = selectedPattern.progress;
 
-  console.log(selectedPattern, patternProgress);
+  console.log(idx, patternProgress);
   setLoadedPattern(patternKey);
   renderPatternInProgress();
+  renderSaveStatus(false, true);
 }
 
 function updateCounters() {
@@ -182,6 +220,17 @@ function updateCounters() {
   }
   renderCounters();
   renderSteps();
+}
+
+let timeout;
+function watchInput(callback) {
+  // set 1s timer every time we get an input
+  if (timeout) {
+    clearTimeout(timeout);
+    timeout = setTimeout(callback, 1000);
+  } else {
+    timeout = setTimeout(callback, 1000);
+  }
 }
 
 function generateHookMini(hook, index) {

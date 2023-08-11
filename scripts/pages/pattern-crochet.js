@@ -23,13 +23,13 @@ const renderHookSizeButtons = () => {
 
 const renderYarnList = () => {
   renderListElement(yarnListElement, selectedPattern.yarns, generateYarnListHTML);
-  addDeleteListeners(yarnListElement, selectedPattern.yarns, (delIdx) => renderYarnList());
+  addDeleteListeners(yarnListElement, selectedPattern.yarns, () => renderYarnList());
   addNumInputListeners('.js-update-yarn-amt', selectedPattern.yarns, 1);
   addSelectListeners('.js-update-yarn-units', selectedPattern.yarns, 2);
 }
 const renderGlossary = () => {
   renderListElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
-  addDeleteListeners(glossaryListElement, selectedPattern.glossary, (delIdx) => renderGlossary());
+  addDeleteListeners(glossaryListElement, selectedPattern.glossary, () => renderGlossary());
 }
 
 const renderSectionHeading = (section, idx) => {
@@ -48,7 +48,7 @@ const renderSectionSteps = (section, idx) => {
   if (rowInput)
     setRowInputValue(rowInput, idx);
   renderListElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
-  addDeleteListeners(stepListElement, selectedPattern.steps[idx], (delIdx) => renderSectionSteps(section, idx));
+  addDeleteListeners(stepListElement, selectedPattern.steps[idx], () => renderSectionSteps(section, idx));
   addRowInputListeners(stepListElement, section, idx);
   addDragNDropListeners(stepListElement, section, idx);
 }
@@ -77,9 +77,9 @@ onload = () => {
   resetPage();
 }
 
-function resetPage() {
+async function resetPage() {
   // TODO: select not working on safari?
-  renderPatternOptions();
+  await renderPatternOptions();
   addPatternSubmitListeners();
   // clear all inputs
   document.querySelectorAll('input, textarea, .js-pattern-types')
@@ -328,8 +328,6 @@ function addStepDropListener(dropZone) {
     const targetIdx = !targetStart ?
       Number(e.target.closest('.js-step-wrapper').dataset.stepIdx)
       : 0;
-
-    console.log(e.target.classList);
 
     if (e.target.classList.contains('step-start') ||
       e.target.classList.contains('step-between')) {

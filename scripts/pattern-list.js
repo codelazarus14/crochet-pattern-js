@@ -15,7 +15,9 @@ const renderPatternList = (loadAction) => {
 function addPatternListListeners(loadAction) {
   patternListClearElement.addEventListener('click', () => {
     savedPatterns = [];
-    saveAllPatterns();
+    deleteAllPatterns();
+    if (getLoadedPattern)
+      location.reload();
     renderPatternList(loadAction);
   });
 
@@ -29,7 +31,7 @@ function addPatternListListeners(loadAction) {
     });
 
   addDeleteListeners(patternListElement, savedPatterns,
-    (delIdx) => {
+    (delIdx, deleted) => {
       const loaded = getLoadedPattern() && Number(getLoadedPattern());
 
       if (delIdx === loaded) {
@@ -39,7 +41,7 @@ function addPatternListListeners(loadAction) {
       else if (delIdx < loaded)
         patternListElement.dataset.loadedPattern--;
 
-      saveAllPatterns();
+      deletePattern(deleted);
       renderPatternList(loadAction);
     }, true);
 }

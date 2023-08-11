@@ -13,9 +13,15 @@ const submitElement = document.querySelector('.js-submit-button');
 const submitAlertElement = document.querySelector('.js-submit-alert');
 const refreshElement = document.querySelector('.js-refresh-button');
 
-const renderPatternOptions = () => {
-  savedPatterns = loadAllPatterns();
-  renderPatternList(populatePatternFields);
+const renderPatternOptions = async () => {
+  try {
+    await setupDB();
+    savedPatterns = await loadAllPatterns();
+    renderPatternList(populatePatternFields);
+  } catch (e) {
+    // todo: renderError
+    alert(e);
+  }
 
   renderListElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
   patternSelectElement.innerHTML = generateDefaultSelectOption('Choose here') + patternSelectElement.innerHTML;
@@ -49,7 +55,7 @@ function addPatternSubmitListeners() {
       selectedPattern.author = author;
       selectedPattern.desc = desc;
       submitAlertElement.innerHTML = '';
-      savePattern(selectedPattern, getLoadedPattern());
+      savePattern(selectedPattern);
       location.reload();
     }
   });
@@ -68,7 +74,7 @@ function addPatternSubmitListeners() {
       selectedPattern.author = author;
       selectedPattern.desc = desc;
       submitAlertElement.innerHTML = '';
-      savePattern(selectedPattern);
+      submitPattern(selectedPattern);
     }
   });
 
@@ -97,7 +103,7 @@ function selectPattern(type) {
   setup();
 }
 
-function populatePatternFields(idx) {
+function populatePatternFields() {
   // don't copy any saved progress, in case we submit later
   delete selectedPattern.progress;
 

@@ -45,6 +45,7 @@ main h1 {
 
 .hook-preview {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .hook-preview-item {
@@ -149,39 +150,48 @@ main h1 {
 
 /* todo: fix borders/margins in printed pages */
 @media print {
+
   header,
   .sidebar,
   .preview-heading,
   .preview-options {
     display: none;
   }
+
   main {
     display: block;
     padding: 0;
     margin: 0;
   }
+
   .inner {
     display: block;
   }
+
   [class$="preview-container"],
   .step-preview-item {
     page-break-inside: avoid;
     break-inside: avoid;
   }
+
   .hook-preview-item {
     display: inline-block;
   }
+
   .glossary-preview-item {
     display: block;
   }
+
   .glossary-image {
     display: inline-block;
   }
+
   .steps-preview-container {
     margin-top: 1cm;
     page-break-inside: auto;
     break-inside: auto;
   }
+
   .step-list {
     display: block;
   }

@@ -2,6 +2,7 @@ const addChar = '&#xff0b';
 const removeChar = '&#x1d5b7';
 const dragIcon = '&vellip;&vellip;';
 const clipboardIcon = '&#x1F4CB;';
+const checkmark = '&#x2713;';
 
 function filterNumInput(key) {
   // allow numbers, inc/dec w arrows and delete
@@ -71,8 +72,8 @@ function addDeleteListener(deleteButton, index, itemList, updateFunc, requireCon
       confirm.classList.remove('hidden');
       confirming = true;
     } else {
-      itemList.splice(index, 1);
-      updateFunc(index);
+      const removed = itemList.splice(index, 1)[0];
+      updateFunc(index, removed);
     }
   });
   deleteButton.addEventListener('blur', () => {

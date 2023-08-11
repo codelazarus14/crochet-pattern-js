@@ -1,74 +1,251 @@
-// TODO: storing patterns
-// https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Client-side_storage#storing_complex_data_%E2%80%94_indexeddb
-
-const PATTERNS_KEY = 'savedPatterns';
 const INPROGRESS_KEY = 'inProgress';
+const PATTERN_DB = 'pattern_db';
+const PatternOS = {
+  USCrochet: 'uscrochet_os'
+};
 
 let savedPatterns;
-
-/*
 let db;
 
-// create database request
-const openRequest = window.indexedDB.open("pattern_db", 1);
+// database interfacing
 
-// handle error opening db
-openRequest.addEventListener('error', () => {
-  console.error('Database failed to open.');
-});
+function setupDB() {
+  return new Promise((resolve, reject) => {
+    // create database request
+    const openRequest = window.indexedDB.open(PATTERN_DB, 1);
 
-openRequest.addEventListener('success', () => {
-  console.log('Database opened successfully.');
-  db = openRequest.result;
+    // handle error opening db
+    openRequest.addEventListener('error', () => {
+      console.error('Database failed to open.');
+      reject();
+    });
 
-  // run code using db instance
-});
-*/
+    openRequest.addEventListener('success', () => {
+      console.log('Database opened successfully.');
+      db = openRequest.result;
+      resolve();
+    });
 
-function loadPattern(key) {
-  const saved = localStorage.getItem(PATTERNS_KEY);
-  if (!saved || saved === 'undefined')
-    console.error('No saved patterns found!');
-  const patterns = JSON.parse(saved);
-  return patterns[key];
-  // look up key in pattern table
-  // if found, return getItem(key)
+    openRequest.addEventListener('upgradeneeded', (e) => {
+      // Grab a reference to the opened database
+      db = e.target.result;
+
+      // Create an objectStore in our database to store notes and an auto-incrementing key
+      // An objectStore is similar to a 'table' in a relational database
+      const objectStore = db.createObjectStore(PatternOS.USCrochet, {
+        keyPath: 'id',
+        autoIncrement: true,
+      });
+
+      // Define what data items the objectStore will contain
+      objectStore.createIndex('title', 'title', { unique: false });
+      objectStore.createIndex('author', 'author', { unique: false });
+      objectStore.createIndex('desc', 'desc', { unique: false });
+      objectStore.createIndex('type', 'type', { unique: false });
+      objectStore.createIndex('hooks', 'hooks', { unique: false });
+      objectStore.createIndex('yarns', 'yarns', { unique: false });
+      objectStore.createIndex('glossary', 'glossary', { unique: false });
+      objectStore.createIndex('notes', 'notes', { unique: false });
+      objectStore.createIndex('steps', 'steps', { unique: false });
+
+      console.log('Database setup complete');
+      resolve();
+    });
+  });
 }
 
-function loadAllPatterns() {
-  // return array of all saved patterns in table
-  const saved = localStorage.getItem(PATTERNS_KEY);
-  const patterns = saved && saved !== 'undefined' ? JSON.parse(saved) : [];
+// todo: refactor into general transaction-creation function
+// to put various requests through
+// and add more error-checking (resolve/reject)
+
+function addData(os, pattern) {
+  return new Promise((resolve, reject) => {
+    // open a read/write db transaction, ready for adding the data
+    const transaction = db.transaction([os], 'readwrite');
+
+    // call an object store that's already been added to the database
+    const objectStore = transaction.objectStore(os);
+
+    // Make a request to add our newItem object to the object store
+    const addRequest = objectStore.add(pattern);
+
+    addRequest.addEventListener("success", () => {
+      console.log('Adding item', pattern);
+    });
+
+    // Report on the success of the transaction completing, when everything is done
+    transaction.addEventListener("complete", () => {
+      console.log("Transaction completed: database modification finished.");
+      resolve();
+    });
+
+    transaction.addEventListener("error", (e) => {
+      console.log("Transaction not opened due to error", e.target.error);
+      reject();
+    });
+  });
+}
+
+function setData(os, key, value, property) {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([os], 'readwrite');
+    const objectStore = transaction.objectStore(os);
+    const getRequest = objectStore.get(key);
+
+    getRequest.addEventListener('success', (e) => {
+      let data = e.target.result;
+
+      if (property) {
+        switch (property) {
+          case 'progress':
+            data.progress = value.progress;
+            break;
+          default:
+            console.error(`Invalid property ${property} for entry ${key} in ${os}`);
+            reject();
+        }
+      } else {
+        data = value;
+      }
+
+      const updateRequest = objectStore.put(data);
+
+      updateRequest.addEventListener('success', () => {
+        console.log(`Updating entry ${key} in ${os}`);
+        resolve();
+      });
+
+      updateRequest.addEventListener('error', (e) => {
+        reject(e);
+      })
+    });
+
+    transaction.addEventListener("complete", () => {
+      console.log("Transaction completed: database modification finished.");
+      resolve();
+    });
+
+    transaction.addEventListener("error", (e) => {
+      console.log("Transaction not opened due to error", e.target.error);
+      reject();
+    });
+  });
+}
+
+function getData(os, key) {
+  return new Promise((resolve, reject) => {
+    const objectStore = db.transaction(os).objectStore(os);
+    const getRequest = objectStore.get(key);
+
+    getRequest.addEventListener('success', () => {
+      resolve(getRequest.result);
+    });
+  });
+}
+
+function getAllData(os) {
+  return new Promise((resolve, reject) => {
+    const acc = [];
+    const objectStore = db.transaction(os).objectStore(os);
+
+    objectStore.openCursor()
+      .addEventListener('success', (e) => {
+        const cursor = e.target.result;
+        // step through object store entries
+        if (cursor) {
+          acc.push(cursor.value);
+          cursor.continue();
+        } else {
+          // end of os
+          resolve(acc);
+        }
+      });
+  });
+}
+
+function deleteData(os, key) {
+  const objectStore = db.transaction([os], 'readwrite').objectStore(os);
+  const deleteRequest = objectStore.delete(key);
+
+  deleteRequest.addEventListener('success', () => {
+    console.log(`Deleted entry ${key} in ${os}`);
+  });
+}
+
+function deleteAllData(os) {
+  const objectStore = db.transaction([os], 'readwrite').objectStore(os);
+  const clearRequest = objectStore.clear();
+
+  clearRequest.addEventListener('success', () => {
+    console.log(`Cleared object store ${os}`);
+  });
+}
+
+function typeToOS(type) {
+  switch (type) {
+    case PatternTypes.USCrochet:
+      return PatternOS.USCrochet;
+    default:
+      console.error(`Type ${type} doesn't match any OS!`);
+  }
+}
+
+// higher-level persistence functions
+
+async function loadPattern(type, key) {
+  const os = typeToOS(type);
+  return await getData(os, key);
+}
+
+async function loadAllPatterns() {
+  let patterns = [];
+  const objectStores = db.objectStoreNames;
+
+  for (let i = 0; i < objectStores.length; i++) {
+    const os = objectStores.item(i);
+    patterns = patterns.concat(await getAllData(os));
+  }
   return patterns;
 }
 
-function savePattern(pattern, idx) {
-  const saved = savedPatterns ? savedPatterns : [];
-  if (idx) {
-    saved[idx] = pattern;
-  } else {
-    saved.push(pattern);
-  }
-  localStorage.setItem(PATTERNS_KEY,
-    JSON.stringify(saved));
-  // save pattern key to table
-  // save pattern data with key
+function submitPattern(pattern) {
+  // in case we're submitting a new version of an existing pattern
+  if (pattern.id) delete pattern.id;
+
+  const os = typeToOS(pattern.type);
+  addData(os, pattern);
 }
 
-function saveAllPatterns() {
-  if (savedPatterns) {
-    localStorage.setItem(PATTERNS_KEY, JSON.stringify(savedPatterns));
+function savePattern(pattern) {
+  const os = typeToOS(pattern.type);
+
+  if (!pattern.id)
+    addData(os, pattern);
+  else
+    setData(os, pattern.id, pattern);
+}
+
+function deletePattern(pattern) {
+  const os = typeToOS(pattern.type);
+  deleteData(os, pattern.id);
+}
+
+function deleteAllPatterns() {
+  const objectStores = db.objectStoreNames;
+  for (let i = 0; i < objectStores.length; i++) {
+    const os = objectStores.item(i);
+    deleteAllData(os);
   }
 }
 
-function loadPatternInProgress() {
-  savedPatterns = loadAllPatterns();
+async function getInProgressKey() {
+  savedPatterns = await loadAllPatterns();
 
   const inProgress = localStorage.getItem(INPROGRESS_KEY);
   let patternKey = inProgress ? JSON.parse(inProgress) : 0;
 
   if (!savedPatterns.length) {
-    console.error('No saved patterns!');
+    throw new Error('No saved patterns!');
     return;
   }
   if (!savedPatterns[patternKey]) patternKey = 0;
@@ -76,6 +253,16 @@ function loadPatternInProgress() {
   return patternKey;
 }
 
-function savePatternInProgress(key) {
-  localStorage.setItem(INPROGRESS_KEY, key);
+function saveInProgressKey(key) {
+  if (key !== undefined)
+    localStorage.setItem(INPROGRESS_KEY, key);
+}
+
+// todo: bundle together all the set requests
+// into one transaction to improve performance?
+async function savePatternProgress(patterns) {
+  await patterns.forEach(async pattern => {
+    const os = typeToOS(pattern.type);
+    await setData(os, pattern.id, pattern, 'progress');
+  });
 }
