@@ -1,18 +1,20 @@
-const INPROGRESS_KEY = 'inProgress';
-const PATTERN_DB = 'pattern_db';
+import { PatternTypes } from "./pattern-types.js";
+
+const dbKey = 'pattern_db';
+const progressKey = 'inProgress';
 const PatternOS = {
   USCrochet: 'uscrochet_os'
 };
 
-let savedPatterns;
+export let savedPatterns;
 let db;
 
 // database interfacing
 
-function setupDB() {
+export function setupDB() {
   return new Promise((resolve, reject) => {
     // create database request
-    const openRequest = window.indexedDB.open(PATTERN_DB, 1);
+    const openRequest = window.indexedDB.open(dbKey, 1);
 
     // handle error opening db
     openRequest.addEventListener('error', () => {
@@ -25,6 +27,8 @@ function setupDB() {
       db = openRequest.result;
       resolve();
     });
+
+    // todo: fix some kind of error that occurs on first time setup? something about 'can't start a transaction during an upgrade...'
 
     openRequest.addEventListener('upgradeneeded', (e) => {
       // Grab a reference to the opened database
@@ -164,20 +168,26 @@ function getAllData(os) {
 }
 
 function deleteData(os, key) {
-  const objectStore = db.transaction([os], 'readwrite').objectStore(os);
-  const deleteRequest = objectStore.delete(key);
+  return new Promise((resolve, reject) => {
+    const objectStore = db.transaction([os], 'readwrite').objectStore(os);
+    const deleteRequest = objectStore.delete(key);
 
-  deleteRequest.addEventListener('success', () => {
-    console.log(`Deleted entry ${key} in ${os}`);
+    deleteRequest.addEventListener('success', () => {
+      console.log(`Deleted entry ${key} in ${os}`);
+      resolve();
+    });
   });
 }
 
 function deleteAllData(os) {
-  const objectStore = db.transaction([os], 'readwrite').objectStore(os);
-  const clearRequest = objectStore.clear();
+  return new Promise((resolve, reject) => {
+    const objectStore = db.transaction([os], 'readwrite').objectStore(os);
+    const clearRequest = objectStore.clear();
 
-  clearRequest.addEventListener('success', () => {
-    console.log(`Cleared object store ${os}`);
+    clearRequest.addEventListener('success', () => {
+      console.log(`Cleared object store ${os}`);
+      resolve();
+    });
   });
 }
 
@@ -192,56 +202,55 @@ function typeToOS(type) {
 
 // higher-level persistence functions
 
-async function loadPattern(type, key) {
+export async function loadPattern(type, key) {
   const os = typeToOS(type);
   return await getData(os, key);
 }
 
-async function loadAllPatterns() {
-  let patterns = [];
+export async function loadAllPatterns() {
+  savedPatterns = [];
   const objectStores = db.objectStoreNames;
 
   for (let i = 0; i < objectStores.length; i++) {
     const os = objectStores.item(i);
-    patterns = patterns.concat(await getAllData(os));
+    const osPatterns = await getAllData(os);
+    savedPatterns = savedPatterns.concat(osPatterns);
   }
-  return patterns;
 }
 
-function submitPattern(pattern) {
+export async function submitPattern(pattern) {
   // in case we're submitting a new version of an existing pattern
   if (pattern.id) delete pattern.id;
 
   const os = typeToOS(pattern.type);
-  addData(os, pattern);
+  await addData(os, pattern);
 }
 
-function savePattern(pattern) {
+export async function savePattern(pattern) {
   const os = typeToOS(pattern.type);
 
   if (!pattern.id)
-    addData(os, pattern);
+    await addData(os, pattern);
   else
-    setData(os, pattern.id, pattern);
+    await setData(os, pattern.id, pattern);
 }
 
-function deletePattern(pattern) {
+export async function deletePattern(pattern) {
   const os = typeToOS(pattern.type);
-  deleteData(os, pattern.id);
+  await deleteData(os, pattern.id);
 }
 
-function deleteAllPatterns() {
+export async function deleteAllPatterns() {
+  savedPatterns = [];
   const objectStores = db.objectStoreNames;
   for (let i = 0; i < objectStores.length; i++) {
     const os = objectStores.item(i);
-    deleteAllData(os);
+    await deleteAllData(os);
   }
 }
 
-async function getInProgressKey() {
-  savedPatterns = await loadAllPatterns();
-
-  const inProgress = localStorage.getItem(INPROGRESS_KEY);
+export async function getInProgressKey() { 
+  const inProgress = localStorage.getItem(progressKey);
   let patternKey = inProgress ? JSON.parse(inProgress) : 0;
 
   if (!savedPatterns.length) {
@@ -253,14 +262,14 @@ async function getInProgressKey() {
   return patternKey;
 }
 
-function saveInProgressKey(key) {
+export function saveInProgressKey(key) {
   if (key !== undefined)
-    localStorage.setItem(INPROGRESS_KEY, key);
+    localStorage.setItem(progressKey, key);
 }
 
 // todo: bundle together all the set requests
 // into one transaction to improve performance?
-async function savePatternProgress(patterns) {
+export async function savePatternProgress(patterns) {
   await patterns.forEach(async pattern => {
     const os = typeToOS(pattern.type);
     await setData(os, pattern.id, pattern, 'progress');

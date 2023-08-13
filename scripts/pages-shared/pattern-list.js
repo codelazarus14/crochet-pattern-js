@@ -1,8 +1,17 @@
+import { setSelectedPattern } from "../data/pattern-types.js";
+import {
+  deleteAllPatterns,
+  deletePattern,
+  savedPatterns
+} from "../data/persistence.js";
+import { addDeleteListeners } from "../utils/input.js";
+import { renderListElement } from "../utils/output.js";
+
 const patternListClearElement = document.querySelector('.js-clear-pattern-list');
 const patternListElement = document.querySelector('.js-pattern-list');
 const missingPatternAlert = document.querySelector('.js-pattern-alert');
 
-const renderPatternList = (loadAction) => {
+export const renderPatternList = (loadAction) => {
   if (savedPatterns.length < 1) {
     missingPatternAlert.classList.remove('hidden');
   } else {
@@ -14,7 +23,6 @@ const renderPatternList = (loadAction) => {
 
 function addPatternListListeners(loadAction) {
   patternListClearElement.addEventListener('click', () => {
-    savedPatterns = [];
     deleteAllPatterns();
     if (getLoadedPattern)
       location.reload();
@@ -46,14 +54,14 @@ function addPatternListListeners(loadAction) {
     }, true);
 }
 
-function setLoadedPattern(idx, loadAction) {
+export function setLoadedPattern(idx, loadAction) {
   patternListElement.dataset.loadedPattern = idx;
   // clone saved data so we dont reference it directly
-  selectedPattern = structuredClone(savedPatterns[idx]);
+  setSelectedPattern(structuredClone(savedPatterns[idx]));
   if (loadAction) loadAction(idx);
 }
 
-function getLoadedPattern() {
+export function getLoadedPattern() {
   return patternListElement.dataset.loadedPattern;
 }
 
@@ -62,6 +70,7 @@ function generatePatternListItem(pattern, index) {
   const isLoaded = loaded === index ? 'loaded' : '';
   const first = index === 0 ? 'first' : '';
 
+  // todo: make template html?
   return `<div class="pattern-list-item js-pattern-list-item ${isLoaded} ${first}" data-pattern-idx="${index}">
   <span class="pattern-title">${pattern.title}</span>
   <span class="pattern-author">${pattern.author}</span>

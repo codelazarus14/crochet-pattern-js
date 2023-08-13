@@ -1,3 +1,40 @@
+import {
+  PatternTypes,
+  USHookSizes,
+  selectedPattern,
+  setSelectedPattern,
+  yarnUnitNames
+} from "../data/pattern-types.js";
+import {
+  getInProgressKey,
+  loadAllPatterns,
+  saveInProgressKey,
+  savePatternProgress,
+  savedPatterns,
+  setupDB
+} from "../data/persistence.js";
+import {
+  renderPatternList,
+  setLoadedPattern
+} from "../pages-shared/pattern-list.js";
+import {
+  hidePopup,
+  showPopup
+} from "../pages-shared/popups/popup.js";
+import {
+  addNumInputListener,
+  checkmark
+} from "../utils/input.js";
+import {
+  generateGlossaryImage,
+  generateStepImage,
+  generateYarnImage,
+  invalidColor,
+  renderListElement,
+  setTitle
+} from "../utils/output.js";
+
+
 let patternKey, patternProgress;
 
 const patternListPopup = document.querySelector('.js-select-pattern-popup');
@@ -105,6 +142,7 @@ const saveProgress = async () => {
 (async () => {
   try {
     await setupDB();
+    await loadAllPatterns();
     patternKey = await getInProgressKey();
     setPatternInProgress(patternKey);
   } catch (e) {
@@ -158,7 +196,7 @@ function addCollapseListeners() {
 
 function setPatternInProgress(idx) {
   patternKey = idx;
-  selectedPattern = savedPatterns[patternKey];
+  setSelectedPattern(savedPatterns[patternKey]);
   setTitle(document.title + `: ${selectedPattern.title}`);
   if (!selectedPattern.progress) {
     selectedPattern.progress = {

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles/popup.css">
     <link rel="stylesheet" href="styles/pattern-list.css">
     <link rel="stylesheet" href="styles/pages/pattern-crochet.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
   </head>
   <body>
     <template-header></template-header>
@@ -131,15 +131,8 @@
         </div>
       </main>
     </div>
-    <script src="scripts/input.js"></script>
-    <script src="scripts/output.js"></script>
-    <script src="scripts/persistence.js"></script>
-    <script src="scripts/html-templates.js"></script>
-    <script src="scripts/popup.js"></script>
-    <script src="scripts/pattern-types.js"></script>
-    <script src="scripts/pattern-list.js"></script>
-    <script src="scripts/sidebar.js"></script>
-    <script src="scripts/pages/pattern-general.js"></script>
-    <script src="scripts/pages/pattern-crochet.js"></script>
+    <script type="module" src="scripts/pages-shared/templates/html-templates.js"></script>
+    <script type="module" src="scripts/pages-shared/templates/sidebar.js"></script>
+    <script type="module" src="scripts/pages/pattern-crochet.js"></script>
   </body>
 </html>

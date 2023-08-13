@@ -1,14 +1,8 @@
-const addChar = '&#xff0b';
-const removeChar = '&#x1d5b7';
-const dragIcon = '&vellip;&vellip;';
-const clipboardIcon = '&#x1F4CB;';
-const checkmark = '&#x2713;';
-
-function filterNumInput(key) {
-  // allow numbers, inc/dec w arrows and delete
-  return (isFinite(key) && key !== ' ') ||
-    ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Backspace', 'Delete', 'Tab', 'Enter'].includes(key);
-}
+export const addChar = '&#xff0b';
+export const removeChar = '&#x1d5b7';
+export const dragIcon = '&vellip;&vellip;';
+export const clipboardIcon = '&#x1F4CB;';
+export const checkmark = '&#x2713;';
 
 // TODO: sanitize inputs or escape generated HTML
 function sanitize() {
@@ -17,9 +11,10 @@ function sanitize() {
 
 // common button/select listeners
 
-const updateListItem = (list, idx, value) => list[idx] = value;
+const updateListItem = (list, idx, value) =>
+  list[idx] = value;
 
-function addSelectListeners(listName, itemList, idx) {
+export function addSelectListeners(listName, itemList, idx) {
   // idx = index of property within each item
   document.querySelectorAll(listName)
     .forEach((updateInput, index) => {
@@ -27,7 +22,7 @@ function addSelectListeners(listName, itemList, idx) {
     });
 }
 
-function addSelectListener(element, updateFunc, funcArgs) {
+export function addSelectListener(element, updateFunc, funcArgs) {
   if (updateFunc) {
     element.addEventListener('change', () => {
       updateFunc.apply(null, funcArgs.concat([element.selectedIndex]));
@@ -35,14 +30,20 @@ function addSelectListener(element, updateFunc, funcArgs) {
   }
 }
 
-function addNumInputListeners(listName, itemList, idx) {
+const filterNumInput = (key) => {
+  // allow numbers, inc/dec w arrows and delete
+  return (isFinite(key) && key !== ' ') ||
+    ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Backspace', 'Delete', 'Tab', 'Enter'].includes(key);
+}
+
+export function addNumInputListeners(listName, itemList, idx) {
   document.querySelectorAll(listName)
     .forEach((updateInput, index) => {
       addNumInputListener(updateInput, updateListItem, [itemList[index], idx]);
     });
 }
 
-function addNumInputListener(element, updateFunc, funcArgs) {
+export function addNumInputListener(element, updateFunc, funcArgs) {
   element.addEventListener('keydown', event => {
     if (!filterNumInput(event.key))
       event.preventDefault();
@@ -54,14 +55,14 @@ function addNumInputListener(element, updateFunc, funcArgs) {
   }
 }
 
-function addDeleteListeners(listElem, itemList, updateFunc, requireConfirm) {
+export function addDeleteListeners(listElem, itemList, updateFunc, requireConfirm) {
   listElem.querySelectorAll(`.js-delete-button`)
     .forEach((deleteButton, index) => {
       addDeleteListener(deleteButton, index, itemList, updateFunc, requireConfirm);
     });
 }
 
-function addDeleteListener(deleteButton, index, itemList, updateFunc, requireConfirm) {
+export function addDeleteListener(deleteButton, index, itemList, updateFunc, requireConfirm) {
   deleteButton.innerHTML = `<span class="delete-confirm js-delete-confirm hidden">Confirm</span>${removeChar}`;
 
   let confirming;
@@ -84,12 +85,12 @@ function addDeleteListener(deleteButton, index, itemList, updateFunc, requireCon
 
 // input resizing
 
-function addInputResizeListener(inputElem) {
-  inputElem.addEventListener('input', () =>
-    resizeInput(inputElem));
-}
-
-function resizeInput(inputElem) {
+export const resizeInput = (inputElem) => {
   inputElem.style.height = 0;
   inputElem.style.height = `${(inputElem.scrollHeight)}px`;
+}
+
+export function addInputResizeListener(inputElem) {
+  inputElem.addEventListener('input', () =>
+    resizeInput(inputElem));
 }

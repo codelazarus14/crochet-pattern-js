@@ -1,8 +1,12 @@
-let selectedPattern;
+export let selectedPattern;
+
+export function setSelectedPattern(pattern) {
+  selectedPattern = pattern;
+}
 
 // todo: refactor patterns to use nested objects
 // instead of arrays ie: yarns as objects
-class Pattern {
+export class Pattern {
   constructor(title, author, desc, type) {
     this.title = title;
     this.author = author;
@@ -11,7 +15,11 @@ class Pattern {
   }
 }
 
-class CrochetPattern extends Pattern {
+export const PatternTypes = {
+  USCrochet: 'US Crochet'
+};
+
+export class CrochetPattern extends Pattern {
   constructor(title, author, desc) {
     super(title, author, desc, PatternTypes.USCrochet);
     this.hooks = [];
@@ -26,13 +34,9 @@ class CrochetPattern extends Pattern {
   }
 }
 
-const PatternTypes = {
-  USCrochet: 'US Crochet'
-};
-
 // unit: [displayname, # of mms]
 // skeins obv an exception
-const Units = {
+export const Units = {
   mm: ["mm", 1],
   in: ["in", 25.4],
   feet: ["feet", 3048],
@@ -40,11 +44,12 @@ const Units = {
   meters: ["meters", 10000],
   skeins: ["skeins"]
 }
-const unitNames = Object.values(Units).map((x) => x[0]);
+export const unitNames =
+  Object.values(Units).map((x) => x[0]);
 
 // Crochet
 
-const USHookSizes = {
+export const USHookSizes = {
   B: 2.25,
   C: 2.75,
   D: 3.25,
@@ -58,4 +63,4 @@ const USHookSizes = {
 }
 
 const yarnUnits = [Units.yards, Units.meters, Units.skeins];
-const yarnUnitNames = yarnUnits.map((x) => x[0]);
+export const yarnUnitNames = yarnUnits.map((x) => x[0]);

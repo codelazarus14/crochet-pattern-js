@@ -1,3 +1,29 @@
+import {
+  USHookSizes,
+  selectedPattern,
+  yarnUnitNames
+} from '../data/pattern-types.js';
+import {
+  addPatternSubmitListeners,
+  renderPatternOptions
+} from '../pages-shared/pattern-generator.js';
+import {
+  addChar,
+  addDeleteListener,
+  addDeleteListeners,
+  addInputResizeListener,
+  addNumInputListener,
+  addNumInputListeners,
+  addSelectListeners,
+  dragIcon,
+  resizeInput
+} from '../utils/input.js';
+import {
+  generateImageUploadHTML,
+  generateOptionHTML,
+  renderListElement
+} from '../utils/output.js';
+
 const hookInputElement = document.querySelector('.js-hook-types');
 
 const yarnFormElement = document.querySelector('.js-yarn-form');
@@ -79,8 +105,8 @@ onload = () => {
 
 async function resetPage() {
   // TODO: select not working on safari?
-  await renderPatternOptions();
-  addPatternSubmitListeners();
+  await renderPatternOptions(populateCrochetPatternFields);
+  addPatternSubmitListeners(validatePattern);
   // clear all inputs
   document.querySelectorAll('input, textarea, .js-pattern-types')
     .forEach(elem => elem.value = elem.defaultValue);

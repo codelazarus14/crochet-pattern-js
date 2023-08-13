@@ -1,3 +1,21 @@
+import {
+  PatternTypes,
+  USHookSizes,
+  yarnUnitNames
+} from "../data/pattern-types.js";
+import {
+  loadAllPatterns,
+  saveInProgressKey,
+  savedPatterns,
+  setupDB
+} from "../data/persistence.js";
+import {
+  generateImagePreview,
+  invalidColor,
+  renderListElement,
+  setTitle
+} from "../utils/output.js";
+
 const basicInfoElement = document.querySelector('.js-basic-info');
 const hookPreviewElement = document.querySelector('.js-hook-preview');
 const yarnPreviewElement = document.querySelector('.js-yarn-preview');
@@ -71,7 +89,7 @@ const renderError = (e) => {
 (async () => {
   try {
     await setupDB();
-    savedPatterns = await loadAllPatterns();
+    await loadAllPatterns();
     // assume last pattern on the list was the new one
     submittedPattern = savedPatterns[savedPatterns.length - 1];
     setTitle(document.title + `: ${submittedPattern.title}`);

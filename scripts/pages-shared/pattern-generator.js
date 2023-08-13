@@ -1,3 +1,22 @@
+import {
+  CrochetPattern,
+  PatternTypes,
+  selectedPattern,
+  setSelectedPattern,
+} from "../data/pattern-types.js";
+import {
+  loadAllPatterns,
+  savePattern,
+  setupDB,
+  submitPattern
+} from "../data/persistence.js";
+import {
+  generateDefaultSelectOption,
+  generateOptionHTML,
+  renderListElement
+} from "../utils/output.js";
+import { renderPatternList } from "./pattern-list.js";
+
 let previousPattern;
 
 // common pattern generator code
@@ -13,14 +32,16 @@ const submitElement = document.querySelector('.js-submit-button');
 const submitAlertElement = document.querySelector('.js-submit-alert');
 const refreshElement = document.querySelector('.js-refresh-button');
 
-const renderPatternOptions = async () => {
+export const renderPatternOptions = async (onPatternLoad) => {
   try {
     await setupDB();
-    savedPatterns = await loadAllPatterns();
-    renderPatternList(populatePatternFields);
+    await loadAllPatterns();
+    renderPatternList(() => {
+      populatePatternFields(onPatternLoad);
+    });
   } catch (e) {
     // todo: renderError
-    alert(e);
+    console.log(e);
   }
 
   renderListElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);
@@ -35,17 +56,18 @@ const renderPatternOptions = async () => {
   patternOptionsFormElement.addEventListener('submit', e => {
     e.preventDefault();
     const type = patternSelectElement.value;
-    selectPattern(type);
+    createPattern(type);
+    onPatternLoad();
   });
 }
 
-function addPatternSubmitListeners() {
+export function addPatternSubmitListeners(validateFunc) {
   // todo: add 'ctrl+s' saving?
   saveElement.addEventListener('click', e => {
     const title = patternTitleInputElement.value.trim();
     const author = patternAuthorInputElement.value.trim();
     const desc = patternDescInputElement.value.trim();
-    const result = validatePattern();
+    const result = validateFunc();
 
     if (result && typeof result === 'string') {
       e.preventDefault();
@@ -64,7 +86,7 @@ function addPatternSubmitListeners() {
     const title = patternTitleInputElement.value.trim();
     const author = patternAuthorInputElement.value.trim();
     const desc = patternDescInputElement.value.trim();
-    const result = validatePattern();
+    const result = validateFunc();
 
     if (result && typeof result === 'string') {
       e.preventDefault();
@@ -83,27 +105,22 @@ function addPatternSubmitListeners() {
   });
 }
 
-function selectPattern(type) {
+function createPattern(type) {
   const title = patternTitleInputElement.value.trim();
   const author = patternAuthorInputElement.value.trim();
   const desc = patternDescInputElement.value.trim();
 
-  let setup;
-
   if (previousPattern && previousPattern.type === type) return;
   switch (type) {
     case PatternTypes.USCrochet:
-      selectedPattern = new CrochetPattern(title, author, desc);
-      setup = setupCrochet;
+      setSelectedPattern(
+        new CrochetPattern(title, author, desc));
       break;
-    default:
-      selectedPattern = new Pattern();
   }
   previousPattern = selectedPattern;
-  setup();
 }
 
-function populatePatternFields() {
+function populatePatternFields(loadAction) {
   // don't copy any saved progress, in case we submit later
   delete selectedPattern.progress;
 
@@ -111,9 +128,5 @@ function populatePatternFields() {
   patternAuthorInputElement.value = selectedPattern.author;
   patternDescInputElement.value = selectedPattern.desc;
   patternSelectElement.value = selectedPattern.type;
-  switch (selectedPattern.type) {
-    case PatternTypes.USCrochet:
-      populateCrochetPatternFields();
-      break;
-  }
+  loadAction();
 }

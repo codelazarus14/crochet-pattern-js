@@ -1,17 +1,19 @@
 const screenDimmer = document.querySelector('.js-screen-dimmer');
 let visiblePopup;
 
-screenDimmer.addEventListener('click', () => {
-  hidePopup();
-});
+export function enableScreenDimmer() {
+  screenDimmer.addEventListener('click', () => {
+    hidePopup();
+  });
+}
 
-function showPopup(popup) {
+export function showPopup(popup) {
   screenDimmer.classList.add('cover-page');
   visiblePopup = popup;
   visiblePopup.classList.remove('hidden');
 }
 
-function hidePopup() {
+export function hidePopup() {
   screenDimmer.classList.remove('cover-page');
   visiblePopup.classList.add('hidden');
 }

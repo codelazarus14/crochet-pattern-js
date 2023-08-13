@@ -1,3 +1,8 @@
+import {
+  clipboardIcon,
+  removeChar
+} from "../../utils/input.js";
+
 class Header extends HTMLElement {
   constructor() {
     super();
