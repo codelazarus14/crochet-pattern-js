@@ -1,6 +1,5 @@
 import {
   PatternTypes,
-  USHookSizes,
   yarnUnitNames
 } from "../data/pattern-types.js";
 import {
@@ -39,7 +38,7 @@ const renderBasicInfo = () => {
 }
 
 const renderHooks = () =>
-  renderListElement(hookPreviewElement, submittedPattern.hooks, generateHookPreview);
+  renderListElement(hookPreviewElement, submittedPattern.hooks.values, generateHookPreview);
 
 const renderYarns = () =>
   renderListElement(yarnPreviewElement, submittedPattern.yarns, generateYarnPreview);
@@ -126,9 +125,10 @@ function generateDescriptionPreview(desc) {
 }
 
 function generateHookPreview(hook, index) {
+  const type = submittedPattern.hooks.type;
   let hookHTML = '';
   if (hook) {
-    const hookStr = 'US ' + Object.values(USHookSizes)[index];
+    const hookStr = `${type.prefix} ${Object.values(type.sizes)[index]}`;
     hookHTML += `<div class="hook-preview-item">${hookStr}</div>`
   }
   return hookHTML;

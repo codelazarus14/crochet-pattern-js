@@ -1,6 +1,5 @@
 import {
   PatternTypes,
-  USHookSizes,
   selectedPattern,
   setSelectedPattern,
   yarnUnitNames
@@ -75,7 +74,7 @@ const renderHooksMini = () => {
     hookListElem.setAttribute('class', 'hooks-mini js-hooks-mini');
     materialsListElem.appendChild(hookListElem);
   }
-  renderListElement(hookListElem, selectedPattern.hooks, generateHookMini);
+  renderListElement(hookListElem, selectedPattern.hooks.values, generateHookMini);
 }
 
 const renderYarnsMini = () => {
@@ -272,9 +271,11 @@ function watchInput(callback) {
 }
 
 function generateHookMini(hook, index) {
+  const type = selectedPattern.hooks.type;
   let hookHTML = '';
+
   if (hook) {
-    const hookStr = 'US ' + Object.values(USHookSizes)[index];
+    const hookStr = `${type.prefix} ${Object.keys(type.sizes)[index]}`;
     hookHTML += `<div class="hook-mini-item">${hookStr}</div>`
   }
   return hookHTML;

@@ -4,6 +4,32 @@ export function setSelectedPattern(pattern) {
   selectedPattern = pattern;
 }
 
+// General data types
+
+// unit: [displayname, # of mms]
+// skeins obv an exception
+export const Units = {
+  mm: ["mm", 1],
+  in: ["in", 25.4],
+  feet: ["feet", 3048],
+  yards: ["yards", 9144],
+  meters: ["meters", 10000],
+  skeins: ["skeins"]
+};
+export const unitNames =
+  Object.values(Units).map((x) => x[0]);
+
+const yarnUnits = [Units.yards, Units.meters, Units.skeins];
+export const yarnUnitNames = yarnUnits.map((x) => x[0]);
+
+//
+// Patterns
+//
+
+export const PatternTypes = {
+  USCrochet: 'US Crochet'
+};
+
 // todo: refactor patterns to use nested objects
 // instead of arrays ie: yarns as objects
 export class Pattern {
@@ -15,14 +41,31 @@ export class Pattern {
   }
 }
 
-export const PatternTypes = {
-  USCrochet: 'US Crochet'
+// Crochet
+
+const USHookSizes = {
+  prefix: 'US',
+  sizes: {
+    B: 2.25,
+    C: 2.75,
+    D: 3.25,
+    E: 3.50,
+    F: 3.75,
+    G: 4.00,
+    H: 5.00,
+    I: 5.50,
+    J: 6.00,
+    K: 6.50
+  }
 };
 
 export class CrochetPattern extends Pattern {
   constructor(title, author, desc) {
     super(title, author, desc, PatternTypes.USCrochet);
-    this.hooks = [];
+    this.hooks = {
+      type: USHookSizes,
+      values: Object.keys(USHookSizes.sizes).map(() => false)
+    }
     this.yarns = [];
     // TODO: gauge?
     this.glossary = [];
@@ -33,34 +76,3 @@ export class CrochetPattern extends Pattern {
     this.steps = [[]];
   }
 }
-
-// unit: [displayname, # of mms]
-// skeins obv an exception
-export const Units = {
-  mm: ["mm", 1],
-  in: ["in", 25.4],
-  feet: ["feet", 3048],
-  yards: ["yards", 9144],
-  meters: ["meters", 10000],
-  skeins: ["skeins"]
-}
-export const unitNames =
-  Object.values(Units).map((x) => x[0]);
-
-// Crochet
-
-export const USHookSizes = {
-  B: 2.25,
-  C: 2.75,
-  D: 3.25,
-  E: 3.50,
-  F: 3.75,
-  G: 4.00,
-  H: 5.00,
-  I: 5.50,
-  J: 6.00,
-  K: 6.50
-}
-
-const yarnUnits = [Units.yards, Units.meters, Units.skeins];
-export const yarnUnitNames = yarnUnits.map((x) => x[0]);

@@ -1,5 +1,4 @@
 import {
-  USHookSizes,
   selectedPattern,
   yarnUnitNames
 } from '../data/pattern-types.js';
@@ -43,7 +42,7 @@ const sectionGridElement = document.querySelector('.js-section-grid');
 const sectionAddElement = document.querySelector('.js-add-section-button');
 
 const renderHookSizeButtons = () => {
-  renderListElement(hookInputElement, Object.keys(USHookSizes), generateHookSizeButtonsHTML);
+  renderListElement(hookInputElement, selectedPattern.hooks.values, generateHookSizeButtonsHTML);
   addHookButtonListeners();
 }
 
@@ -189,8 +188,8 @@ function addHookButtonListeners() {
   document.querySelectorAll('.js-hook-size-button')
     .forEach(button => {
       button.addEventListener('click', () => {
-        selectedPattern.hooks[button.value] =
-          !selectedPattern.hooks[button.value];
+        selectedPattern.hooks.values[button.value] =
+          !selectedPattern.hooks.values[button.value];
         renderHookSizeButtons();
       });
     });
@@ -460,19 +459,11 @@ function validatePattern() {
   return result;
 }
 
-function generateHookSizeButtonsHTML(option, index) {
-  let classes = 'hook-size-button js-hook-size-button';
-  if (selectedPattern.hooks[index])
-    classes += ' selected';
-  return `<button class="${classes}" value="${index}">${option}/${USHookSizes[option]}</button>`;
+function generateHookSizeButtonsHTML(hook, index) {
+  const type = selectedPattern.hooks.type;
+  const selected = hook ? 'selected' : '';
+  return `<button class="hook-size-button js-hook-size-button ${selected}" value="${index}">${Object.keys(type.sizes)[index]}/${Object.values(type.sizes)[index]}</button>`;
 }
-
-// function generateHookListHTML(selected, index) {
-//   if (!selected) return '';
-//   return `<div>US 
-//   ${Object.keys(USHookSizes)[index]} /
-//   ${Object.values(USHookSizes)[index]}</div>`
-// }
 
 // TODO: make output list items have editable text fields
 // TODO: add tooltips for yarns and glossary entries
