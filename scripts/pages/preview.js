@@ -135,12 +135,12 @@ function generateHookPreview(hook, index) {
 }
 
 function generateYarnPreview(yarn, index) {
-  const units = yarnUnitNames[yarn[2]];
+  const { name, amount, units } = yarn;
   return `<div class="yarn-preview-item">
   <div class="yarn-image">${generateImagePreview()}</div>
   <div class="yarn">
-    <span class="yarn-name">${yarn[0]}</span> -
-    <span class="yarn-amt">${yarn[1]}</span>
+    <span class="yarn-name">${name}</span> -
+    <span class="yarn-amt">${amount}</span>
     <span class="yarn-units">${units}</span></div>
   </div>`;
 }

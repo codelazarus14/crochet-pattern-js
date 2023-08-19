@@ -282,11 +282,11 @@ function generateHookMini(hook, index) {
 }
 
 function generateYarnMini(yarn, index) {
-  const units = yarnUnitNames[yarn[2]];
+  const { name, amount, units } = yarn;
   return `<div class="yarn-mini-item">
     <div class="yarn-image tiny">${generateYarnImage()}</div>
-    <span class="yarn-name">${yarn[0]}</span>
-    <span class="yarn-amt">${yarn[1]}</span>
+    <span class="yarn-name">${name}</span>
+    <span class="yarn-amt">${amount}</span>
     <span class="yarn-units">${units}</span></div>
   </div>`;
 }

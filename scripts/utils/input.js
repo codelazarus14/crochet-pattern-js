@@ -11,17 +11,6 @@ function sanitize() {
 
 // common button/select listeners
 
-const updateListItem = (list, idx, value) =>
-  list[idx] = value;
-
-export function addSelectListeners(listName, itemList, idx) {
-  // idx = index of property within each item
-  document.querySelectorAll(listName)
-    .forEach((updateInput, index) => {
-      addSelectListener(updateInput, updateListItem, [itemList[index], idx]);
-    });
-}
-
 export function addSelectListener(element, updateFunc, funcArgs) {
   if (updateFunc) {
     element.addEventListener('change', () => {
@@ -34,13 +23,6 @@ const filterNumInput = (key) => {
   // allow numbers, inc/dec w arrows and delete
   return (isFinite(key) && key !== ' ') ||
     ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Backspace', 'Delete', 'Tab', 'Enter'].includes(key);
-}
-
-export function addNumInputListeners(listName, itemList, idx) {
-  document.querySelectorAll(listName)
-    .forEach((updateInput, index) => {
-      addNumInputListener(updateInput, updateListItem, [itemList[index], idx]);
-    });
 }
 
 export function addNumInputListener(element, updateFunc, funcArgs) {

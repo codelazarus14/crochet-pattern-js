@@ -12,8 +12,7 @@ import {
   addDeleteListeners,
   addInputResizeListener,
   addNumInputListener,
-  addNumInputListeners,
-  addSelectListeners,
+  addSelectListener,
   dragIcon,
   resizeInput
 } from '../utils/input.js';
@@ -49,8 +48,8 @@ const renderHookSizeButtons = () => {
 const renderYarnList = () => {
   renderListElement(yarnListElement, selectedPattern.yarns, generateYarnListHTML);
   addDeleteListeners(yarnListElement, selectedPattern.yarns, () => renderYarnList());
-  addNumInputListeners('.js-update-yarn-amt', selectedPattern.yarns, 1);
-  addSelectListeners('.js-update-yarn-units', selectedPattern.yarns, 2);
+  addYarnAmtListeners();
+  addYarnUnitsListeners();
 }
 const renderGlossary = () => {
   renderListElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
@@ -134,10 +133,12 @@ function setupCrochet() {
   renderSectionGrid();
 
   yarnFormElement.addEventListener('submit', () => {
-    const yarnName = yarnNameInputElement.value.trim();
-    const yarnAmt = Number(yarnAmtInputElement.value);
-    const yarnUnitsIdx = yarnUnitsInputElement.selectedIndex;
-    selectedPattern.yarns.push([yarnName, yarnAmt, yarnUnitsIdx]);
+    const newYarn = {
+      name: yarnNameInputElement.value.trim(),
+      amount: Number(yarnAmtInputElement.value),
+      units: yarnUnitNames[yarnUnitsInputElement.selectedIndex]
+    };
+    selectedPattern.yarns.push(newYarn);
     renderYarnList();
   });
 
@@ -192,6 +193,25 @@ function addHookButtonListeners() {
           !selectedPattern.hooks.values[button.value];
         renderHookSizeButtons();
       });
+    });
+}
+
+function addYarnAmtListeners() {
+  document.querySelectorAll('.js-update-yarn-amt')
+    .forEach((amtInput, index) => {
+      addNumInputListener(amtInput, () => {
+        selectedPattern.yarns[index].amount = Number(amtInput.value);
+      }, []);
+    });
+}
+
+function addYarnUnitsListeners() {
+  document.querySelectorAll('.js-update-yarn-units')
+    .forEach((unitsInput, index) => {
+      addSelectListener(unitsInput, () => {
+        selectedPattern.yarns[index].units =
+          yarnUnitNames[unitsInput.selectedIndex];
+      }, []);
     });
 }
 
@@ -469,20 +489,21 @@ function generateHookSizeButtonsHTML(hook, index) {
 // TODO: add tooltips for yarns and glossary entries
 
 function generateYarnListHTML(yarn, index) {
-  let units = '';
-  yarnUnitNames.forEach((unit, idx) => {
-    units += generateOptionHTML(unit, 1, idx === yarn[2]);
+  const { name, amount, units } = yarn;
+  let unitSelect = '';
+  yarnUnitNames.forEach(yarnUnit => {
+    unitSelect += generateOptionHTML(yarnUnit, null, yarnUnit === units);
   });
   const imageUpload = generateImageUploadHTML();
 
   return `<div class="yarn-list-item">
   <div class="js-update-yarn-image">${imageUpload}</div>
   <label class="yarn-name">Name:
-    <span>${yarn[0]}</span></label>
+    <span>${name}</span></label>
   <label class="yarn-amt">Amount:
-    <input class="update-yarn-amt js-update-yarn-amt" type="number" value="${yarn[1]}" min="1"></label>
+    <input class="update-yarn-amt js-update-yarn-amt" type="number" value="${amount}" min="1"></label>
   <label class="yarn-units">Units:
-    <select class="update-yarn-units js-update-yarn-units">${units}</select></label>
+    <select class="update-yarn-units js-update-yarn-units">${unitSelect}</select></label>
   <button class="js-delete-button"></button></div>`;
 }
 

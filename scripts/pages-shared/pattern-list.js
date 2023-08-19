@@ -24,7 +24,7 @@ export const renderPatternList = (loadAction) => {
 function addPatternListListeners(loadAction) {
   patternListClearElement.addEventListener('click', () => {
     deleteAllPatterns();
-    if (getLoadedPattern)
+    if (getLoadedPattern() !== null)
       location.reload();
     renderPatternList(loadAction);
   });
@@ -40,7 +40,7 @@ function addPatternListListeners(loadAction) {
 
   addDeleteListeners(patternListElement, savedPatterns,
     (delIdx, deleted) => {
-      const loaded = getLoadedPattern() && Number(getLoadedPattern());
+      const loaded = getLoadedPattern();
 
       if (delIdx === loaded) {
         delete patternListElement.dataset.loadedPattern;
@@ -61,12 +61,13 @@ export function setLoadedPattern(idx, loadAction) {
   if (loadAction) loadAction(idx);
 }
 
-export function getLoadedPattern() {
-  return patternListElement.dataset.loadedPattern;
+function getLoadedPattern() {
+  const str = patternListElement.dataset.loadedPattern;
+  return str === '' ? null : Number(str);
 }
 
 function generatePatternListItem(pattern, index) {
-  const loaded = getLoadedPattern() && Number(getLoadedPattern());
+  const loaded = getLoadedPattern();
   const isLoaded = loaded === index ? 'loaded' : '';
   const first = index === 0 ? 'first' : '';
 
