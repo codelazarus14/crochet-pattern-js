@@ -146,10 +146,11 @@ function generateYarnPreview(yarn, index) {
 }
 
 function generateGlossaryEntryPreview(entry, index) {
+  const { term, description } = entry;
   return `<div class="glossary-preview-item">
   <div class="glossary-image">${generateImagePreview()}</div>
-  <span class="glossary-term">${entry[0]}</span>
-  <span class="glossary-desc">${entry[1]}</span></div>`;
+  <span class="glossary-term">${term}</span>
+  <span class="glossary-desc">${description}</span></div>`;
 }
 
 function generateNotesPreview(notes) {

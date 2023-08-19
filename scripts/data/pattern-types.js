@@ -30,8 +30,6 @@ export const PatternTypes = {
   USCrochet: 'US Crochet'
 };
 
-// todo: refactor patterns to use nested objects
-// instead of arrays ie: yarns as objects
 export class Pattern {
   constructor(title, author, desc, type) {
     this.title = title;
@@ -59,6 +57,8 @@ const USHookSizes = {
   }
 };
 
+// todo: refactor patterns to use nested objects
+// instead of arrays ie: yarns as objects
 export class CrochetPattern extends Pattern {
   constructor(title, author, desc) {
     super(title, author, desc, PatternTypes.USCrochet);

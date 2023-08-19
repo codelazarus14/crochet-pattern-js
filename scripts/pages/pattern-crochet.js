@@ -143,9 +143,11 @@ function setupCrochet() {
   });
 
   glossaryFormElement.addEventListener('submit', () => {
-    const newTerm = glossaryTermInputElement.value.trim();
-    const newDesc = glossaryDescInputElement.value.trim();
-    selectedPattern.glossary.push([newTerm, newDesc]);
+    const newEntry = {
+      term: glossaryTermInputElement.value.trim(),
+      description: glossaryDescInputElement.value.trim()
+    };
+    selectedPattern.glossary.push(newEntry);
     renderGlossary();
   });
 
@@ -508,12 +510,13 @@ function generateYarnListHTML(yarn, index) {
 }
 
 function generateGlossaryEntryHTML(entry, index) {
+  const { term, description } = entry;
   return `<div class="glossary-list-item">
   <div class="js-update-term-image">${generateImageUploadHTML()}</div>
   <label>Term:
-    <span class="glossary-term">${entry[0]}</span></label>
+    <span class="glossary-term">${term}</span></label>
   <label>Description:
-    <span class="glossary-desc">${entry[1]}</span></label>
+    <span class="glossary-desc">${description}</span></label>
   <button class="js-delete-button"></button></div>`;
 }
 
