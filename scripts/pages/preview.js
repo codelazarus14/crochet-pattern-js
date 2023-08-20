@@ -164,11 +164,12 @@ function generateSectionPreview(section, index) {
 }
 
 function generateStepPreview(step, index) {
-  const rowString =
-    step[1] ? `R${step[0]} - ${step[1]}` : `R${step[0]}`;
+  const { start, end, instructions } = step;
+  const rowStr =
+    end ? `R${start} - ${end}` : `R${start}`;
 
   return `<div class="step-preview-item">
-  <span class="step-rows">${rowString}</span>
-  <span class="step-instrs">${step[2]}</span>
+  <span class="step-rows">${rowStr}</span>
+  <span class="step-instrs">${instructions}</span>
   <div class="step-image">${generateImagePreview()}</div></div>`;
 }

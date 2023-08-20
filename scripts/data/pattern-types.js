@@ -57,8 +57,6 @@ const USHookSizes = {
   }
 };
 
-// todo: refactor patterns to use nested objects
-// instead of arrays ie: yarns as objects
 export class CrochetPattern extends Pattern {
   constructor(title, author, desc) {
     super(title, author, desc, PatternTypes.USCrochet);
@@ -71,8 +69,8 @@ export class CrochetPattern extends Pattern {
     this.glossary = [];
     this.notes = '';
     // 2d array of steps ordered by sections,
-    // each step consists of steps idx 1..n:
-    // [startIdx, endIdx, instrs, errorFlag]
+    // each section consists of steps idx 1..n
+    // step = { start, end, instrs, errorFlag }
     this.steps = [[]];
   }
 }

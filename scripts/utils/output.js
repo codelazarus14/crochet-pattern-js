@@ -3,6 +3,9 @@ export const invalidColor = 'rgb(220, 0, 0)';
 export function renderListElement(listElement, elementData, htmlGenerator) {
   let html = '';
 
+  // every bit of rendering code that uses this function
+  // at least once, if not everywhere, should have at least
+  // these two arguments even if unused
   elementData.forEach((item, index) => {
     html += htmlGenerator(item, index);
   });

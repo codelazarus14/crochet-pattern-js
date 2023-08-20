@@ -61,7 +61,7 @@ const renderSectionHeading = (section, idx) => {
   const startDropZone = section.querySelector('.js-step-dropzone');
   sectionHeading.innerHTML = generateSectionHeadingHTML(idx);
   addSectionDeleteListener(sectionHeading, idx);
-  addStepDropListener(startDropZone, selectedPattern.steps[idx], idx);
+  addStepDropListener(startDropZone);
 }
 const renderSectionSteps = (section, idx) => {
   const stepListElement = section.querySelector('.js-steps-list');
@@ -240,10 +240,17 @@ function addStepInputListeners(section, idx) {
     const input = rowInput.value.trim();
     const currStep = Number(rowInput.dataset.currStep);
     const [startIdx, endIdx] = parseRowInput(input, currStep);
-    const instr = instrInput.value.trim();
+
+    const newStep = {
+      start: startIdx,
+      end: endIdx,
+      instructions: instrInput.value.trim(),
+      error: false
+    };
+
     if (selectedPattern.steps[idx])
-      selectedPattern.steps[idx].push([startIdx, endIdx, instr, false]);
-    else selectedPattern.steps[idx] = [[startIdx, endIdx, instr, false]];
+      selectedPattern.steps[idx].push(newStep);
+    else selectedPattern.steps[idx] = [newStep];
     // clear instr field
     instrInput.value = instrInput.defaultValue;
     renderSectionSteps(section, idx);
@@ -268,12 +275,12 @@ function addRowInputListeners(stepListElem, section, index) {
   function updateStepRows(rowInput, idx) {
     const input = rowInput.value.trim();
     const currStep = stepList[idx - 1] ?
-      (stepList[idx - 1][1] ||
-        stepList[idx - 1][0])
+      (stepList[idx - 1].end ||
+        stepList[idx - 1].start)
       : 0;
     const [start, end] = parseRowInput(input, currStep, true);
-    stepList[idx][0] = start
-    stepList[idx][1] = end;
+    stepList[idx].start = start
+    stepList[idx].end = end;
     renderSectionSteps(section, index);
   }
 }
@@ -307,7 +314,11 @@ function addStepDragListener(dragger, idx, sectionSteps, secIdx) {
   });
   // mark dragged step
   step.addEventListener('dragstart', e => {
-    const stepData = JSON.stringify([[secIdx, idx], sectionSteps[idx]]);
+    const stepData = JSON.stringify({
+      section: secIdx,
+      index: idx,
+      step: sectionSteps[idx]
+    });
     e.dataTransfer.setData('text/plain', stepData);
     setTimeout(() => {
       e.target.classList.add('dragging');
@@ -365,9 +376,11 @@ function addStepDropListener(dropZone) {
   function handleDrop(e) {
     // get step to insert
     const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
-    const draggedSection = Number(dragData[0][0]);
-    const draggedIdx = Number(dragData[0][1]);
-    const draggedStep = dragData[1];
+    const {
+      section: draggedSection,
+      index: draggedIdx,
+      step: draggedStep
+    } = dragData;
     // get target step
     const targetStart = e.target.classList.contains('step-start');
     const targetSection =
@@ -413,8 +426,8 @@ function setRowInputValue(rowInputElem, idx) {
 
   // if section already exists, use final start/end idx
   const currStep = sectionSteps.length > 0 ?
-    sectionSteps[sectionSteps.length - 1][1] ||
-    sectionSteps[sectionSteps.length - 1][0]
+    sectionSteps[sectionSteps.length - 1].end ||
+    sectionSteps[sectionSteps.length - 1].start
     : 0;
   rowInputElem.dataset.currStep = currStep;
   rowInputElem.value = currStep + 1;
@@ -447,14 +460,14 @@ function parseRowInput(rowsInput, currStep, skipIdxCheck) {
 
 function checkStepIndexes(sectionIdx) {
   const sectionSteps = selectedPattern.steps[sectionIdx];
-  let foundError = sectionSteps[0] && sectionSteps[0][0] !== 1;
+  let foundError = sectionSteps[0] && sectionSteps[0].start !== 1;
 
   for (let i = 0; i < sectionSteps.length; i++) {
-    const prevStepEnd = sectionSteps[i][1] || sectionSteps[i][0];
-    const nextStepStart = sectionSteps[i + 1] && sectionSteps[i + 1][0];
+    const prevStepEnd = sectionSteps[i].end || sectionSteps[i].start;
+    const nextStepStart = sectionSteps[i + 1] && sectionSteps[i + 1].start;
 
     // mark every step affected (after error)
-    sectionSteps[i][3] = foundError;
+    sectionSteps[i].error = foundError;
     if (!foundError && nextStepStart) {
       // detect gap between rows
       foundError = nextStepStart !== prevStepEnd + 1;
@@ -546,12 +559,13 @@ function generateStepInputHTML() {
 }
 
 function generateStepHTML(step, index) {
+  const { start, end, instructions, error } = step;
   const rowPrefix =
-    step[1] ? 'Rows' : 'Row';
-  const rowValue =
-    step[1] ? `${step[0]} - ${step[1]}` : `${step[0]}`;
+    end ? 'Rows' : 'Row';
+  const rowRange =
+    end ? `${start} - ${end}` : `${start}`;
   const imageUpload = generateImageUploadHTML();
-  const rowIndexError = step[3] ? '' : 'hidden';
+  const showError = error ? '' : 'hidden';
   const regex = '\\s*[0-9]+((?![,-])|(\\s*,\\s*|(\\s*-\\s*))\\s*[0-9]+)\\s*';
 
   return `<div class="step-wrapper js-step-wrapper" data-step-idx="${index}">
@@ -560,9 +574,9 @@ function generateStepHTML(step, index) {
     <div class="step-image">${imageUpload}</div>
     <div class="step-rows">
       <label class="step-rows-input">${rowPrefix}
-        <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowValue}" required></label>
-      <div class="row-index-error ${rowIndexError}">Index error</div></div>
-    <div class="step-instrs">${step[2]}</div>
+        <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowRange}" required></label>
+      <div class="row-index-error ${showError}">Index error</div></div>
+    <div class="step-instrs">${instructions}</div>
     <button class="js-delete-button"></button></div>
   <div class="step-between js-step-dropzone"></div></div>`;
 }

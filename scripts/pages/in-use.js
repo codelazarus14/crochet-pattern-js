@@ -218,8 +218,8 @@ function updateCounters() {
   const { sectionCount, rowCount } = patternProgress;
   const currSection = selectedPattern.steps[sectionCount - 1];
   const currMaxRow =
-    currSection[currSection.length - 1][1] ||
-    currSection[currSection.length - 1][0];
+    currSection[currSection.length - 1].end ||
+    currSection[currSection.length - 1].start;
 
   // flag first step in pattern
   const patternStart = sectionCount === 1 && rowCount === 1;
@@ -245,8 +245,8 @@ function updateCounters() {
       // -- to prev section
       const prevSection = selectedPattern.steps[sectionCount - 2];
       const prevMaxRow =
-        prevSection[prevSection.length - 1][1] ||
-        prevSection[prevSection.length - 1][0];
+        prevSection[prevSection.length - 1].end ||
+        prevSection[prevSection.length - 1].start;
       patternProgress.sectionCount--;
       patternProgress.rowCount = prevMaxRow;
     }
@@ -300,12 +300,13 @@ function generateGlossaryMini(entry, index) {
 }
 
 function generateStepInUse(step, index) {
+  const { start, end, instructions } = step;
   const rowString =
-    step[1] ? `${step[0]} - ${step[1]}` : `${step[0]}`;
+    end ? `${start} - ${end}` : `${start}`;
 
   return `<div class="step-in-use-item">
   <div class="step-text">
   <span class="step-rows">${rowString}</span>
-  <span class="step-instrs">${step[2]}</span></div>
+  <span class="step-instrs">${instructions}</span></div>
   <div class="step-image biggest">${generateStepImage()}</div></div>`;
 }
