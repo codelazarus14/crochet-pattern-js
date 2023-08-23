@@ -154,7 +154,7 @@ input[type="number"] {
   font-size: 0.8em;
 }
 
-.image-attach {
+.image-upload {
   font-weight: bold;
 }
 
@@ -195,4 +195,44 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
 [class*="list-item"] button,
 [class*="list-item"] select {
   background-color: var(--purple-color);
+}
+
+[class$='image-display'] {
+  display: flex;
+  /* todo: deleting images doesn't reset wrapping? */
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.image-preview {
+  position: relative;
+  padding: 0.5em;
+}
+
+.image-preview img {
+  max-width: 10em;
+  vertical-align: middle;
+  background-color: antiquewhite;
+  border: 0.2em solid var(--wheat-border);
+  border-radius: 1em;
+}
+
+.delete-image {
+  position: absolute;
+  top: 0.1em;
+  right: 0.1em;
+  padding: 0 0.333em;
+  line-height: 1.2em;
+  background-color: var(--invalid-color);
+  color: white;
+  border-radius: 1em;
+  cursor: pointer;
+}
+
+.delete-image:hover {
+  opacity: 0.6;
+}
+
+.delete-image:active {
+  opacity: 0.2;
 }

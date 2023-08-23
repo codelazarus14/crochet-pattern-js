@@ -93,7 +93,7 @@ const renderGlossaryMini = () => {
 
 const renderNotesMini = () => {
   document.querySelector('.js-pattern-notes').innerHTML =
-    selectedPattern.notes;
+    selectedPattern.notes.text;
 }
 
 const renderSteps = () => {

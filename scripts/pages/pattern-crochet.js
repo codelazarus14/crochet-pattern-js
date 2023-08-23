@@ -14,11 +14,14 @@ import {
   addNumInputListener,
   addSelectListener,
   dragIcon,
-  resizeInput
+  resizeInput,
+  addImageUploadListeners,
+  addImageDisplayListeners
 } from '../utils/input.js';
 import {
-  generateImageUploadHTML,
+  ImageStyles,
   generateOptionHTML,
+  renderImageDisplay,
   renderListElement
 } from '../utils/output.js';
 
@@ -48,12 +51,16 @@ const renderHookSizeButtons = () => {
 const renderYarnList = () => {
   renderListElement(yarnListElement, selectedPattern.yarns, generateYarnListHTML);
   addDeleteListeners(yarnListElement, selectedPattern.yarns, () => renderYarnList());
+  addImageUploadListeners(yarnListElement, selectedPattern.yarns, () => renderYarnList());
+  addImageDisplayListeners(yarnListElement, selectedPattern.yarns, () => renderYarnList());
   addYarnAmtListeners();
   addYarnUnitsListeners();
 }
 const renderGlossary = () => {
   renderListElement(glossaryListElement, selectedPattern.glossary, generateGlossaryEntryHTML);
   addDeleteListeners(glossaryListElement, selectedPattern.glossary, () => renderGlossary());
+  addImageUploadListeners(glossaryListElement, selectedPattern.glossary, () => renderGlossary());
+  addImageDisplayListeners(glossaryListElement, selectedPattern.glossary, () => renderGlossary());
 }
 
 const renderSectionHeading = (section, idx) => {
@@ -73,12 +80,14 @@ const renderSectionSteps = (section, idx) => {
     setRowInputValue(rowInput, idx);
   renderListElement(stepListElement, selectedPattern.steps[idx], generateStepHTML);
   addDeleteListeners(stepListElement, selectedPattern.steps[idx], () => renderSectionSteps(section, idx));
+  addImageUploadListeners(stepListElement, selectedPattern.steps[idx], () => renderSectionSteps(section, idx), true);
+  addImageDisplayListeners(stepListElement, selectedPattern.steps[idx], () => renderSectionSteps(section, idx));
   addRowInputListeners(stepListElement, section, idx);
   addDragNDropListeners(stepListElement, section, idx);
 }
 const renderSectionStepInput = (section, idx) => {
-  section.querySelector('.js-step-form')
-    .innerHTML = generateStepInputHTML();
+  const inputForm = section.querySelector('.js-step-form');
+  inputForm.innerHTML = generateStepInputHTML();
   addStepInputListeners(section, idx);
 }
 const renderSectionGrid = () => {
@@ -119,10 +128,10 @@ async function resetPage() {
 }
 
 function setupCrochet() {
-  document.querySelector('.js-pattern-body').classList.remove('hidden');
   // reset size of pattern body text boxes (notes)
   document.querySelectorAll('textarea')
     .forEach(input => resizeInput(input));
+  document.querySelector('.js-pattern-body').classList.remove('hidden');
   bodyRevealed = true;
 
   // render input stuff once
@@ -152,7 +161,7 @@ function setupCrochet() {
   });
 
   notesInputElement.addEventListener('blur', e => {
-    selectedPattern.notes = notesInputElement.value.trim();
+    selectedPattern.notes.text = notesInputElement.value.trim();
   });
 
   sectionAddElement.addEventListener('click', () => {
@@ -179,7 +188,7 @@ function populateCrochetPatternFields() {
   renderHookSizeButtons();
   renderYarnList();
   renderGlossary();
-  notesInputElement.value = selectedPattern.notes;
+  notesInputElement.value = selectedPattern.notes.text;
   renderSectionGrid();
   // since we skipped setup, have to resize text boxes
   // (notes box) to fit their content
@@ -504,33 +513,38 @@ function generateHookSizeButtonsHTML(hook, index) {
 // TODO: add tooltips for yarns and glossary entries
 
 function generateYarnListHTML(yarn, index) {
-  const { name, amount, units } = yarn;
+  const { name, amount, units, images } = yarn;
+  const imageDisplay = images ? renderImageDisplay(images, ImageStyles.Preview) : '';
   let unitSelect = '';
   yarnUnitNames.forEach(yarnUnit => {
     unitSelect += generateOptionHTML(yarnUnit, null, yarnUnit === units);
   });
-  const imageUpload = generateImageUploadHTML();
 
   return `<div class="yarn-list-item">
-  <div class="js-update-yarn-image">${imageUpload}</div>
-  <label class="yarn-name">Name:
-    <span>${name}</span></label>
-  <label class="yarn-amt">Amount:
-    <input class="update-yarn-amt js-update-yarn-amt" type="number" value="${amount}" min="1"></label>
-  <label class="yarn-units">Units:
-    <select class="update-yarn-units js-update-yarn-units">${unitSelect}</select></label>
-  <button class="js-delete-button"></button></div>`;
+    <div class="yarn-image">
+      <div class="yarn-image-upload js-image-upload ${imageDisplay ? 'hidden' : ''}"></div>
+      <div class="yarn-image-display">${imageDisplay}</div></div>
+    <div class="yarn-name">Name:
+      <span>${name}</span></div>
+    <label class="yarn-amt">Amount:
+      <input class="update-yarn-amt js-update-yarn-amt" type="number" value="${amount}" min="1"></label>
+    <label class="yarn-units">Units:
+      <select class="update-yarn-units js-update-yarn-units">${unitSelect}</select></label>
+    <button class="js-delete-button"></button></div>`;
 }
 
 function generateGlossaryEntryHTML(entry, index) {
-  const { term, description } = entry;
+  const { term, description, images } = entry;
+  const imageDisplay = images ? renderImageDisplay(images, ImageStyles.Preview) : '';
   return `<div class="glossary-list-item">
-  <div class="js-update-term-image">${generateImageUploadHTML()}</div>
-  <label>Term:
-    <span class="glossary-term">${term}</span></label>
-  <label>Description:
-    <span class="glossary-desc">${description}</span></label>
-  <button class="js-delete-button"></button></div>`;
+    <div class="glossary-image">
+      <div class="glossary-image-upload js-image-upload ${imageDisplay ? 'hidden' : ''}"></div>
+      <div class="glossary-image-display">${imageDisplay}</div></div>
+    <div>Term:
+      <span class="glossary-term">${term}</span></div>
+    <div>Description:
+      <span class="glossary-desc">${description}</span></div>
+    <button class="js-delete-button"></button></div>`;
 }
 
 function generateSectionHTML(section, idx) {
@@ -550,7 +564,7 @@ function generateStepInputHTML() {
   const regex = '\\s*[0-9]+((?![,-])|(\\s*,\\s*|(\\s*-\\s*))\\s*[0-9]+)\\s*';
 
   return `<div class="step-input-grid">
-  <div class="js-step-image">${generateImageUploadHTML()}</div>
+  <div class="step-image-upload js-image-upload"></div>
   <label class="step-rows-input">Rows:
     <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" required></label>
   <label class"step-instr-input">Instructions:
@@ -559,24 +573,26 @@ function generateStepInputHTML() {
 }
 
 function generateStepHTML(step, index) {
-  const { start, end, instructions, error } = step;
+  const { start, end, instructions, error, images } = step;
+  const imageDisplay = images ? renderImageDisplay(images, ImageStyles.Preview) : '';
   const rowPrefix =
     end ? 'Rows' : 'Row';
   const rowRange =
     end ? `${start} - ${end}` : `${start}`;
-  const imageUpload = generateImageUploadHTML();
   const showError = error ? '' : 'hidden';
   const regex = '\\s*[0-9]+((?![,-])|(\\s*,\\s*|(\\s*-\\s*))\\s*[0-9]+)\\s*';
 
   return `<div class="step-wrapper js-step-wrapper" data-step-idx="${index}">
   <div class="js-step-list-item step-list-item js-step-dropzone">
-    <div aria-hidden="true" class="drag-icon js-drag-icon no-highlight">${dragIcon}</div>
-    <div class="step-image">${imageUpload}</div>
-    <div class="step-rows">
-      <label class="step-rows-input">${rowPrefix}
-        <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowRange}" required></label>
-      <div class="row-index-error ${showError}">Index error</div></div>
-    <div class="step-instrs">${instructions}</div>
-    <button class="js-delete-button"></button></div>
+    <div class="step-info">
+      <div aria-hidden="true" class="drag-icon js-drag-icon no-highlight">${dragIcon}</div>
+      <div class="step-image-upload js-image-upload"></div>
+      <div class="step-rows">
+        <label class="step-rows-input">${rowPrefix}
+          <input class="js-row-input row-input" placeholder="e.g. 1, 1-5" pattern="${regex}" value="${rowRange}" required></label>
+        <div class="row-index-error ${showError}">Index error</div></div>
+      <div class="step-instrs">${instructions}</div>
+      <button class="js-delete-button"></button></div>
+    <div class="step-image-display">${imageDisplay}</div></div>
   <div class="step-between js-step-dropzone"></div></div>`;
 }

@@ -31,10 +31,33 @@ export function generateDefaultSelectOption(chooseMsg) {
   selected disabled hidden>${chooseMsg}</option>`;
 }
 
-// TODO: add image functionality
+export const ImageStyles = {
+  Preview: 'Preview',
+  Mini: 'Mini',
+  Bigger: 'Bigger',
+};
 
-export function generateImageUploadHTML(option, index) {
-  return `<button class="image-attach">Upload Image?!?</button>`;
+export function renderImageDisplay(images, style) {
+  let html = '';
+  images.forEach((image, index) => {
+    html += renderImage(image, index, style);
+  });
+  return html;
+}
+
+export function renderImage(image, index, style) {
+  const { dataUrl, info } = image;
+  let imageClass = '';
+  
+  switch (style) {
+    case ImageStyles.Preview:
+      imageClass = 'image-preview';
+      break;
+  }
+
+  return `<div class="${imageClass}" data-img-index="${index}">
+    <img src="${dataUrl}" id="${info.name}">
+    <div class="delete-image js-delete-image">X</div></div>`;
 }
 
 export function generateImagePreview(image) {

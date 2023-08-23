@@ -37,8 +37,8 @@ export function addNumInputListener(element, updateFunc, funcArgs) {
   }
 }
 
-export function addDeleteListeners(listElem, itemList, updateFunc, requireConfirm) {
-  listElem.querySelectorAll(`.js-delete-button`)
+export function addDeleteListeners(listElem, itemList, updateFunc, requireConfirm, selector = '.js-delete-button') {
+  listElem.querySelectorAll(selector)
     .forEach((deleteButton, index) => {
       addDeleteListener(deleteButton, index, itemList, updateFunc, requireConfirm);
     });
@@ -75,4 +75,65 @@ export const resizeInput = (inputElem) => {
 export function addInputResizeListener(inputElem) {
   inputElem.addEventListener('input', () =>
     resizeInput(inputElem));
+}
+
+export function addImageUploadListeners(listElem, itemList, updateFunc, allowMultiple) {
+  listElem.querySelectorAll('.js-image-upload')
+    .forEach((uploadElem, index) => {
+      addImageUploadListener(uploadElem, itemList[index], updateFunc, allowMultiple);
+    });
+}
+
+export function addImageUploadListener(element, item, updateFunc, allowMultiple) {
+  element.innerHTML = generateImageUploadHTML();
+
+  const uploadButton = element.querySelector('button');
+  const uploadInput = element.querySelector('input');
+
+  // make button trigger input elem
+  uploadButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    uploadInput.click();
+  });
+
+  uploadInput.addEventListener('change', () => {
+    if (!uploadInput.files.length) return;
+
+    if (!allowMultiple || !item.images) {
+      item.images = [];
+    }
+
+    const uploadedFiles = allowMultiple ? uploadInput.files
+      : [uploadInput.files[0]];
+
+    for (const file of uploadedFiles) {
+      const reader = new FileReader();
+      // create data url for image
+      reader.readAsDataURL(file);
+      reader.addEventListener('load', (e) => {
+        const imageData = {
+          dataUrl: e.target.result,
+          info: {
+            name: file.name,
+            size: file.size
+          }
+        };
+        item.images.push(imageData);
+        updateFunc();
+      });
+    }
+
+  });
+}
+
+function generateImageUploadHTML() {
+  return `<button type="button" class="image-upload">Upload Image</button>
+  <input class="hidden" type="file" accept="image/*" multiple>`;
+}
+
+export function addImageDisplayListeners(listElem, itemList, updateFunc) {
+  listElem.querySelectorAll('[class$="image-display"]')
+    .forEach((imageDisplay, index) => {
+      addDeleteListeners(imageDisplay, itemList[index].images, updateFunc, false, '.js-delete-image');
+    });
 }

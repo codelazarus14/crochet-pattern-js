@@ -63,11 +63,13 @@ export class CrochetPattern extends Pattern {
     this.hooks = {
       type: USHookSizes,
       values: Object.keys(USHookSizes.sizes).map(() => false)
-    }
+    };
     this.yarns = [];
     // TODO: gauge?
     this.glossary = [];
-    this.notes = '';
+    this.notes = {
+      text: ''
+    };
     // 2d array of steps ordered by sections,
     // each section consists of steps idx 1..n
     // step = { start, end, instrs, errorFlag }

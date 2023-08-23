@@ -154,7 +154,7 @@ function generateGlossaryEntryPreview(entry, index) {
 }
 
 function generateNotesPreview(notes) {
-  return `<span class="notes">${notes}</span>`;
+  return `<span class="notes">${notes.text}</span>`;
 }
 
 function generateSectionPreview(section, index) {
