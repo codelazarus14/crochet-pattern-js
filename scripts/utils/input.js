@@ -122,7 +122,6 @@ export function addImageUploadListener(element, item, updateFunc, allowMultiple)
         updateFunc();
       });
     }
-
   });
 }
 

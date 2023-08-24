@@ -514,7 +514,7 @@ function generateHookSizeButtonsHTML(hook, index) {
 
 function generateYarnListHTML(yarn, index) {
   const { name, amount, units, images } = yarn;
-  const imageDisplay = images ? renderImageDisplay(images, ImageStyles.Preview) : '';
+  const imageDisplay = images ? renderImageDisplay(images, ImageStyles.Preview, true) : '';
   let unitSelect = '';
   yarnUnitNames.forEach(yarnUnit => {
     unitSelect += generateOptionHTML(yarnUnit, null, yarnUnit === units);
@@ -535,7 +535,7 @@ function generateYarnListHTML(yarn, index) {
 
 function generateGlossaryEntryHTML(entry, index) {
   const { term, description, images } = entry;
-  const imageDisplay = images ? renderImageDisplay(images, ImageStyles.Preview) : '';
+  const imageDisplay = images ? renderImageDisplay(images, ImageStyles.Preview, true) : '';
   return `<div class="glossary-list-item">
     <div class="glossary-image">
       <div class="glossary-image-upload js-image-upload ${imageDisplay ? 'hidden' : ''}"></div>
@@ -574,7 +574,7 @@ function generateStepInputHTML() {
 
 function generateStepHTML(step, index) {
   const { start, end, instructions, error, images } = step;
-  const imageDisplay = images ? renderImageDisplay(images, ImageStyles.Preview) : '';
+  const imageDisplay = images ? renderImageDisplay(images, ImageStyles.Preview, true) : '';
   const rowPrefix =
     end ? 'Rows' : 'Row';
   const rowRange =

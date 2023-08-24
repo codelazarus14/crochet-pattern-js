@@ -12,7 +12,9 @@ import {
   generateImagePreview,
   invalidColor,
   renderListElement,
-  setTitle
+  setTitle,
+  ImageStyles,
+  renderImageDisplay
 } from "../utils/output.js";
 
 const basicInfoElement = document.querySelector('.js-basic-info');
@@ -135,20 +137,30 @@ function generateHookPreview(hook, index) {
 }
 
 function generateYarnPreview(yarn, index) {
-  const { name, amount, units } = yarn;
-  return `<div class="yarn-preview-item">
-  <div class="yarn-image">${generateImagePreview()}</div>
+  const { name, amount, units, images } = yarn;
+  const imageDisplay = images ?
+    renderImageDisplay(images, ImageStyles.Preview) : '';
+  const firstItem = !index ? 'first ' : '';
+
+  return `<div class="${firstItem}yarn-preview-item">
+  <div class="yarn-image">${imageDisplay}</div>
   <div class="yarn">
-    <span class="yarn-name">${name}</span> -
-    <span class="yarn-amt">${amount}</span>
-    <span class="yarn-units">${units}</span></div>
+    <div class="yarn-name">${name}</div>
+    <div class="separator">-</div>
+    <div class="yarn-qty">
+      <span class="yarn-amt">${amount}</span>
+      <span class="yarn-units">${units}</span></div></div>
   </div>`;
 }
 
 function generateGlossaryEntryPreview(entry, index) {
-  const { term, description } = entry;
-  return `<div class="glossary-preview-item">
-  <div class="glossary-image">${generateImagePreview()}</div>
+  const { term, description, images } = entry;
+  const imageDisplay = images ?
+    renderImageDisplay(images, ImageStyles.Preview) : '';
+  const firstItem = !index ? 'first ' : '';
+
+  return `<div class="${firstItem}glossary-preview-item">
+  <div class="glossary-image">${imageDisplay}</div>
   <span class="glossary-term">${term}</span>
   <span class="glossary-desc">${description}</span></div>`;
 }
@@ -158,18 +170,24 @@ function generateNotesPreview(notes) {
 }
 
 function generateSectionPreview(section, index) {
-  return `<div class="section-preview-item js-section-preview">
+  const firstItem = !index ? 'first ' : '';
+
+  return `<div class="${firstItem}section-preview-item js-section-preview">
   <div class="section-heading js-section-heading"></div>
   <div class="step-list js-steps-list"></div></div>`;
 }
 
 function generateStepPreview(step, index) {
-  const { start, end, instructions } = step;
+  const { start, end, instructions, images } = step;
   const rowStr =
     end ? `R${start} - ${end}` : `R${start}`;
+  const imageDisplay = images ?
+    renderImageDisplay(images, ImageStyles.Preview) : '';
+  const firstItem = !index ? 'first ' : '';
 
-  return `<div class="step-preview-item">
-  <span class="step-rows">${rowStr}</span>
-  <span class="step-instrs">${instructions}</span>
-  <div class="step-image">${generateImagePreview()}</div></div>`;
+  return `<div class="${firstItem}step-preview-item">
+  <div class="step">
+    <span class="step-rows">${rowStr}</span>
+    <span class="step-instrs">${instructions}</span></div>
+  <div class="step-image">${imageDisplay}</div></div>`;
 }

@@ -37,18 +37,20 @@ export const ImageStyles = {
   Bigger: 'Bigger',
 };
 
-export function renderImageDisplay(images, style) {
+export function renderImageDisplay(images, style, deleteable) {
   let html = '';
   images.forEach((image, index) => {
-    html += renderImage(image, index, style);
+    html += renderImage(image, index, style, deleteable);
   });
   return html;
 }
 
-export function renderImage(image, index, style) {
+export function renderImage(image, index, style, deleteable) {
   const { dataUrl, info } = image;
+  const deleteButton = deleteable ?
+    '<div class="delete-image js-delete-image">X</div>' : '';
   let imageClass = '';
-  
+
   switch (style) {
     case ImageStyles.Preview:
       imageClass = 'image-preview';
@@ -57,7 +59,7 @@ export function renderImage(image, index, style) {
 
   return `<div class="${imageClass}" data-img-index="${index}">
     <img src="${dataUrl}" id="${info.name}">
-    <div class="delete-image js-delete-image">X</div></div>`;
+    ${deleteButton}</div>`;
 }
 
 export function generateImagePreview(image) {

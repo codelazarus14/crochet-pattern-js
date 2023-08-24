@@ -18,11 +18,18 @@ main h1 {
 
 [class$="preview-item"] {
   margin-top: 1em;
+  padding-top: 1em;
+  border-top: 0.3em solid var(--wheat-border);
 }
 
-[class$="image"] {
-  background-color: wheat;
-  padding: 1.5em;
+.first[class$="preview-item"] {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+[class$="preview-item"] * {
+  display: inline-block;
 }
 
 .basic-info {
@@ -57,17 +64,9 @@ main h1 {
   white-space: nowrap;
 }
 
-.yarn-preview {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 2em;
-}
-
-.yarn-preview-item,
-.glossary-preview-item {
-  display: flex;
-  align-items: center;
-  column-gap: 1em;
+.yarn-image,
+.glossary-image {
+  margin-right: 1em;
 }
 
 .glossary-term,
@@ -76,18 +75,30 @@ main h1 {
   margin-right: 0.5em;
 }
 
+.notes-preview,
+.steps-preview {
+  margin-left: 1em;
+}
+
 .section-heading {
   font-weight: bold;
+  margin-bottom: 1em;
+}
+
+.section-preview-item {
   margin-top: 2em;
 }
 
-.step-list {
-  max-height: none;
+.first.section-preview-item {
+  margin: 0;
 }
 
-.step-image {
-  padding: 4em 5em;
-  margin-top: 1em;
+.step-preview-item {
+  border: none;
+}
+
+.step {
+  display: block;
 }
 
 .preview-options h1 {
@@ -172,18 +183,6 @@ main h1 {
   .step-preview-item {
     page-break-inside: avoid;
     break-inside: avoid;
-  }
-
-  .hook-preview-item {
-    display: inline-block;
-  }
-
-  .glossary-preview-item {
-    display: block;
-  }
-
-  .glossary-image {
-    display: inline-block;
   }
 
   .steps-preview-container {
