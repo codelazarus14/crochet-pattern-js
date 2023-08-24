@@ -204,17 +204,33 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
   align-items: center;
 }
 
-.image-preview {
+.image-mini,
+.image-preview,
+.image-bigger {
   position: relative;
   padding: 0.5em;
 }
 
-.image-preview img {
-  max-width: 10em;
+.image-mini img,
+.image-preview img,
+.image-bigger img {
   vertical-align: middle;
   background-color: antiquewhite;
   border: 0.2em solid var(--wheat-border);
   border-radius: 1em;
+}
+
+.image-mini img {
+  max-width: 3em;
+}
+
+.image-preview img {
+  max-width: 10em;
+}
+
+.image-bigger img {
+  padding: 1em;
+  max-width: 25em;
 }
 
 .delete-image {

@@ -1,21 +1,3 @@
-/* testing image layout */
-.tiny,
-.bigger,
-.biggest {
-  background-color: var(--blue-color);
-  margin: 0.5em;
-  padding: 0.5em;
-  width: fit-content;
-}
-
-.bigger {
-  padding: 1.5em;
-}
-
-.biggest {
-  padding: 4em;
-}
-
 .inner {
   margin: 0.5em;
   align-items: inherit;
@@ -117,19 +99,18 @@
   justify-content: center;
 }
 
+[class$="mini-item"]>* {
+  margin-right: 0.5em;
+}
+
 .hook-mini-item {
-  width: max-content;
+  white-space: nowrap;
 }
 
 .yarn-mini-item {
-  padding: 0 0.5em;
   display: grid;
   grid-template-columns: repeat(4, auto);
   align-items: center;
-}
-
-.yarn-mini-item * {
-  margin-right: 0.5em;
 }
 
 .glossary-list {
@@ -140,10 +121,6 @@
   display: grid;
   grid-template-columns: repeat(3, auto);
   align-items: center;
-}
-
-.glossary-mini-item * {
-  margin-right: 1em;
 }
 
 .pattern-steps {
@@ -185,4 +162,8 @@
 
 .step-in-use-item .step-rows {
   font-weight: bold;
+}
+
+.step-in-use-item .step-image {
+  text-align: center;
 }

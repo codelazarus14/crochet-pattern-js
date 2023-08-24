@@ -63,6 +63,8 @@ export const renderPatternOptions = async (onPatternLoad) => {
 
 export function addPatternSubmitListeners(validateFunc) {
   // todo: add 'ctrl+s' saving?
+  // todo: fix patterns not saving because transactions take too long before browser unloads page...
+  // await transaction completing?
   saveElement.addEventListener('click', e => {
     const title = patternTitleInputElement.value.trim();
     const author = patternAuthorInputElement.value.trim();

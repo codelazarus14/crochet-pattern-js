@@ -192,6 +192,8 @@ main h1 {
   }
 
   .step-list {
+    /* remove scrollbars */
+    max-height: none;
     display: block;
   }
 }

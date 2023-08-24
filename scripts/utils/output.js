@@ -32,9 +32,9 @@ export function generateDefaultSelectOption(chooseMsg) {
 }
 
 export const ImageStyles = {
-  Preview: 'Preview',
-  Mini: 'Mini',
-  Bigger: 'Bigger',
+  Preview: 'image-preview',
+  Mini: 'image-mini',
+  Bigger: 'image-bigger',
 };
 
 export function renderImageDisplay(images, style, deleteable) {
@@ -49,15 +49,8 @@ export function renderImage(image, index, style, deleteable) {
   const { dataUrl, info } = image;
   const deleteButton = deleteable ?
     '<div class="delete-image js-delete-image">X</div>' : '';
-  let imageClass = '';
 
-  switch (style) {
-    case ImageStyles.Preview:
-      imageClass = 'image-preview';
-      break;
-  }
-
-  return `<div class="${imageClass}" data-img-index="${index}">
+  return `<div class="${style}" data-img-index="${index}">
     <img src="${dataUrl}" id="${info.name}">
     ${deleteButton}</div>`;
 }

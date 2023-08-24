@@ -30,7 +30,9 @@ import {
   generateYarnImage,
   invalidColor,
   renderListElement,
-  setTitle
+  setTitle,
+  ImageStyles,
+  renderImageDisplay
 } from "../utils/output.js";
 
 
@@ -284,25 +286,34 @@ function generateHookMini(hook, index) {
 }
 
 function generateYarnMini(yarn, index) {
-  const { name, amount, units } = yarn;
+  const { name, amount, units, images } = yarn;
+  const imageDisplay = images ?
+    renderImageDisplay(images, ImageStyles.Mini) : '';
+
   return `<div class="yarn-mini-item">
-    <div class="yarn-image tiny">${generateYarnImage()}</div>
-    <span class="yarn-name">${name}</span>
-    <span class="yarn-amt">${amount}</span>
-    <span class="yarn-units">${units}</span></div>
+    <div class="yarn-image">${imageDisplay}</div>
+    <div class="yarn-name">${name}</div>
+    <div class="yarn-qty">
+      <span class="yarn-amt">${amount}</span>
+      <span class="yarn-units">${units}</span></div></div>
   </div>`;
 }
 
 function generateGlossaryMini(entry, index) {
-  const { term, description } = entry;
+  const { term, description, images } = entry;
+  const imageDisplay = images ?
+    renderImageDisplay(images, ImageStyles.Mini) : '';
+
   return `<div class="glossary-mini-item">
-  <div class="glossary-image bigger">${generateGlossaryImage()}</div>
+  <div class="glossary-image">${imageDisplay}</div>
   <span class="glossary-term">${term}</span>
   <span class="glossary-desc">${description}</span></div>`;
 }
 
 function generateStepInUse(step, index) {
-  const { start, end, instructions } = step;
+  const { start, end, instructions, images } = step;
+  const imageDisplay = images ?
+    renderImageDisplay(images, ImageStyles.Bigger) : '';
   const rowString =
     end ? `${start} - ${end}` : `${start}`;
 
@@ -310,5 +321,5 @@ function generateStepInUse(step, index) {
   <div class="step-text">
   <span class="step-rows">${rowString}</span>
   <span class="step-instrs">${instructions}</span></div>
-  <div class="step-image biggest">${generateStepImage()}</div></div>`;
+  <div class="step-image">${imageDisplay}</div></div>`;
 }
