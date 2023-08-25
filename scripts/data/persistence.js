@@ -52,8 +52,7 @@ export function setupDB() {
       objectStore.createIndex('notes', 'notes', { unique: false });
       objectStore.createIndex('steps', 'steps', { unique: false });
 
-      console.log('Database setup complete');
-      resolve();
+      console.log('Database setup complete.');
     });
   });
 }
