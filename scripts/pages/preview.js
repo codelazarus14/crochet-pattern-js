@@ -139,11 +139,10 @@ function generateHookPreview(hook, index) {
 function generateYarnPreview(yarn, index) {
   const { name, amount, units, images } = yarn;
   const imageDisplay = images ?
-    renderImageDisplay(images, ImageStyles.Preview) : '';
-  const firstItem = !index ? 'first ' : '';
+    renderImageDisplay(images, ImageStyles.Mini) : '';
 
-  return `<div class="${firstItem}yarn-preview-item">
-  <div class="yarn-image">${imageDisplay}</div>
+  return `<div class="yarn-preview-item">
+  <div class="yarn-images">${imageDisplay}</div>
   <div class="yarn">
     <div class="yarn-name">${name}</div>
     <div class="separator">-</div>
@@ -157,10 +156,9 @@ function generateGlossaryEntryPreview(entry, index) {
   const { term, description, images } = entry;
   const imageDisplay = images ?
     renderImageDisplay(images, ImageStyles.Preview) : '';
-  const firstItem = !index ? 'first ' : '';
 
-  return `<div class="${firstItem}glossary-preview-item">
-  <div class="glossary-image">${imageDisplay}</div>
+  return `<div class="glossary-preview-item">
+  <div class="glossary-images">${imageDisplay}</div>
   <span class="glossary-term">${term}</span>
   <span class="glossary-desc">${description}</span></div>`;
 }
@@ -170,9 +168,8 @@ function generateNotesPreview(notes) {
 }
 
 function generateSectionPreview(section, index) {
-  const firstItem = !index ? 'first ' : '';
 
-  return `<div class="${firstItem}section-preview-item js-section-preview">
+  return `<div class="section-preview-item js-section-preview">
   <div class="section-heading js-section-heading"></div>
   <div class="step-list js-steps-list"></div></div>`;
 }
@@ -183,11 +180,10 @@ function generateStepPreview(step, index) {
     end ? `R${start} - ${end}` : `R${start}`;
   const imageDisplay = images ?
     renderImageDisplay(images, ImageStyles.Preview) : '';
-  const firstItem = !index ? 'first ' : '';
 
-  return `<div class="${firstItem}step-preview-item">
+  return `<div class="step-preview-item">
   <div class="step">
     <span class="step-rows">${rowStr}</span>
     <span class="step-instrs">${instructions}</span></div>
-  <div class="step-image">${imageDisplay}</div></div>`;
+  <div class="step-images">${imageDisplay}</div></div>`;
 }

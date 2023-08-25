@@ -16,22 +16,6 @@ main h1 {
   align-items: start;
 }
 
-[class$="preview-item"] {
-  margin-top: 1em;
-  padding-top: 1em;
-  border-top: 0.3em solid var(--wheat-border);
-}
-
-.first[class$="preview-item"] {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: none;
-}
-
-[class$="preview-item"] * {
-  display: inline-block;
-}
-
 .basic-info {
   width: 100%;
   text-align: center;
@@ -46,16 +30,20 @@ main h1 {
   font-style: italic;
 }
 
+[class$="images"] * {
+  display: inline-block;
+}
+
 .materials-preview h2 {
   margin-bottom: 0;
 }
 
 .hook-preview {
-  display: flex;
-  flex-wrap: wrap;
+  margin-top: 0.5em;
 }
 
 .hook-preview-item {
+  display: inline-block;
   margin-right: 1em;
   padding: 0.5em;
   background-color: wheat;
@@ -64,9 +52,16 @@ main h1 {
   white-space: nowrap;
 }
 
-.yarn-image,
-.glossary-image {
-  margin-right: 1em;
+.yarn-preview {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 1em;
+  align-items: center;
+}
+
+.yarn-preview-item *,
+.glossary-preview-item * {
+  display: inline-block;
 }
 
 .glossary-term,
@@ -77,28 +72,19 @@ main h1 {
 
 .notes-preview,
 .steps-preview {
-  margin-left: 1em;
+  padding: 0 1em;
 }
 
 .section-heading {
   font-weight: bold;
-  margin-bottom: 1em;
 }
 
 .section-preview-item {
-  margin-top: 2em;
-}
-
-.first.section-preview-item {
-  margin: 0;
+  margin-bottom: 1em;
 }
 
 .step-preview-item {
-  border: none;
-}
-
-.step {
-  display: block;
+  margin: 1em 0;
 }
 
 .preview-options h1 {
@@ -159,7 +145,12 @@ main h1 {
   box-shadow: -0.1em -0.1em inset var(--shadow-color);
 }
 
-/* todo: fix borders/margins in printed pages */
+@page {
+  /* remove link/timestamp in margins */
+  margin: 0;
+}
+
+/* todo: make images bigger for export */
 @media print {
 
   header,
@@ -171,7 +162,6 @@ main h1 {
 
   main {
     display: block;
-    padding: 0;
     margin: 0;
   }
 
@@ -179,21 +169,31 @@ main h1 {
     display: block;
   }
 
-  [class$="preview-container"],
-  .step-preview-item {
-    page-break-inside: avoid;
-    break-inside: avoid;
+  h2,
+  .section-heading {
+    margin-top: 0;
+    padding-top: 1em;
+    page-break-before: auto;
+    break-before: auto;
   }
 
-  .steps-preview-container {
-    margin-top: 1cm;
-    page-break-inside: auto;
-    break-inside: auto;
+  .section-heading {
+    margin-top: -1em;
+  }
+
+  [class*="preview-item"],
+  .notes-preview-container {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   .step-list {
     /* remove scrollbars */
     max-height: none;
     display: block;
+    page-break-inside: auto;
+    page-break-after: auto;
+    break-inside: auto;
+    break-after: auto;
   }
 }

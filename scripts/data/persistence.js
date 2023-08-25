@@ -28,8 +28,6 @@ export function setupDB() {
       resolve();
     });
 
-    // todo: fix some kind of error that occurs on first time setup? something about 'can't start a transaction during an upgrade...'
-
     openRequest.addEventListener('upgradeneeded', (e) => {
       // Grab a reference to the opened database
       db = e.target.result;
