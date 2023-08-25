@@ -107,7 +107,6 @@ const renderSteps = () => {
 const renderPatternInProgress = () => {
   renderBasicInfoMini();
   renderCounters();
-  // TODO: add image previews to in-use
 
   switch (selectedPattern.type) {
     case PatternTypes.USCrochet:

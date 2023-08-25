@@ -63,9 +63,7 @@ export const renderPatternOptions = async (onPatternLoad) => {
 
 export function addPatternSubmitListeners(validateFunc) {
   // todo: add 'ctrl+s' saving?
-  // todo: fix patterns not saving because transactions take too long before browser unloads page...
-  // await transaction completing?
-  saveElement.addEventListener('click', e => {
+  saveElement.addEventListener('click', async e => {
     const title = patternTitleInputElement.value.trim();
     const author = patternAuthorInputElement.value.trim();
     const desc = patternDescInputElement.value.trim();
@@ -79,12 +77,12 @@ export function addPatternSubmitListeners(validateFunc) {
       selectedPattern.author = author;
       selectedPattern.desc = desc;
       submitAlertElement.innerHTML = '';
-      savePattern(selectedPattern);
+      await savePattern(selectedPattern);
       location.reload();
     }
   });
 
-  submitElement.addEventListener('click', e => {
+  submitElement.addEventListener('click', async e => {
     const title = patternTitleInputElement.value.trim();
     const author = patternAuthorInputElement.value.trim();
     const desc = patternDescInputElement.value.trim();
@@ -98,7 +96,8 @@ export function addPatternSubmitListeners(validateFunc) {
       selectedPattern.author = author;
       selectedPattern.desc = desc;
       submitAlertElement.innerHTML = '';
-      submitPattern(selectedPattern);
+      await submitPattern(selectedPattern);
+      location.assign('./preview.html');
     }
   });
 
