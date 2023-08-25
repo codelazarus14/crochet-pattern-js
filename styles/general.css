@@ -199,8 +199,7 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
 
 [class$='image-display'] {
   display: flex;
-  /* todo: deleting images doesn't reset wrapping? */
-  flex-wrap: wrap;
+  overflow-x: auto;
   align-items: center;
 }
 
@@ -208,6 +207,8 @@ also see https://lea.verou.me/2012/04/background-attachment-local/ */
 .image-preview,
 .image-bigger {
   position: relative;
+  /* keep fixed size to be set below */
+  flex-shrink: 0;
   padding: 0.5em;
 }
 

@@ -158,6 +158,12 @@ main {
   display: grid;
 }
 
+.section {
+  /* overrides default 'auto', which keeps grid items 
+  (sections) from growing/overflowing the grid */
+  min-width: 0;
+}
+
 .section-heading {
   font-weight: bold;
   padding: 0.5em;
