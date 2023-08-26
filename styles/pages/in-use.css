@@ -113,6 +113,10 @@
   align-items: center;
 }
 
+.yarn-qty {
+  white-space: nowrap;
+}
+
 .glossary-list {
   justify-content: start;
 }

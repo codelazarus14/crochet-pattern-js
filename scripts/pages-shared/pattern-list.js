@@ -79,7 +79,6 @@ function generatePatternListItem(pattern, index) {
   const first = index === 0 ? 'first' : '';
 
   // todo: make list into template html element?
-  // todo: add "preview" button to redirect to preview page
   return `<div class="pattern-list-item js-pattern-list-item ${isLoaded} ${first}" data-pattern-idx="${index}">
   <span class="pattern-title">${pattern.title}</span>
   <span class="pattern-author">${pattern.author}</span>

@@ -60,12 +60,13 @@ const renderBasicInfoMini = () => {
 }
 
 const renderCounters = () => {
-  counterElem.value = patternProgress.rowCount;
+  const { rowCount, sectionCount } = patternProgress;
+  counterElem.value = rowCount;
   if (selectedPattern.steps.length === 1)
     sectionElem.classList.add('hidden');
   else {
     sectionElem.classList.remove('hidden');
-    sectionElem.innerHTML = `Section ${patternProgress.sectionCount}`;
+    sectionElem.innerHTML = `Section ${sectionCount}`;
   }
 }
 
@@ -99,9 +100,23 @@ const renderNotesMini = () => {
 }
 
 const renderSteps = () => {
-  // todo: focus current step in section
   const section = patternProgress.sectionCount - 1;
+  const row = patternProgress.rowCount;
   renderListElement(stepsListElem, selectedPattern.steps[section], generateStepInUse);
+  const lastStep = stepsListElem.lastChild;
+  // add padding below final step
+  lastStep.style.marginBottom =
+    `${stepsListElem.clientHeight - (3 * lastStep.scrollHeight) / 4}px`;
+
+  // auto-scrolling
+  const focusedIdx = selectedPattern.steps[section]
+    .findIndex((step, idx) => {
+      const nextStep = selectedPattern.steps[section][idx + 1];
+      return step.start <= row && (nextStep ? row < nextStep.start : true);
+    });
+
+  const stepElem = stepsListElem.querySelector(`[data-step-idx="${focusedIdx}"]`);
+  stepElem.scrollIntoView({ behavior: 'smooth' });
 }
 
 const renderPatternInProgress = () => {
@@ -316,7 +331,7 @@ function generateStepInUse(step, index) {
   const rowString =
     end ? `${start} - ${end}` : `${start}`;
 
-  return `<div class="step-in-use-item">
+  return `<div class="step-in-use-item" data-step-idx="${index}">
   <div class="step-text">
   <span class="step-rows">${rowString}</span>
   <span class="step-instrs">${instructions}</span></div>
