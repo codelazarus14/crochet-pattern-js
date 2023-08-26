@@ -25,6 +25,7 @@ const notesPreviewElement = document.querySelector('.js-notes-preview');
 const stepsPreviewElement = document.querySelector('.js-steps-preview');
 
 const exportPDFElement = document.querySelector('.js-export-pdf');
+const exportJSONButton = document.querySelector('.js-export-json-button');
 const exportJSONElement = document.querySelector('.js-export-json');
 const usePatternElement = document.querySelector('.js-use-pattern');
 
@@ -34,7 +35,7 @@ const renderBasicInfo = () => {
   const title = submittedPattern.title;
   const author = submittedPattern.author;
   const desc = submittedPattern.desc;
-  basicInfoElement.innerHTML += generateTitlePreview(title);
+  basicInfoElement.innerHTML = generateTitlePreview(title);
   basicInfoElement.innerHTML += generateAuthorPreview(author);
   basicInfoElement.innerHTML += generateDescriptionPreview(desc);
 }
@@ -102,11 +103,17 @@ const renderError = (e) => {
 
 exportPDFElement.addEventListener('click', () => {
   print();
-})
+});
 
-exportJSONElement.addEventListener('click', () => {
-  // TODO: implement JSON export
-})
+exportJSONButton.addEventListener('click', async () => {
+  const json = JSON.stringify(submittedPattern);
+
+  exportJSONElement.setAttribute('href',
+    `data:text/plain;charset=utf-8,${encodeURIComponent(json)}`);
+  exportJSONElement.setAttribute('download',
+    `${submittedPattern.title}.json`);
+  exportJSONElement.click();
+});
 
 usePatternElement.addEventListener('click', () => {
   const patternKey = savedPatterns.length - 1;

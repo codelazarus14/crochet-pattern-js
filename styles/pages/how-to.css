@@ -1,5 +1,5 @@
-.how-to-header {
-  margin: 0.25em;
+.how-to-header h1 {
+  margin: 0.5em;
 }
 
 .how-to-content {
@@ -19,11 +19,12 @@
   opacity: 0.6;
 }
 
-/* Todo: make images clickable to get full size */
+/* Todo: make images clickable to get full size
 .how-to-content .expand-image-note {
   margin: 0;
   font-style: italic;
 }
+*/
 
 .image-container {
   max-width: 50%;

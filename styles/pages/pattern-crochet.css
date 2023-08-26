@@ -25,24 +25,31 @@ main {
   font-size: 1.2em;
   margin: 1em;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
-.pattern-options-form {
+.create-pattern-heading {
+  margin: 0 0 1em 0;
+}
+
+.create-pattern-form {
   font-size: 1.2em;
 }
 
-.pattern-options .pattern-desc {
+.create-pattern-form textarea {
+  min-width: 15em;
+}
+
+.create-pattern-form .pattern-desc {
   min-height: 3em;
 }
 
 .load-pattern-options {
-  font-size: 1.25em;
   width: 50%;
 }
 
-.pattern-options-heading {
-  margin: 1rem;
+.saved-patterns {
+  font-size: 1.2em;
 }
 
 .pattern-body {

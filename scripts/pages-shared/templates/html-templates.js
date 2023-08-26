@@ -15,7 +15,8 @@ class Header extends HTMLElement {
         <nav class="navbar">
           <ul>
             <li><a class="homepage" href="index.html">Home</a></li>
-            <li><a class="how-to" href="how-to.html">How To Use</a></li>
+            <li><a class="how-to" href="how-to.html">How To</a></li>
+            <li><a class="in-use" href="in-use.html">Use A Pattern</a></li>
             <li class="last"><a class="github-repo" href="https://github.com/codelazarus14/crochet-pattern-js" target="_blank">
               <img src="images/github.svg" alt="Github logo"></a></li>
           </ul>

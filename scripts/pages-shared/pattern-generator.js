@@ -27,6 +27,8 @@ const patternAuthorInputElement = document.querySelector('.js-pattern-author');
 const patternDescInputElement = document.querySelector('.js-pattern-desc');
 const patternSelectElement = document.querySelector('.js-pattern-types');
 
+const patternImportElement = document.querySelector('.js-import-pattern');
+
 const saveElement = document.querySelector('.js-save-button');
 const submitElement = document.querySelector('.js-submit-button');
 const submitAlertElement = document.querySelector('.js-submit-alert');
@@ -58,6 +60,18 @@ export const renderPatternOptions = async (onPatternLoad) => {
     const type = patternSelectElement.value;
     createPattern(type);
     onPatternLoad();
+  });
+
+  patternImportElement.addEventListener('change', () => {
+    if (patternImportElement.files) {
+      const reader = new FileReader();
+      reader.addEventListener('load', (e) => {
+        const imported = JSON.parse(e.target.result);
+        setSelectedPattern(imported);
+        populatePatternFields(onPatternLoad);
+      });
+      reader.readAsText(patternImportElement.files[0]);
+    }
   });
 }
 
