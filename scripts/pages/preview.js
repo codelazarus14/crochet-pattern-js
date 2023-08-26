@@ -1,15 +1,14 @@
 import {
-  PatternTypes,
-  yarnUnitNames
+  PatternTypes
 } from "../data/pattern-types.js";
 import {
+  getSubmittedKey,
   loadAllPatterns,
   saveInProgressKey,
   savedPatterns,
   setupDB
 } from "../data/persistence.js";
 import {
-  generateImagePreview,
   invalidColor,
   renderListElement,
   setTitle,
@@ -93,7 +92,7 @@ const renderError = (e) => {
     await setupDB();
     await loadAllPatterns();
     // assume last pattern on the list was the new one
-    submittedPattern = savedPatterns[savedPatterns.length - 1];
+    submittedPattern = savedPatterns[getSubmittedKey()];
     setTitle(document.title + `: ${submittedPattern.title}`);
     renderPatternPreview();
   } catch (e) {

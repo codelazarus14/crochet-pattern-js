@@ -2,6 +2,7 @@ import { setSelectedPattern } from "../data/pattern-types.js";
 import {
   deleteAllPatterns,
   deletePattern,
+  saveSubmittedKey,
   savedPatterns
 } from "../data/persistence.js";
 import { addDeleteListeners } from "../utils/input.js";
@@ -35,6 +36,12 @@ function addPatternListListeners(loadAction) {
       loadButton.addEventListener('click', () => {
         setLoadedPattern(idx, loadAction);
         renderPatternList(loadAction);
+      });
+
+      const previewButton = pattern.querySelector('.js-preview-pattern');
+      previewButton.addEventListener('click', () => {
+        saveSubmittedKey(idx);
+        location.assign('./preview.html');
       });
     });
 
@@ -76,6 +83,7 @@ function generatePatternListItem(pattern, index) {
   return `<div class="pattern-list-item js-pattern-list-item ${isLoaded} ${first}" data-pattern-idx="${index}">
   <span class="pattern-title">${pattern.title}</span>
   <span class="pattern-author">${pattern.author}</span>
+  <button class="preview-pattern js-preview-pattern">Preview</button>
   <button class="load-pattern js-load-pattern">Load</button>
-  <button class="js-delete-button"></button></div>`
+  <button class="js-delete-button"></button></div>`;
 }

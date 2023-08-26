@@ -7,6 +7,8 @@ import {
 import {
   loadAllPatterns,
   savePattern,
+  saveSubmittedKey,
+  savedPatterns,
   setupDB,
   submitPattern
 } from "../data/persistence.js";
@@ -111,6 +113,7 @@ export function addPatternSubmitListeners(validateFunc) {
       selectedPattern.desc = desc;
       submitAlertElement.innerHTML = '';
       await submitPattern(selectedPattern);
+      saveSubmittedKey(savedPatterns.length);
       location.assign('./preview.html');
     }
   });

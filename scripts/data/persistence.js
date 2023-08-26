@@ -1,7 +1,7 @@
 import { PatternTypes } from "./pattern-types.js";
 
 const dbKey = 'pattern_db';
-const progressKey = 'inProgress';
+const progressKey = 'inProgress', submittedKey = 'submitted';
 const PatternOS = {
   USCrochet: 'uscrochet_os'
 };
@@ -252,7 +252,6 @@ export async function getInProgressKey() {
 
   if (!savedPatterns.length) {
     throw new Error('No saved patterns!');
-    return;
   }
   if (!savedPatterns[patternKey]) patternKey = 0;
 
@@ -271,4 +270,21 @@ export async function savePatternProgress(patterns) {
     const os = typeToOS(pattern.type);
     await setData(os, pattern.id, pattern, 'progress');
   });
+}
+
+export function getSubmittedKey() {
+  const submitted = localStorage.getItem(submittedKey);
+  let patternKey = submitted ? JSON.parse(submitted) : 0;
+
+  if (!savedPatterns.length) {
+    throw new Error('No saved patterns!');
+  }
+  if (!savedPatterns[patternKey]) patternKey = 0;
+
+  return patternKey;
+}
+
+export function saveSubmittedKey(key) {
+  if (key !== undefined)
+    localStorage.setItem(submittedKey, key);
 }
