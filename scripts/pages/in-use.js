@@ -17,8 +17,7 @@ import {
   setLoadedPattern
 } from "../pages-shared/pattern-list.js";
 import {
-  hidePopup,
-  showPopup
+  addPopupListeners
 } from "../pages-shared/popups/popup.js";
 import {
   addNumInputListener,
@@ -37,11 +36,6 @@ import {
 
 
 let patternKey, patternProgress;
-
-const patternListPopup = document.querySelector('.js-select-pattern-popup');
-const patternListPopupButton = patternListPopup.previousElementSibling;
-const closePatternListButton = patternListPopup.querySelector('.js-close-button');
-const afterListElem = patternListPopup.querySelector('.js-after-form');
 
 const materialsListElem = document.querySelector('.js-materials-list');
 const glossaryListElem = document.querySelector('.js-glossary-list');
@@ -160,6 +154,7 @@ const saveProgress = async () => {
   }
 
   addNumInputListener(counterElem, updateCounters, []);
+  addPatternListPopupListeners();
   addCollapseListeners();
 })();
 
@@ -174,22 +169,14 @@ counterElem.addEventListener('input', () => {
   watchInput(saveProgress);
 });
 
-// popup listeners 
-// todo: merge with sidebar's?
+function addPatternListPopupListeners() {
+  const patternListPopup = document.querySelector('.js-select-pattern-popup');
+  const patternListPopupButton = patternListPopup.previousElementSibling;
+  const closePatternListButton = patternListPopup.querySelector('.js-close-button');
+  const afterListElem = patternListPopup.querySelector('.js-after-form');
 
-patternListPopupButton.addEventListener('click', () => {
-  showPopup(patternListPopupButton.nextElementSibling);
-  renderPatternList(setPatternInProgress);
-});
-
-closePatternListButton.addEventListener('click', () => {
-  hidePopup();
-});
-
-afterListElem.addEventListener('focus', () => {
-  // loop tab navigation back to top
-  closePatternListButton.focus();
-});
+  addPopupListeners([patternListPopupButton], [closePatternListButton], [afterListElem], () => renderPatternList(setPatternInProgress));
+}
 
 function addCollapseListeners() {
   document.querySelectorAll('.js-collapse')

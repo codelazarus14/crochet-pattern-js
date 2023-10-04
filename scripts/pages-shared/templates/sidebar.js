@@ -1,8 +1,7 @@
 import { renderConvertUnitsPopup } from "../popups/convert-units.js";
 import {
   enableScreenDimmer,
-  hidePopup,
-  showPopup
+  addPopupListeners
 } from "../popups/popup.js";
 
 const sidebar = document.querySelector(".sidebar");
@@ -14,28 +13,11 @@ addSidebarListeners();
 renderConvertUnitsPopup();
 
 function addSidebarListeners() {
-  sidebar.querySelectorAll('.sidebar > button')
-    .forEach(popupButton => {
-      popupButton.addEventListener('click', () => {
-        showPopup(popupButton.nextElementSibling);
-      });
-    });
+  const popupButtons = sidebar.querySelectorAll('.sidebar > button');
+  const closePopupButtons = sidebar.querySelectorAll('.js-close-button');
+  const afterFormElems = sidebar.querySelectorAll('.js-after-form');
 
-  sidebar.querySelectorAll('.js-close-button')
-    .forEach(closeButton => {
-      closeButton.addEventListener('click', () => {
-        hidePopup();
-      });
-    });
-
-  sidebar.querySelectorAll('.js-after-form')
-    .forEach(after => {
-      after.addEventListener('focus', () => {
-        // loop tab navigation back to top
-        const closeButton = after.parentElement.querySelector('.js-close-button');
-        closeButton.focus();
-      });
-    });
+  addPopupListeners(popupButtons, closePopupButtons, afterFormElems);
 }
 
 // sticky sidebar functionality
