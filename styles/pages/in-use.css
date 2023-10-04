@@ -138,11 +138,14 @@
 }
 
 .counters {
-  min-width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
   font-size: 1.2em;
   font-weight: bold;
 }
 
+.section-counter,
 .row-counter {
   display: flex;
   align-items: center;
@@ -150,6 +153,7 @@
 }
 
 .save-status {
+  margin-right: 1em;
   font-size: 0.8em;
   font-weight: normal;
   opacity: 0.5;

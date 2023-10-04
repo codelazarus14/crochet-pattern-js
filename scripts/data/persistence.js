@@ -270,10 +270,10 @@ export async function savePatternProgress(patterns) {
   patterns.forEach((pattern, idx) => {
     const os = typeToOS(pattern.type);
 
-    if (idx == 0)
+    if (idx === 0)
       osList.push(os);
     currOS = os;
-    if (currOS != os) {
+    if (currOS !== os) {
       osList.push(os);
       currOS = os;
       i++;

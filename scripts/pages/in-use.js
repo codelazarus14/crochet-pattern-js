@@ -40,8 +40,8 @@ let patternKey, patternProgress;
 const materialsListElem = document.querySelector('.js-materials-list');
 const glossaryListElem = document.querySelector('.js-glossary-list');
 const stepsListElem = document.querySelector('.js-steps-list');
-const counterElem = document.querySelector('.js-counter');
-const sectionElem = document.querySelector('.js-section');
+const sectionCounterElem = document.querySelector('.section-counter .js-counter');
+const rowCounterElem = document.querySelector('.row-counter .js-counter');
 const saveStatusElem = document.querySelector('.js-save-status');
 
 const renderBasicInfoMini = () => {
@@ -54,14 +54,13 @@ const renderBasicInfoMini = () => {
 }
 
 const renderCounters = () => {
-  const { rowCount, sectionCount } = patternProgress;
-  counterElem.value = rowCount;
+  const { sectionCount, rowCount } = patternProgress;
+  sectionCounterElem.value = sectionCount;
+  rowCounterElem.value = rowCount;
   if (selectedPattern.steps.length === 1)
-    sectionElem.classList.add('hidden');
-  else {
-    sectionElem.classList.remove('hidden');
-    sectionElem.innerHTML = `Section ${sectionCount}`;
-  }
+    sectionCounterElem.parentElement.classList.add('hidden');
+  else
+    sectionCounterElem.parentElement.classList.remove('hidden');
 }
 
 const renderHooksMini = () => {
@@ -141,6 +140,23 @@ const saveProgress = async () => {
   renderSaveStatus(true);
 }
 
+let timeout;
+function watchInput(callback) {
+  // set 1s timer every time we get an input
+  if (timeout) {
+    clearTimeout(timeout);
+    timeout = setTimeout(callback, 1000);
+  } else {
+    timeout = setTimeout(callback, 1000);
+  }
+}
+
+const watchSavingProgress = () => {
+  // wait for user to stop typing and save
+  renderSaveStatus(false);
+  watchInput(saveProgress);
+}
+
 (async () => {
   try {
     await setupDB();
@@ -150,10 +166,11 @@ const saveProgress = async () => {
   } catch (e) {
     const patternHeaderElem = document.querySelector('.pattern-header');
     const patternInfoElem = document.querySelector('.pattern-info');
-    renderError(e, stepsListElem, [patternHeaderElem, patternInfoElem, counterElem.parentElement]);
+    renderError(e, stepsListElem, [patternHeaderElem, patternInfoElem, rowCounterElem.parentElement]);
   }
 
-  addNumInputListener(counterElem, updateCounters, []);
+  addNumInputListener(sectionCounterElem, updateCounters, []);
+  addNumInputListener(rowCounterElem, updateCounters, []);
   addPatternListPopupListeners();
   addCollapseListeners();
 })();
@@ -163,10 +180,11 @@ onpagehide = () => {
   saveInProgressKey(patternKey);
 }
 
-counterElem.addEventListener('input', () => {
-  // wait for user to stop typing and save
-  renderSaveStatus(false);
-  watchInput(saveProgress);
+sectionCounterElem.addEventListener('input', () => {
+  watchSavingProgress();
+});
+rowCounterElem.addEventListener('input', () => {
+  watchSavingProgress();
 });
 
 function addPatternListPopupListeners() {
@@ -210,62 +228,65 @@ function setPatternInProgress(idx) {
 }
 
 function updateCounters() {
-  // TODO: make section counter editable too
-  // TODO: replace some of these checks with regex on input?
-  const newRowCount = Number(counterElem.value);
+  const secInput = Number(sectionCounterElem.value);
+  const rowInput = Number(rowCounterElem.value);
   const { sectionCount, rowCount } = patternProgress;
-  const currSection = selectedPattern.steps[sectionCount - 1];
-  const currMaxRow =
-    currSection[currSection.length - 1].end ||
-    currSection[currSection.length - 1].start;
 
-  // flag first step in pattern
-  const patternStart = sectionCount === 1 && rowCount === 1;
-  // flag last step in pattern
-  const patternEnd =
-    sectionCount === selectedPattern.steps.length &&
-    rowCount === currMaxRow;
+  // figure out which one changed
+  if (secInput !== sectionCount) {
+    const sectionMax = selectedPattern.steps.length;
+    // prevent invalid section
+    patternProgress.sectionCount = Math.min(Math.max(secInput, 1), sectionMax);
+    // clamp row counter
+    const currSection = selectedPattern.steps[patternProgress.sectionCount - 1];
+    const rowMax =
+      currSection[currSection.length - 1].end ||
+      currSection[currSection.length - 1].start;
+    patternProgress.rowCount = Math.min(rowCount, rowMax);
+  }
+  else if (rowInput !== rowCount) {
+    const currSection = selectedPattern.steps[sectionCount - 1];
+    // min is always 1
+    const rowMax =
+      currSection[currSection.length - 1].end ||
+      currSection[currSection.length - 1].start;
+    const oob = ((value, min, max) => {
+      if (value < min) return value - min;
+      else if (value > max) return value - max;
+      else return 0;
+    })(rowInput, 1, rowMax);
 
-  if (newRowCount > currMaxRow && !patternEnd) {
-    if (newRowCount - currMaxRow > 1) {
-      // clamp OOB increase to current section
-      patternProgress.rowCount = currMaxRow;
-    } else {
-      // ++ to next section
-      patternProgress.sectionCount++;
-      patternProgress.rowCount = 1;
+    // + overflow
+    if (oob > 0) {
+      if (oob === 1 && selectedPattern.steps[sectionCount]) {
+        // go to next section
+        patternProgress.sectionCount++;
+        patternProgress.rowCount = 1;
+      } else {
+        // set to max value
+        patternProgress.rowCount = rowMax;
+      }
     }
-  } else if (newRowCount < 1 && !patternStart) {
-    if (newRowCount < 0) {
-      // clamp OOB decrease to current section
-      patternProgress.rowCount = 1;
+    // - underflow 
+    else if (oob < 0) {
+      if (oob === -1 && selectedPattern.steps[sectionCount - 2]) {
+        // back up to previous section
+        const prevSection = selectedPattern.steps[sectionCount - 2];
+        const prevRowMax =
+          prevSection[prevSection.length - 1].end ||
+          prevSection[prevSection.length - 1].start;
+        patternProgress.sectionCount--;
+        patternProgress.rowCount = prevRowMax;
+      } else {
+        // set to min value
+        patternProgress.rowCount = 1;
+      }
     } else {
-      // -- to prev section
-      const prevSection = selectedPattern.steps[sectionCount - 2];
-      const prevMaxRow =
-        prevSection[prevSection.length - 1].end ||
-        prevSection[prevSection.length - 1].start;
-      patternProgress.sectionCount--;
-      patternProgress.rowCount = prevMaxRow;
+      patternProgress.rowCount = Math.min(Math.max(rowInput, 1), rowMax);
     }
-  } else {
-    // clamp 1..maxRow
-    patternProgress.rowCount =
-      Math.min(Math.max(newRowCount, 1), currMaxRow);
   }
   renderCounters();
   renderSteps();
-}
-
-let timeout;
-function watchInput(callback) {
-  // set 1s timer every time we get an input
-  if (timeout) {
-    clearTimeout(timeout);
-    timeout = setTimeout(callback, 1000);
-  } else {
-    timeout = setTimeout(callback, 1000);
-  }
 }
 
 function generateHookMini(hook, index) {
