@@ -87,38 +87,41 @@ function addData(os, pattern) {
   });
 }
 
-function setData(os, key, value, property) {
+function setData(os, kvpList) {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction([os], 'readwrite');
     const objectStore = transaction.objectStore(os);
-    const getRequest = objectStore.get(key);
 
-    getRequest.addEventListener('success', (e) => {
-      let data = e.target.result;
+    kvpList.forEach((kvp) => {
+      const { key, value, property } = kvp;
+      const getRequest = objectStore.get(key);
 
-      if (property) {
-        switch (property) {
-          case 'progress':
-            data.progress = value.progress;
-            break;
-          default:
-            console.error(`Invalid property ${property} for entry ${key} in ${os}`);
-            reject();
+      getRequest.addEventListener('success', (e) => {
+        let data = e.target.result;
+
+        if (property) {
+          switch (property) {
+            case 'progress':
+              data.progress = value.progress;
+              break;
+            default:
+              console.error(`Invalid property ${property} for entry ${key} in ${os}`);
+              reject();
+          }
+        } else {
+          data = value;
         }
-      } else {
-        data = value;
-      }
 
-      const updateRequest = objectStore.put(data);
+        const updateRequest = objectStore.put(data);
 
-      updateRequest.addEventListener('success', () => {
-        console.log(`Updating entry ${key} in ${os}`);
-        resolve();
+        updateRequest.addEventListener('success', () => {
+          console.log(`Updating entry ${key} in ${os}`);
+        });
+
+        updateRequest.addEventListener('error', (e) => {
+          reject(e);
+        });
       });
-
-      updateRequest.addEventListener('error', (e) => {
-        reject(e);
-      })
     });
 
     transaction.addEventListener("complete", () => {
@@ -176,7 +179,7 @@ function deleteData(os, key) {
   });
 }
 
-function deleteAllData(os) {
+function clearOS(os) {
   return new Promise((resolve, reject) => {
     const objectStore = db.transaction([os], 'readwrite').objectStore(os);
     const clearRequest = objectStore.clear();
@@ -229,7 +232,7 @@ export async function savePattern(pattern) {
   if (!pattern.id)
     await addData(os, pattern);
   else
-    await setData(os, pattern.id, pattern);
+    await setData(os, [{ key: pattern.id, value: pattern }]);
 }
 
 export async function deletePattern(pattern) {
@@ -242,11 +245,11 @@ export async function deleteAllPatterns() {
   const objectStores = db.objectStoreNames;
   for (let i = 0; i < objectStores.length; i++) {
     const os = objectStores.item(i);
-    await deleteAllData(os);
+    await clearOS(os);
   }
 }
 
-export async function getInProgressKey() { 
+export async function getInProgressKey() {
   const inProgress = localStorage.getItem(progressKey);
   let patternKey = inProgress ? JSON.parse(inProgress) : 0;
 
@@ -263,12 +266,29 @@ export function saveInProgressKey(key) {
     localStorage.setItem(progressKey, key);
 }
 
-// todo: bundle together all the set requests
-// into one transaction to improve performance?
 export async function savePatternProgress(patterns) {
-  await patterns.forEach(async pattern => {
+  const requests = [[]];
+  let currOS, osList = [];
+  let i = 0;
+
+  patterns.forEach((pattern, idx) => {
     const os = typeToOS(pattern.type);
-    await setData(os, pattern.id, pattern, 'progress');
+
+    if (idx == 0)
+      osList.push(os);
+    currOS = os;
+    if (currOS != os) {
+      osList.push(os);
+      currOS = os;
+      i++;
+    }
+
+    requests[i].push({ key: pattern.id, value: pattern, property: 'progress' });
+  });
+
+  requests.forEach(async (osRequests, idx) => {
+    const os = osList[idx];
+    await setData(os, osRequests);
   });
 }
 
