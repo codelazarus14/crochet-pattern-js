@@ -21,6 +21,11 @@ body * {
   display: none !important;
 }
 
+.error-display {
+  color: var(--invalid-color);
+  font-size: 24px !important;
+}
+
 .no-highlight {
   user-select: none;
   -webkit-user-select: none;

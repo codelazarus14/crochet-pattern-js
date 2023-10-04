@@ -1,5 +1,3 @@
-export const invalidColor = 'rgb(220, 0, 0)';
-
 export function renderListElement(listElement, elementData, htmlGenerator) {
   let html = '';
 
@@ -29,6 +27,12 @@ export function generateDefaultSelectOption(chooseMsg) {
   // https://stackoverflow.com/questions/52860383/default-option-of-select-is-not-showing
   return `<option value="undefined" 
   selected disabled hidden>${chooseMsg}</option>`;
+}
+
+export function renderError(e, errorElem, hideElems) {
+  hideElems.forEach(elem => elem.classList.add('hidden'));
+  errorElem.innerHTML = e;
+  errorElem.classList.add('error-display');
 }
 
 export const ImageStyles = {

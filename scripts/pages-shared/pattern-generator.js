@@ -15,7 +15,8 @@ import {
 import {
   generateDefaultSelectOption,
   generateOptionHTML,
-  renderListElement
+  renderListElement,
+  renderError
 } from "../utils/output.js";
 import { renderPatternList } from "./pattern-list.js";
 
@@ -44,8 +45,8 @@ export const renderPatternOptions = async (onPatternLoad) => {
       populatePatternFields(onPatternLoad);
     });
   } catch (e) {
-    // todo: renderError
-    console.log(e);
+    const patternOptionsElem = document.querySelector('.pattern-options');
+    renderError(e, patternOptionsElem, []);
   }
 
   renderListElement(patternSelectElement, Object.values(PatternTypes), generateOptionHTML);

@@ -28,11 +28,11 @@ import {
   generateGlossaryImage,
   generateStepImage,
   generateYarnImage,
-  invalidColor,
   renderListElement,
   setTitle,
   ImageStyles,
-  renderImageDisplay
+  renderImageDisplay,
+  renderError
 } from "../utils/output.js";
 
 
@@ -142,15 +142,6 @@ const renderSaveStatus = (saved, hide) => {
       saved ? `Saved ${checkmark}` : 'Saving...';
 }
 
-// todo: combine renderErrors in output.js?
-const renderError = (e) => {
-  const patternHeaderElem = document.querySelector('.pattern-header');
-  patternHeaderElem.classList.add('hidden');
-  counterElem.parentElement.classList.add('hidden');
-  stepsListElem.innerHTML = e;
-  stepsListElem.style.color = invalidColor;
-}
-
 const saveProgress = async () => {
   await savePatternProgress(savedPatterns);
   renderSaveStatus(true);
@@ -163,7 +154,9 @@ const saveProgress = async () => {
     patternKey = await getInProgressKey();
     setPatternInProgress(patternKey);
   } catch (e) {
-    renderError(e);
+    const patternHeaderElem = document.querySelector('.pattern-header');
+    const patternInfoElem = document.querySelector('.pattern-info');
+    renderError(e, stepsListElem, [patternHeaderElem, patternInfoElem, counterElem.parentElement]);
   }
 
   addNumInputListener(counterElem, updateCounters, []);

@@ -55,10 +55,6 @@ export function setupDB() {
   });
 }
 
-// todo: refactor into general transaction-creation function
-// to put various requests through
-// and add more error-checking (resolve/reject)
-
 function addData(os, pattern) {
   return new Promise((resolve, reject) => {
     // open a read/write db transaction, ready for adding the data

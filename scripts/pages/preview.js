@@ -9,11 +9,11 @@ import {
   setupDB
 } from "../data/persistence.js";
 import {
-  invalidColor,
   renderListElement,
   setTitle,
   ImageStyles,
-  renderImageDisplay
+  renderImageDisplay,
+  renderError
 } from "../utils/output.js";
 
 const basicInfoElement = document.querySelector('.js-basic-info');
@@ -80,13 +80,6 @@ const renderPatternPreview = () => {
   }
 }
 
-const renderError = (e) => {
-  document.querySelector('.preview-options').classList.add('hidden');
-  const innerElem = document.querySelector('.inner');
-  innerElem.innerHTML = e;
-  innerElem.style.color = invalidColor;
-}
-
 (async () => {
   try {
     await setupDB();
@@ -96,7 +89,9 @@ const renderError = (e) => {
     setTitle(document.title + `: ${submittedPattern.title}`);
     renderPatternPreview();
   } catch (e) {
-    renderError(e);
+    const optionsElem = document.querySelector('.preview-options');
+    const innerElem = document.querySelector('.inner');
+    renderError(e, innerElem, [optionsElem]);
   }
 })();
 
