@@ -79,44 +79,19 @@ export const renderPatternOptions = async (onPatternLoad) => {
 }
 
 export function addPatternSubmitListeners(validateFunc) {
-  // todo: add 'ctrl+s' saving?
-  saveElement.addEventListener('click', async e => {
-    const title = patternTitleInputElement.value.trim();
-    const author = patternAuthorInputElement.value.trim();
-    const desc = patternDescInputElement.value.trim();
-    const result = validateFunc();
-
-    if (result && typeof result === 'string') {
+  document.addEventListener('keydown', async e => {
+    if (e.ctrlKey && e.key === 's') {
       e.preventDefault();
-      submitAlertElement.innerHTML = result;
-    } else {
-      selectedPattern.title = title;
-      selectedPattern.author = author;
-      selectedPattern.desc = desc;
-      submitAlertElement.innerHTML = '';
-      await savePattern(selectedPattern);
-      location.reload();
+      await validateAndSavePattern(e, validateFunc, savePattern);
     }
   });
 
-  submitElement.addEventListener('click', async e => {
-    const title = patternTitleInputElement.value.trim();
-    const author = patternAuthorInputElement.value.trim();
-    const desc = patternDescInputElement.value.trim();
-    const result = validateFunc();
+  saveElement.addEventListener('click', async e => {
+    await validateAndSavePattern(e, validateFunc, savePattern);
+  });
 
-    if (result && typeof result === 'string') {
-      e.preventDefault();
-      submitAlertElement.innerHTML = result;
-    } else {
-      selectedPattern.title = title;
-      selectedPattern.author = author;
-      selectedPattern.desc = desc;
-      submitAlertElement.innerHTML = '';
-      await submitPattern(selectedPattern);
-      saveSubmittedKey(savedPatterns.length);
-      location.assign('./preview.html');
-    }
+  submitElement.addEventListener('click', async e => {
+    await validateAndSavePattern(e, validateFunc, submitPattern);
   });
 
   refreshElement.addEventListener('click', () => {
@@ -148,4 +123,32 @@ function populatePatternFields(loadAction) {
   patternDescInputElement.value = selectedPattern.desc;
   patternSelectElement.value = selectedPattern.type;
   loadAction();
+}
+
+async function validateAndSavePattern(e, validateFunc, saveFunc) {
+  const title = patternTitleInputElement.value.trim();
+  const author = patternAuthorInputElement.value.trim();
+  const desc = patternDescInputElement.value.trim();
+  const result = validateFunc();
+
+  if (result && typeof result === 'string') {
+    e.preventDefault();
+    submitAlertElement.innerHTML = result;
+  } else {
+    selectedPattern.title = title;
+    selectedPattern.author = author;
+    selectedPattern.desc = desc;
+    submitAlertElement.innerHTML = '';
+
+    switch (saveFunc) {
+      case savePattern:
+        await savePattern(selectedPattern);
+        location.reload();
+        break;
+      case submitPattern:
+        await submitPattern(selectedPattern);
+        saveSubmittedKey(savedPatterns.length);
+        location.assign('./preview.html');
+    }
+  }
 }
