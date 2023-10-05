@@ -118,8 +118,7 @@ async function resetPage() {
   document.querySelectorAll('input, textarea, .js-pattern-types')
     .forEach(elem => elem.value = elem.defaultValue);
   // reset size of pattern options text boxes
-  // TODO: refactor the three separate 'reset textarea 
-  // size' calls for each section ?
+  // and add listeners to all (incl. pattern body)
   document.querySelectorAll('textarea')
     .forEach(input => {
       resizeInput(input);
@@ -128,9 +127,6 @@ async function resetPage() {
 }
 
 function setupCrochet() {
-  // reset size of pattern body text boxes (notes)
-  document.querySelectorAll('textarea')
-    .forEach(input => resizeInput(input));
   document.querySelector('.js-pattern-body').classList.remove('hidden');
   bodyRevealed = true;
 
@@ -190,8 +186,7 @@ function populateCrochetPatternFields() {
   renderGlossary();
   notesInputElement.value = selectedPattern.notes.text;
   renderSectionGrid();
-  // since we skipped setup, have to resize text boxes
-  // (notes box) to fit their content
+  // reset size of pattern body text boxes (notes)
   document.querySelectorAll('textarea')
     .forEach(input => resizeInput(input));
 }

@@ -23,10 +23,8 @@ export function generateOptionHTML(option, index, selected, disabled) {
 }
 
 export function generateDefaultSelectOption(chooseMsg) {
-  // important = have to set value="undefined" or it won't work
   // https://stackoverflow.com/questions/52860383/default-option-of-select-is-not-showing
-  return `<option value="undefined" 
-  selected disabled hidden>${chooseMsg}</option>`;
+  return `<option disabled selected hidden value=undefined>${chooseMsg}</option>`;
 }
 
 export function renderError(e, errorElem, hideElems) {
