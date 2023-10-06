@@ -110,6 +110,23 @@ const renderSteps = () => {
 
   const stepElem = stepsListElem.querySelector(`[data-step-idx="${focusedIdx}"]`);
   stepElem.scrollIntoView({ behavior: 'smooth' });
+
+  // open glossary on term clicked
+  stepsListElem.querySelectorAll('.js-annotation').forEach((annot) => {
+    annot.addEventListener('click', () => {
+      const index = annot.dataset.termIdx;
+      const glossaryCollapse = glossaryListElem.previousElementSibling;
+      const currentActive = glossaryListElem.dataset.activeEntry;
+
+      if (!glossaryCollapse.classList.contains('active'))
+        glossaryListElem.previousElementSibling.click();
+
+      if (currentActive !== '')
+        glossaryListElem.children[Number(currentActive)].classList.remove('active');
+      glossaryListElem.dataset.activeEntry = index;
+      glossaryListElem.children[index].classList.add('active');
+    });
+  });
 }
 
 const renderPatternInProgress = () => {
@@ -340,7 +357,7 @@ function generateStepAnnotations(instructions) {
       matches.forEach((match) => {
         const pos = html.indexOf(match);
 
-        temp += html.substring(0, pos) + `<span class="annotation" data-term-idx=${index}>
+        temp += html.substring(0, pos) + `<span class="annotation js-annotation" data-term-idx=${index}>
           <div class="tooltip">Open Glossary</div>${match}</span>`;
         html = html.substring(pos + match.length);
       });

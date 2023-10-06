@@ -99,7 +99,7 @@
   justify-content: center;
 }
 
-[class$="mini-item"]>* {
+[class*="mini-item"]>* {
   margin-right: 0.5em;
 }
 
@@ -125,6 +125,11 @@
   display: grid;
   grid-template-columns: repeat(3, auto);
   align-items: center;
+}
+
+.glossary-mini-item.active {
+  background-color: white;
+  border-radius: 1em;
 }
 
 .pattern-steps {
