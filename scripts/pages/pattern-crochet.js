@@ -506,7 +506,6 @@ function generateHookSizeButtonsHTML(hook, index) {
 
 // TODO: make output list items have editable text fields
 // todo: make input fields (and above) resize w input
-// TODO: add tooltips for yarns
 
 function generateYarnListHTML(yarn, index) {
   const { name, amount, units, images } = yarn;

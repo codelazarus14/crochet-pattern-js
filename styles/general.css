@@ -1,12 +1,15 @@
 :root {
   --bg-color: rgb(215, 230, 235);
   --blue-color: rgb(140, 215, 235);
+  --dark-blue-color: rgb(60, 180, 235);
   --light-purple-color: rgb(210, 215, 240);
   --purple-color: rgb(160, 185, 235);
   --wheat-border: rgb(235, 200, 135);
   --shadow-color: rgba(0, 0, 0, 0.15);
   --invalid-color: rgb(220, 0, 0);
   --link-color: rgb(80, 80, 200);
+  --active-glossary-color: rgb(80, 80, 200, 0.25);
+  --active-yarn-color: rgb(140, 215, 235, 0.5);
 }
 
 body {

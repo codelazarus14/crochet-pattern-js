@@ -78,6 +78,7 @@ const renderYarnsMini = () => {
   if (!yarnListElem) {
     yarnListElem = document.createElement('div');
     yarnListElem.setAttribute('class', 'yarns-mini js-yarns-mini');
+    yarnListElem.setAttribute('data-active-entry', '');
     materialsListElem.appendChild(yarnListElem);
   }
   renderListElement(yarnListElem, selectedPattern.yarns, generateYarnMini);
@@ -97,6 +98,7 @@ const renderSteps = () => {
   const row = patternProgress.rowCount;
   renderListElement(stepsListElem, selectedPattern.steps[section], generateStepInUse);
   const lastStep = stepsListElem.lastChild;
+  // TODO: fix
   // add padding below final step
   lastStep.style.marginBottom =
     `${stepsListElem.clientHeight - (3 * lastStep.scrollHeight) / 4}px`;
@@ -111,21 +113,29 @@ const renderSteps = () => {
   const stepElem = stepsListElem.querySelector(`[data-step-idx="${focusedIdx}"]`);
   stepElem.scrollIntoView({ behavior: 'smooth' });
 
-  // open glossary on term clicked
-  stepsListElem.querySelectorAll('.js-annotation').forEach((annot) => {
-    annot.addEventListener('click', () => {
-      const index = annot.dataset.termIdx;
-      const glossaryCollapse = glossaryListElem.previousElementSibling;
-      const currentActive = glossaryListElem.dataset.activeEntry;
+  const setActiveMiniEntryListeners = (listElem, collapsible, annotation) => {
+    annotation.addEventListener('click', () => {
+      const index = annotation.dataset.termIdx;
+      const currentActive = listElem.dataset.activeEntry;
 
-      if (!glossaryCollapse.classList.contains('active'))
-        glossaryListElem.previousElementSibling.click();
+      if (!collapsible.classList.contains('active'))
+        collapsible.click();
 
       if (currentActive !== '')
-        glossaryListElem.children[Number(currentActive)].classList.remove('active');
-      glossaryListElem.dataset.activeEntry = index;
-      glossaryListElem.children[index].classList.add('active');
+        listElem.children[Number(currentActive)].classList.remove('active');
+      listElem.dataset.activeEntry = index;
+      listElem.children[index].classList.add('active');
     });
+  }
+
+  // open glossary/yarn entry on term clicked
+  let yarnListElem = document.querySelector('.js-yarns-mini');
+
+  stepsListElem.querySelectorAll('.js-yarn-annotation').forEach((annot) => {
+    setActiveMiniEntryListeners(yarnListElem, yarnListElem.parentElement.previousElementSibling, annot);
+  });
+  stepsListElem.querySelectorAll('.js-glossary-annotation').forEach((annot) => {
+    setActiveMiniEntryListeners(glossaryListElem, glossaryListElem.previousElementSibling, annot);
   });
 }
 
@@ -345,25 +355,42 @@ function generateGlossaryMini(entry, index) {
 function generateStepAnnotations(instructions) {
   let html = instructions;
 
-  selectedPattern.glossary.forEach((entry, index) => {
-    const { term } = entry;
-    const regex = new RegExp(term, "gi");
-    const matches = html.match(regex);
+  const tagOccurrences = (term, index, type, text) => {
+    const regex = new RegExp(`(?!>)(${term})(?!<)`, "gi");
+    const matches = text.match(regex);
 
     if (matches) {
       let temp = '';
 
-      // wrap tags around every occurrence of the glossary term
+      // wrap tags around every occurrence
       matches.forEach((match) => {
-        const pos = html.indexOf(match);
+        const pos = text.indexOf(match);
 
-        temp += html.substring(0, pos) + `<span class="annotation js-annotation" data-term-idx=${index}>
-          <div class="tooltip">Open Glossary</div>${match}</span>`;
-        html = html.substring(pos + match.length);
+        switch (type) {
+          case "yarn":
+            temp += text.substring(0, pos) + `<span class="yarn-annotation js-yarn-annotation" data-term-idx=${index}>
+              <div class="tooltip">Open Yarns</div>${match}</span>`;
+            break;
+          case "glossary":
+            temp += text.substring(0, pos) + `<span class="glossary-annotation js-glossary-annotation" data-term-idx=${index}>
+              <div class="tooltip">Open Glossary</div>${match}</span>`;
+            break;
+        }
+        text = text.substring(pos + match.length);
       });
-      html = temp;
+      text = temp + text;
     }
+
+    return text;
+  };
+
+  selectedPattern.yarns.forEach((yarn, index) => {
+    html = tagOccurrences(yarn.name, index, "yarn", html);
   });
+  selectedPattern.glossary.forEach((entry, index) => {
+    html = tagOccurrences(entry.term, index, "glossary", html);
+  });
+
   return html;
 }
 
