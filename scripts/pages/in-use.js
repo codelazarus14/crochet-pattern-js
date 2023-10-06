@@ -325,16 +325,42 @@ function generateGlossaryMini(entry, index) {
   <span class="glossary-desc">${description}</span></div>`;
 }
 
+function generateStepAnnotations(instructions) {
+  let html = instructions;
+
+  selectedPattern.glossary.forEach((entry, index) => {
+    const { term } = entry;
+    const regex = new RegExp(term, "gi");
+    const matches = html.match(regex);
+
+    if (matches) {
+      let temp = '';
+
+      // wrap tags around every occurrence of the glossary term
+      matches.forEach((match) => {
+        const pos = html.indexOf(match);
+
+        temp += html.substring(0, pos) + `<span class="annotation" data-term-idx=${index}>
+          <div class="tooltip">Open Glossary</div>${match}</span>`;
+        html = html.substring(pos + match.length);
+      });
+      html = temp;
+    }
+  });
+  return html;
+}
+
 function generateStepInUse(step, index) {
   const { start, end, instructions, images } = step;
   const imageDisplay = images ?
     renderImageDisplay(images, ImageStyles.Bigger) : '';
   const rowString =
     end ? `${start} - ${end}` : `${start}`;
+  const instrsHTML = generateStepAnnotations(instructions);
 
   return `<div class="step-in-use-item" data-step-idx="${index}">
   <div class="step-text">
   <span class="step-rows">${rowString}</span>
-  <span class="step-instrs">${instructions}</span></div>
+  <span class="step-instrs">${instrsHTML}</span></div>
   <div class="step-image">${imageDisplay}</div></div>`;
 }
