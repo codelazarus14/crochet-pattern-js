@@ -11,6 +11,7 @@
   <body>
     <template-header></template-header>
     <template-sidebar></template-sidebar>
+    <template-image-preview></template-image-preview>
     <div class="page-content">
       <main>
         <div class="how-to">
@@ -18,43 +19,43 @@
             <h1>How To Use The Generator</h1>
           </div>
           <div class="how-to-content">
-            <p class="expand-image-note hidden">Click on the images below to get a full-size view.</p>
+            <p class="expand-image-note">Click on the images below to get a full-size view.</p>
             <!-- todo: replace placeholder images -->
             <p>To create a pattern, first go to the
               <a href="index.html" target="_blank">main page</a>
               of this site and begin by filling in some basic info. Under the <strong>Pattern Options</strong> heading, enter a <strong>Title</strong>, <strong>Author</strong> and (optionally) a <strong>Description</strong> for the pattern, before selecting a project type from the dropdown. After confirming your selection the pattern creation form will open underneath.</p>
-            <div class="image-container">
+            <div class="image-container open-image-preview">
               <img src="images/how-to/how-to-1.png" alt="A screenshot of the Pattern Options form on the website's main page. The screenshot shows the 'Title', 'Author' and 'Description' fields have been filled out and the user is now able to select a Pattern Type.">
             </div>
             <p>Alternatively, if you have saved patterns on the site before, you can select a pattern to edit from from the <strong>Saved Patterns</strong> list. After clicking <strong>Load</strong> the creation form's fields will be populated from the loaded pattern.</p>
-            <div class="image-container">
+            <div class="image-container open-image-preview">
               <img src="images/how-to/how-to-2.png" alt="A screenshot of the Saved Patterns list on the main page. The screenshot shows a single saved pattern preview with the title 'My Pattern' and author 'codelazarus14'.">
             </div>
             <p>From there, enter the required information in each section of the pattern creation form (<strong>Materials</strong>, <strong>Glossary</strong>, <strong>Notes</strong> etc.).</p>
             <h2>Steps</h2>
             <p>When entering <strong>Steps</strong>, note that each step in the pattern's information is stored separately from their order in the list of steps. This is to allow for flexibility in repeating steps without having to duplicate instructions.</p>
-            <div class="image-container">
+            <div class="image-container open-image-preview">
               <img src="images/how-to/how-to-3.png" alt="A screenshot of the pattern creation form's Steps section. Three steps have been entered into the form: Row 1's instruction is 'The first step.', Row 2's instruction is 'The second step, with a slight difference.' and Rows 3 through 100 have the instruction 'And it goes on...'">
             </div>
             <p>Step indices can be manually edited via the input fields on each step, and rearranged by dragging and dropping steps into the spaces above or below each other. Steps do not change their row indices after being rearranged, so make sure to adjust them afterward!</p>
-            <div class="image-container">
+            <div class="image-container open-image-preview">
               <img src="images/how-to/how-to-4.png" alt="A screenshot of the pattern creation form's Steps section. Four steps are shown with all except first marked with an 'Index error' alert underneath their Row input fields. The first step for Rows 1 through 100 contains the instructions 'Just where I belong', but the second step erroneously begins on Row 201. The third step, for Rows 101-200, contains the instructions 'I'm out of place!' as a result of the second step and third step being implied to have exchanged positions. The fourth step for Row 202 was not rearranged, but is also marked with the 'Index error' alert, and the instructions indicate that 'My rows might have been affected by the steps being rearranged above me'.">
             </div>
             <p>You can also add <strong>Sections</strong> to the pattern via the appropriately labeled button. Each section maintains a separate row counter and can be used to split up distinct parts of a larger pattern to be joined together near the end. Beware that deleting a section will also delete all of its contents from the form!</p>
-            <div class="image-container">
+            <div class="image-container open-image-preview">
               <img src="images/how-to/how-to-5.png" alt="A screenshot of the pattern creation form's Steps section. Two Sections have been created with one step each, the first section's step containing the instructions 'An arm...', and the second step's instructions being '...and a leg.'">
             </div>
             <h2>Submit and Use</h2>
             <p>After completing the pattern creation form and fixing any errors that arise, the pattern will be saved via the <strong>Save</strong> or <strong>Submit</strong> buttons. The <strong>Save</strong> button will save the pattern and allow you to return to creating and editing patterns, while the <strong>Submit</strong> button allows you to open the <a href="preview.html" target="_blank">pattern preview</a>.</p>
-            <div class="image-container">
+            <div class="image-container open-image-preview">
               <img src="images/how-to/how-to-6.png" alt="A screenshot of the pattern creation form's submit options, including the Save, Submit and Reset buttons. An error is displayed underneath the buttons indicating that the 'Pattern must include at least one step.'">
             </div>
             <p>From here you can inspect the output and proceed to either export a PDF or a raw JSON of the saved pattern, or make use of it on the next page.</p>
-            <div class="image-container">
+            <div class="image-container open-image-preview">
               <img src="images/how-to/how-to-7.png" alt="A screenshot of hte pattern preview's export options, which include buttons for saving to JSON, PDF or proceeding to the Use Pattern page.">
             </div>
             <p>On the <a href="in-use.html" target="_blank">pattern use</a> page, you can choose to load and make use of any saved pattern on the website. The dropdowns to the left allow you to peek at the various details of the pattern as necessary, while the main steps view is displayed to the right. Entering numbers or using the up or down arrows on the <strong>Row Counter</strong> allows you to progress through the pattern. Pattern progress is saved after refreshing or closing the browser window.</p>
-            <div class="image-container">
+            <div class="image-container open-image-preview">
               <img src="images/how-to/how-to-8.png" alt="A screenshot of the Pattern Use page, showing the various collapsible menus for viewing pattern details with the Notes menu expanded to show the note 'Something for you to make note of.' The pattern steps view is displayed to the right of these menus, and covers a majority of the page display. The Row Counter is set to 1 and the steps for the first section are shown to the right of the counter.">
             </div>
           </div>
@@ -64,5 +65,6 @@
     </div>
     <script type="module" src="scripts/pages-shared/templates/html-templates.js"></script>
     <script type="module" src="scripts/pages-shared/templates/sidebar.js"></script>
+    <script type="module" src="scripts/pages/how-to.js"></script>
   </body>
 </html>

@@ -16,6 +16,7 @@ import {
   renderPatternList,
   setLoadedPattern
 } from "../pages-shared/pattern-list.js";
+import { addImagePreviewListeners } from "../pages-shared/popups/image-preview.js";
 import {
   addPopupListeners
 } from "../pages-shared/popups/popup.js";
@@ -97,6 +98,7 @@ const renderSteps = () => {
   const section = patternProgress.sectionCount - 1;
   const row = patternProgress.rowCount;
   renderListElement(stepsListElem, selectedPattern.steps[section], generateStepInUse);
+  addImagePreviewListeners(stepsListElem);
   const lastStep = stepsListElem.lastChild;
   // TODO: fix
   // add padding below final step
@@ -152,6 +154,8 @@ const renderPatternInProgress = () => {
       renderSteps();
       break;
   }
+
+  addImagePreviewListeners(document.body);
 }
 
 const renderSaveStatus = (saved, hide) => {

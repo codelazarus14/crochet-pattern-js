@@ -6,6 +6,7 @@ import {
   addPatternSubmitListeners,
   renderPatternOptions
 } from '../pages-shared/pattern-generator.js';
+import { addImagePreviewListeners } from '../pages-shared/popups/image-preview.js';
 import {
   addChar,
   addDeleteListener,
@@ -54,6 +55,7 @@ const renderYarnList = () => {
   addDeleteListeners(yarnListElement, selectedPattern.yarns, () => renderYarnList());
   addImageUploadListeners(yarnListElement, selectedPattern.yarns, () => renderYarnList());
   addImageDisplayListeners(yarnListElement, selectedPattern.yarns, () => renderYarnList());
+  addImagePreviewListeners(yarnListElement);
   addYarnAmtListeners();
   addYarnUnitsListeners();
 }
@@ -62,6 +64,7 @@ const renderGlossary = () => {
   addDeleteListeners(glossaryListElement, selectedPattern.glossary, () => renderGlossary());
   addImageUploadListeners(glossaryListElement, selectedPattern.glossary, () => renderGlossary());
   addImageDisplayListeners(glossaryListElement, selectedPattern.glossary, () => renderGlossary());
+  addImagePreviewListeners(glossaryListElement);
 }
 
 const renderSectionHeading = (section, idx) => {
@@ -83,6 +86,7 @@ const renderSectionSteps = (section, idx) => {
   addDeleteListeners(stepListElement, selectedPattern.steps[idx], () => renderSectionSteps(section, idx));
   addImageUploadListeners(stepListElement, selectedPattern.steps[idx], () => renderSectionSteps(section, idx), true);
   addImageDisplayListeners(stepListElement, selectedPattern.steps[idx], () => renderSectionSteps(section, idx));
+  addImagePreviewListeners(stepListElement);
   addRowInputListeners(stepListElement, section, idx);
   addDragNDropListeners(stepListElement, section, idx);
 }

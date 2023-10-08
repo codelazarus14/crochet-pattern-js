@@ -19,12 +19,10 @@
   opacity: 0.6;
 }
 
-/* Todo: make images clickable to get full size
 .how-to-content .expand-image-note {
   margin: 0;
   font-style: italic;
 }
-*/
 
 .image-container {
   max-width: 50%;
@@ -32,6 +30,10 @@
   padding: 1em;
   border-radius: 1em;
   box-shadow: 0.4rem 0.4rem var(--wheat-border);
+}
+
+.image-container:hover {
+  box-shadow: 0.8rem 0.8rem var(--wheat-border);
 }
 
 .image-container img {

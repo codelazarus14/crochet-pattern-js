@@ -85,5 +85,28 @@ class Sidebar extends HTMLElement {
   }
 }
 
+class ImagePreview extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.innerHTML = 
+    `
+    <button class="image-preview-button js-image-preview-button hidden"></button>
+    <div class="image-preview-popup js-image-preview-popup hidden">
+      <div class="popup-header">
+        <h2>Image Preview</h2>
+        <button class="close-button js-close-button">${removeChar}</button>
+      </div>
+      <div class="image-preview-inner">
+        <img class="image-preview-content js-image-preview-content" src="" alt="">
+      </div>
+      <button class="after-form js-after-form" aria-hidden="true"></button>
+    </div>`;
+  }
+}
+
 customElements.define('template-header', Header);
 customElements.define('template-sidebar', Sidebar);
+customElements.define('template-image-preview', ImagePreview);

@@ -50,3 +50,26 @@
 [class$="popup"] .close-button:active {
   opacity: 0.2;
 }
+
+.open-image-preview:hover {
+  cursor: pointer;
+}
+
+.image-preview-popup {
+  font-size: 1.5em;
+}
+
+.image-preview-popup h2 {
+  margin-bottom: 0.5em;
+}
+
+.image-preview-inner {
+  background-color: antiquewhite;
+  margin: 0.5em;
+  margin-bottom: -0.7em;
+  padding: 0.5em;
+}
+
+.image-preview-content {
+  width: 100%;
+}

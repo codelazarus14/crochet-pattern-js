@@ -52,7 +52,7 @@ export function renderImage(image, index, style, deleteable) {
   const deleteButton = deleteable ?
     '<div class="delete-image js-delete-image">X</div>' : '';
 
-  return `<div class="${style}" data-img-index="${index}">
+  return `<div class="${style} open-image-preview" data-img-index="${index}">
     <img src="${dataUrl}" id="${info.name}">
     ${deleteButton}</div>`;
 }

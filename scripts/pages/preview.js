@@ -8,6 +8,7 @@ import {
   savedPatterns,
   setupDB
 } from "../data/persistence.js";
+import { addImagePreviewListeners } from "../pages-shared/popups/image-preview.js";
 import {
   renderListElement,
   setTitle,
@@ -78,6 +79,8 @@ const renderPatternPreview = () => {
       renderSteps();
       break;
   }
+
+  addImagePreviewListeners(document.body);
 }
 
 (async () => {
