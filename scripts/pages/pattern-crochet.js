@@ -16,7 +16,8 @@ import {
   dragIcon,
   resizeInput,
   addImageUploadListeners,
-  addImageDisplayListeners
+  addImageDisplayListeners,
+  sanitize
 } from '../utils/input.js';
 import {
   ImageStyles,
@@ -139,7 +140,7 @@ function setupCrochet() {
 
   yarnFormElement.addEventListener('submit', () => {
     const newYarn = {
-      name: yarnNameInputElement.value.trim(),
+      name: sanitize(yarnNameInputElement.value.trim()),
       amount: Number(yarnAmtInputElement.value),
       units: yarnUnitNames[yarnUnitsInputElement.selectedIndex]
     };
@@ -149,15 +150,15 @@ function setupCrochet() {
 
   glossaryFormElement.addEventListener('submit', () => {
     const newEntry = {
-      term: glossaryTermInputElement.value.trim(),
-      description: glossaryDescInputElement.value.trim()
+      term: sanitize(glossaryTermInputElement.value.trim()),
+      description: sanitize(glossaryDescInputElement.value.trim())
     };
     selectedPattern.glossary.push(newEntry);
     renderGlossary();
   });
 
   notesInputElement.addEventListener('blur', e => {
-    selectedPattern.notes.text = notesInputElement.value.trim();
+    selectedPattern.notes.text = sanitize(notesInputElement.value.trim());
   });
 
   sectionAddElement.addEventListener('click', () => {
@@ -248,7 +249,7 @@ function addStepInputListeners(section, idx) {
     const newStep = {
       start: startIdx,
       end: endIdx,
-      instructions: instrInput.value.trim(),
+      instructions: sanitize(instrInput.value.trim()),
       error: false
     };
 

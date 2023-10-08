@@ -13,6 +13,9 @@ import {
   submitPattern
 } from "../data/persistence.js";
 import {
+  sanitize
+} from "../utils/input.js";
+import {
   generateDefaultSelectOption,
   generateOptionHTML,
   renderListElement,
@@ -99,10 +102,11 @@ export function addPatternSubmitListeners(validateFunc) {
   });
 }
 
+// TODO: refactor to move pattern creation into submit/validate
 function createPattern(type) {
-  const title = patternTitleInputElement.value.trim();
-  const author = patternAuthorInputElement.value.trim();
-  const desc = patternDescInputElement.value.trim();
+  const title = sanitize(patternTitleInputElement.value.trim());
+  const author = sanitize(patternAuthorInputElement.value.trim());
+  const desc = sanitize(patternDescInputElement.value.trim());
 
   if (previousPattern && previousPattern.type === type) return;
   switch (type) {
@@ -126,9 +130,9 @@ function populatePatternFields(loadAction) {
 }
 
 async function validateAndSavePattern(e, validateFunc, saveFunc) {
-  const title = patternTitleInputElement.value.trim();
-  const author = patternAuthorInputElement.value.trim();
-  const desc = patternDescInputElement.value.trim();
+  const title = sanitize(patternTitleInputElement.value.trim());
+  const author = sanitize(patternAuthorInputElement.value.trim());
+  const desc = sanitize(patternDescInputElement.value.trim());
   const result = validateFunc();
 
   if (result && typeof result === 'string') {

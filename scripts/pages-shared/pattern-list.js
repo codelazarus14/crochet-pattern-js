@@ -78,7 +78,6 @@ function generatePatternListItem(pattern, index) {
   const isLoaded = loaded === index ? 'loaded' : '';
   const first = index === 0 ? 'first' : '';
 
-  // todo: make list into template html element?
   return `<div class="pattern-list-item js-pattern-list-item ${isLoaded} ${first}" data-pattern-idx="${index}">
   <span class="pattern-title">${pattern.title}</span>
   <span class="pattern-author">${pattern.author}</span>

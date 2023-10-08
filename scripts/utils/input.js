@@ -4,9 +4,10 @@ export const dragIcon = '&vellip;&vellip;';
 export const clipboardIcon = '&#x1F4CB;';
 export const checkmark = '&#x2713;';
 
-// TODO: sanitize inputs or escape generated HTML
-function sanitize() {
-
+export function sanitize(string) {
+  // create DOMParser and split out text only
+  const dom = new DOMParser().parseFromString(string, 'text/html');
+  return dom.body.textContent;
 }
 
 // common button/select listeners
